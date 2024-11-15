@@ -1,15 +1,271 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
+model Car {
+  CarId     Int     @id @default(autoincrement()) @db.UnsignedInt
+  ContactID Int?
+  Make      String? @db.Char(50)
+  Model     String? @db.Char(50)
+  Year      String? @db.Char(50)
+  VIN       String? @db.Char(50)
+  LicenseNo String? @db.Char(50)
+}
+
+model RepairOrder {
+  RepairOrderNumber Int     @id @default(autoincrement()) @db.UnsignedInt
+  CarID             Int?
+  Date              String? @db.Char(50)
+  Odometer          String? @db.Char(50)
+  CallWhenReady     String? @db.Char(50)
+  PromisedTime      String? @db.Char(50)
+  PromisedDate      String? @db.Char(50)
+}
+
+model ar_internal_metadata {
+  key        String   @id @db.VarChar(255)
+  value      String?  @db.VarChar(255)
+  created_at DateTime @db.DateTime(6)
+  updated_at DateTime @db.DateTime(6)
+}
+
+model cars {
+  id          BigInt      @id @default(autoincrement())
+  model       String?     @db.VarChar(255)
+  customer_id BigInt
+  created_at  DateTime    @db.DateTime(6)
+  updated_at  DateTime    @db.DateTime(6)
+  year        String?     @db.VarChar(255)
+  make        String?     @db.VarChar(255)
+  engine      String?     @db.VarChar(255)
+  vin         String?     @db.VarChar(255)
+  fleetNo     String?     @db.VarChar(255)
+  license     String?     @db.VarChar(20)
+  notes       String?     @db.Text
+  customers   customers   @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_f57ca1d9fe")
+  estimates   estimates[]
+
+  @@index([customer_id], map: "index_cars_on_customer_id")
+}
+
+model cars_bak {
+  id          BigInt   @id @default(autoincrement())
+  model       String?  @db.VarChar(255)
+  customer_id BigInt
+  created_at  DateTime @db.DateTime(6)
+  updated_at  DateTime @db.DateTime(6)
+  year        String?  @db.VarChar(255)
+  make        String?  @db.VarChar(255)
+  engine      String?  @db.VarChar(255)
+  vin         String?  @db.VarChar(255)
+  fleetNo     String?  @db.VarChar(255)
+  license     String?  @db.VarChar(20)
+  notes       String?  @db.Text
+
+  @@index([customer_id], map: "index_cars_on_customer_id")
+}
+
+model contact {
+  ContactID         Int     @id @default(autoincrement()) @db.UnsignedInt
+  LastName          String? @db.Char(50)
+  FirstName         String? @db.Char(50)
+  BusStreetAddress  String? @db.Char(50)
+  BusCity           String? @db.Char(50)
+  BusState          String? @db.Char(50)
+  BusZIP            String? @db.Char(50)
+  HomeStreetAddress String? @db.Char(50)
+  HomeCity          String? @db.Char(50)
+  HomeState         String? @db.Char(50)
+  HomeZIP           String? @db.Char(50)
+  BusPhone          String? @db.Char(50)
+  HomePhone         String? @db.Char(50)
+  CellPhone         String? @db.Char(50)
+  Fax               String? @db.Char(50)
+  OtherPhone        String? @db.Char(50)
+  Email             String? @db.Char(50)
+}
+
+model customer {
+  id         Int      @id @default(autoincrement())
+  first_name String   @db.VarChar(255)
+  last_name  String   @db.VarChar(255)
+  notes      String   @db.Text
+  created_at DateTime @db.DateTime(0)
+  updated_at DateTime @db.DateTime(0)
+}
+
+model customers {
+  id         BigInt   @id @default(autoincrement())
+  first_name String?  @db.VarChar(255)
+  created_at DateTime @db.DateTime(6)
+  updated_at DateTime @db.DateTime(6)
+  last_name  String?  @db.VarChar(255)
+  notes      String?  @db.Text
+  cars       cars[]
+  phones     phones[]
+}
+
+model customers_bak {
+  id         BigInt   @id @default(autoincrement())
+  first_name String?  @db.VarChar(255)
+  created_at DateTime @db.DateTime(6)
+  updated_at DateTime @db.DateTime(6)
+  last_name  String?  @db.VarChar(255)
+  notes      String?  @db.Text
+}
+
+model employees {
+  id         BigInt      @id @default(autoincrement())
+  first_name String?     @db.VarChar(255)
+  last_name  String?     @db.VarChar(255)
+  title      String?     @db.VarChar(255)
+  salary     Int?
+  created_at DateTime    @db.DateTime(6)
+  updated_at DateTime    @db.DateTime(6)
+  estimates  estimates[]
+}
+
+model estimates {
+  id            BigInt          @id @default(autoincrement())
+  date          DateTime?       @db.Date
+  miles         Int?
+  isRepairOrder Boolean?
+  employee_id   BigInt
+  created_at    DateTime        @db.DateTime(6)
+  updated_at    DateTime        @db.DateTime(6)
+  car_id        BigInt?
+  hours_taken   Decimal?        @db.Decimal(10, 2)
+  pub_notes     String?         @db.Text
+  priv_notes    String?         @db.Text
+  employees     employees       @relation(fields: [employee_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_2b518ef25b")
+  cars          cars?           @relation(fields: [car_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_f47fa1c4f4")
+  sub_estimates sub_estimates[]
+
+  @@index([car_id], map: "index_estimates_on_car_id")
+  @@index([employee_id], map: "index_estimates_on_employee_id")
+}
+
+model estimates_bak {
+  id            BigInt    @id @default(autoincrement())
+  date          DateTime? @db.Date
+  miles         Int?
+  isRepairOrder Boolean?
+  employee_id   BigInt
+  created_at    DateTime  @db.DateTime(6)
+  updated_at    DateTime  @db.DateTime(6)
+  car_id        BigInt?
+  hours_taken   Decimal?  @db.Decimal(10, 2)
+  pub_notes     String?   @db.Text
+  priv_notes    String?   @db.Text
+
+  @@index([car_id], map: "index_estimates_on_car_id")
+  @@index([employee_id], map: "index_estimates_on_employee_id")
+}
+
+model income {
+  id          Int       @id @default(autoincrement())
+  description String?   @db.VarChar(255)
+  date        DateTime? @db.Date
+  type        String?   @db.VarChar(255)
+  amount      Decimal?  @db.Decimal(6, 2)
+}
+
+model oldLabor {
+  ID                Int     @id @default(autoincrement()) @db.UnsignedInt
+  RepairOrderNumber Int?
+  OrderNumber       Int?
+  WorkInstructions  String? @db.Char(50)
+  LaborCharge       Float?
+}
+
+model oldOil {
+  ID                Int     @id @default(autoincrement()) @db.UnsignedInt
+  RepairOrderNumber Int?
+  Quantity          Int?
+  Description       String? @db.Char(50)
+  UnitPrice         Float?
+}
+
+model oldPart {
+  ID                Int      @id @default(autoincrement()) @db.UnsignedInt
+  RepairOrderNumber Int?
+  Quantity          Int?
+  Manufacturer      String?  @db.Char(50)
+  PartNumber        Int?
+  Description       String?  @db.Char(50)
+  UnitCost          Float?
+  UnitPrice         Float?
+  Warranty          Boolean?
+}
+
+model phones {
+  id          BigInt    @id @default(autoincrement())
+  number      String?   @db.VarChar(255)
+  kind        String?   @db.VarChar(255)
+  customer_id BigInt
+  created_at  DateTime  @db.DateTime(6)
+  updated_at  DateTime  @db.DateTime(6)
+  customers   customers @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_4588ed0a89")
+
+  @@index([customer_id], map: "index_phones_on_customer_id")
+}
+
+model phones_bak {
+  id          BigInt   @id @default(autoincrement())
+  number      String?  @db.VarChar(255)
+  kind        String?  @db.VarChar(255)
+  customer_id BigInt
+  created_at  DateTime @db.DateTime(6)
+  updated_at  DateTime @db.DateTime(6)
+
+  @@index([customer_id], map: "index_phones_on_customer_id")
+}
+
+model schema_migrations {
+  version String @id @db.VarChar(255)
+}
+
+model sub_estimates {
+  id          BigInt     @id @default(autoincrement())
+  description String?    @db.Text
+  laborHours  Decimal?   @db.Decimal(10, 2)
+  laborPrice  Decimal?   @db.Decimal(10, 2)
+  quantity    Int?
+  cost        Decimal?   @db.Decimal(10, 2)
+  list        Decimal?   @db.Decimal(10, 2)
+  price       Decimal?   @db.Decimal(10, 2)
+  created_at  DateTime   @db.DateTime(6)
+  updated_at  DateTime   @db.DateTime(6)
+  estimate_id BigInt?
+  estimates   estimates? @relation(fields: [estimate_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_8a659c7a9f")
+
+  @@index([estimate_id], map: "index_sub_estimates_on_estimate_id")
+}
+
+model sub_estimates_bak {
+  id          BigInt   @id @default(autoincrement())
+  description String?  @db.Text
+  laborHours  Decimal? @db.Decimal(10, 2)
+  laborPrice  Decimal? @db.Decimal(10, 2)
+  quantity    Int?
+  cost        Decimal? @db.Decimal(10, 2)
+  list        Decimal? @db.Decimal(10, 2)
+  price       Decimal? @db.Decimal(10, 2)
+  created_at  DateTime @db.DateTime(6)
+  updated_at  DateTime @db.DateTime(6)
+  estimate_id BigInt?
+
+  @@index([estimate_id], map: "index_sub_estimates_on_estimate_id")
+}
+
+model users {
+  id       Int      @id @default(autoincrement())
+  username String?  @db.VarChar(255)
+  password String?  @db.VarChar(255)
+  isAdmin  Boolean?
+}
