@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation"
 export default function Navbar () {
     const path = usePathname();
     return (
-    <div className="border-collapse p-3 m-3 bg-slate-600 rounded-md">
+    <div className="border-collapse py-3 my-3 bg-slate-600 w-screen">
         <Link className={`link ${path === '/' 
             ? 'border-spacing-2 cursor-pointer rounded-lg p-3 m-3 text-2xl bg-slate-950' 
             : 'border-spacing-2 cursor-pointer rounded-lg p-3 m-3 text-2xl hover:bg-slate-950'}`}  href={`/`}>
