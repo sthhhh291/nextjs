@@ -7,7 +7,7 @@ export default async function Home() {
   const customersList  = await prisma.customers.findMany({take:20});
   // console.log(customersList);
   return (
-    <div>
+    <div className="">
       <CustomerList customersList={customersList} />
     </div>
   );
