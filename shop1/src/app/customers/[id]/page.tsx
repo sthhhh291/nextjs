@@ -26,7 +26,7 @@ export default async function Customer({ params }: CustomerPageProps) {
     });
     console.log('customer',customer);
     return (
-      <div>
+      <div className="mx-6 px-6">
         {customer?.first_name} {customer?.last_name}
         <div>
             {customer?.cars.map((car: cars)=>

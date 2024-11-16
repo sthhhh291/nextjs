@@ -1,14 +1,16 @@
 import { customers } from "@prisma/client";
+import Link from "next/link";
+import CustomerSearchCard from "./CustomerSearchCard";
 
 export default async function CustomerList(props: { customersList: customers[] }) {
     
     return (
     //   <div>
-        <ul>
+        <div className="grid grid-cols-5 gap-4 items-center">
           {props.customersList.map((cus:customers) => 
-            <li key={cus.id} >{cus.first_name} {cus.last_name}</li>
+            <CustomerSearchCard key={cus.id} customer={cus} />
             )}
-        </ul>
+        </div>
     //   </div>
     );
   }

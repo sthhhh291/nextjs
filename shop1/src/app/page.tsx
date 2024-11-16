@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 // import { customers } from "@prisma/client";
-import CustomerList from "./components/CustomerList";
+import CustomerList from "./components/customers/CustomerList";
 // import Link from "next/link";
 
 export default async function Home() {
