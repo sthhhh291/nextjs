@@ -1,6 +1,14 @@
+import prisma from "@/lib/db";
+// import { customers } from "@prisma/client";
+import CustomerList from "./components/CustomerList";
+// import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const customersList  = await prisma.customers.findMany({take:20});
+  // console.log(customersList);
   return (
-    <h2>Home</h2>
+    <div>
+      <CustomerList customersList={customersList} />
+    </div>
   );
 }
