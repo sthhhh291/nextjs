@@ -32,6 +32,7 @@ export const get_customers_full = async function () {
 export const get_customer = async function (id: number) {
   const res = await fetch(api_base + `/customers/${id}`);
   const data = await res.json();
+  // console.log("get_customer", data);
   return data;
 };
 
