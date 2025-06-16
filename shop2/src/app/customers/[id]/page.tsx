@@ -3,9 +3,7 @@ import {
   get_customer_cars,
   get_customer_phones,
 } from "@/lib/api/customers";
-// import Card from "@/lib/components/Card";
-import Heading from "@/lib/components/Heading";
-import CardList from "@/lib/components/CardList";
+import Table from "@/lib/components/Table";
 
 type customerProps = {
   id: number;
@@ -23,6 +21,9 @@ type car = {
   year: string;
   make: string;
   model: string;
+  engine: string;
+  vin: string;
+  fleet_no: string;
   notes: string;
 };
 
@@ -39,32 +40,34 @@ const CustomerPage = async ({ params }: { params: customerProps }) => {
   const customer: customer = customer_data.customer;
   const cars: car[] = await get_customer_cars(id);
   const phones: phone[] = await get_customer_phones(id);
-  //   const cars: car[] = await car_data.cars;
-  //   console.log("car_data", car_data);
-  //   console.log("cars", cars);
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen p-8'>
-      <h1 className='text-2xl font-bold mb-4'>Customer Details</h1>
-      <p className='text-lg'>Customer ID: {id}</p>
-      <Heading title={`${customer.first_name} ${customer.last_name}`} />
-      <h2 className='text-xl font-semibold mt-6 mb-4'>Phones</h2>
-      <CardList
-        items={phones.map((phone) => ({
-          id: phone.id,
-          title: `${phone.phone_type} - ${phone.phone_number}`,
-          description: ``,
-        }))}
+    <div className="flex flex-col-3 ">
+      <Table
+        title="Customer"
+        headers={["First Name", "Last Name"]}
+        rows={[[customer.first_name, customer.last_name]]}
       />
-      <h2 className='text-xl font-semibold mt-6 mb-4'>Cars</h2>
-      <CardList
-        items={cars.map((car) => ({
-          id: car.id,
-          title: `${car.year} ${car.make} ${car.model}`,
-          description: car.notes,
-        }))}
+      <Table
+        title="Phones"
+        headers={["Number", "Type"]}
+        rows={phones.map((phone) => [
+          String(phone.phone_number),
+          String(phone.phone_type),
+        ])}
       />
-      {/* Additional customer details can be fetched and displayed here */}
+      <Table
+        title="Car"
+        headers={["Year", "Make", "Model", "Engine", "Vin", "Fleet"]}
+        rows={cars.map((car) => [
+          String(car.year),
+          String(car.make),
+          String(car.model),
+          String(car.engine),
+          String(car.vin),
+          String(car.fleet_no),
+        ])}
+      />
     </div>
   );
 };

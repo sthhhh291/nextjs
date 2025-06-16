@@ -1,15 +1,22 @@
 "use client";
 
-import { get_customers } from "../api/customers";
+import { get_cars } from "../api/cars";
 import Input from "./Input";
 import SearchList from "./SearchList";
 import Pagination from "./Pagination";
 import { useState, useEffect } from "react";
 
-type customer = {
+type car = {
   id: number;
   first_name: string;
   last_name: string;
+  year: string;
+  make: string;
+  model: string;
+  engine: string;
+  vin: string;
+  license: string;
+  fleet_no: string;
   notes: string;
 };
 
@@ -22,9 +29,10 @@ type totalProps = {
   pages: number;
 };
 
-const CustomerSearch = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [customers, setCustomers] = useState<customer[]>([]);
+const CarSearch = () => {
+  const [customerSearch, setCustomerSearch] = useState("");
+  const [carSearch, setCarSearch] = useState("");
+  const [cars, setcars] = useState<car[]>([]);
   const [page, setPage] = useState(1);
   const [totals, setTotals] = useState<totalProps>({
     total: 110,
@@ -37,19 +45,24 @@ const CustomerSearch = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await get_customers(searchTerm, page, 20);
-      setCustomers(data.customers);
+      const data = await get_cars(customerSearch, carSearch, page, 20);
+      setcars(data.cars);
       setTotals(data.totals);
     };
     fetchData();
-  }, [searchTerm, page]);
+  }, [customerSearch, carSearch, page]);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
+  const handleCustomerSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCustomerSearch(e.target.value);
+    setPage(1); // Reset to first page on new search
+  };
+
+  const handleCarSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCarSearch(e.target.value);
     setPage(1); // Reset to first page on new search
   };
 
@@ -58,8 +71,14 @@ const CustomerSearch = () => {
       <Input
         type="text"
         placeholder="Search customers..."
-        value={searchTerm}
-        onChange={handleSearchChange}
+        value={customerSearch}
+        onChange={handleCustomerSearch}
+      />
+      <Input
+        type="text"
+        placeholder="Search cars..."
+        value={carSearch}
+        onChange={handleCarSearch}
       />
       <Pagination
         total={totals.total}
@@ -71,15 +90,15 @@ const CustomerSearch = () => {
         onPageChange={handlePageChange}
       />
       <SearchList
-        items={customers.map((customer) => ({
-          id: customer.id,
-          title: `${customer.first_name} ${customer.last_name}`,
-          description: customer.notes,
-          href: `/customers/${customer.id}`,
+        items={cars.map((car) => ({
+          id: car.id,
+          title: `${car.first_name} ${car.last_name} - ${car.year} ${car.make} ${car.model}`,
+          description: car.notes,
+          href: `/cars/${car.id}`,
         }))}
       />
     </div>
   );
 };
 
-export default CustomerSearch;
+export default CarSearch;
