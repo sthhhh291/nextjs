@@ -46,13 +46,18 @@ const CustomerPage = async ({ params }: { params: customerProps }) => {
       <Table
         title="Customer"
         headers={["First Name", "Last Name"]}
-        rows={[[customer.first_name, customer.last_name]]}
+        rows={[
+          {
+            "First Name": customer.first_name,
+            "Last Name": customer.last_name,
+          },
+        ]}
       />
       <Table
         title="Phones"
         headers={["Number", "Type"]}
         rows={phones.map((phone) => [
-          String(phone.phone_number),
+          "Number":phone.phone_number,
           String(phone.phone_type),
         ])}
       />
