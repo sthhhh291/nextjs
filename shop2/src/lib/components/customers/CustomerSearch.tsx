@@ -1,9 +1,12 @@
 "use client";
 
-import { get_customers } from "../api/customers";
-import Input from "./Input";
-import SearchList from "./SearchList";
-import Pagination from "./Pagination";
+import { get_customers } from "@/lib/api/customers";
+// import Input from "@/lib/components";
+// import SearchList from "./SearchList";
+// import Pagination from "./Pagination";
+import Input from "../Input";
+import SearchList from "../SearchList";
+import Pagination from "../Pagination";
 import { useState, useEffect } from "react";
 
 type customer = {
@@ -54,10 +57,10 @@ const CustomerSearch = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen p-8">
+    <div className='flex flex-col items-center min-h-screen p-8'>
       <Input
-        type="text"
-        placeholder="Search customers..."
+        type='text'
+        placeholder='Search customers...'
         value={searchTerm}
         onChange={handleSearchChange}
       />
