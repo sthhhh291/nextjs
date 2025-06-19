@@ -4,7 +4,6 @@ import {
   get_customer_phones,
 } from "@/lib/api/customers";
 import Table from "@/lib/components/Table";
-import CustomerTable from "@/lib/components/customers/CustomerTable";
 
 type customerProps = {
   id: number;
@@ -46,42 +45,33 @@ const CustomerPage = async ({ params }: { params: customerProps }) => {
   const phones: phone[] = await get_customer_phones(id);
 
   return (
-    <div className='flex flex-col-3 '>
-      {/* <Table
-        title='Customer'
-        rows={[
-          {
-            "First Name": customer.first_name,
-            "Last Name": customer.last_name,
-          },
-        ]}
-      /> */}
-      <CustomerTable
-        customers={[
-          {
-            "First Name": customer.first_name,
-            "Last Name": customer.last_name,
-            href: `/customers/${customer.id}`,
-          },
+    <div className="flex sm:flex-col-1 md:flex-col-2 lg:flex-col-3 ">
+      <Table
+        data={[customer]}
+        keyField={"id"}
+        columns={[
+          { key: "first_name", header: "First Name" },
+          { key: "last_name", header: "Last Name" },
         ]}
       />
       <Table
-        title='Phones'
-        rows={phones.map((phone) => ({
-          Number: phone.phone_number,
-          Type: phone.phone_type,
-        }))}
+        data={cars}
+        keyField={"id"}
+        columns={[
+          { key: "year", header: "Year" },
+          { key: "make", header: "Make" },
+          { key: "model", header: "Model" },
+          { key: "engine", header: "Engine" },
+          { key: "vin", header: "Vin" },
+        ]}
       />
       <Table
-        title='Car'
-        rows={cars.map((car) => ({
-          Year: car.year,
-          Make: car.make,
-          Model: car.model,
-          Engine: car.engine,
-          Vin: car.vin,
-          Fleet: car.fleet_no,
-        }))}
+        data={phones}
+        keyField={"id"}
+        columns={[
+          { key: "phone_number", header: "Phone Number" },
+          { key: "phone_type", header: "Type" },
+        ]}
       />
     </div>
   );
