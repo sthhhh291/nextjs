@@ -45,13 +45,21 @@ const CustomerPage = async ({ params }: { params: customerProps }) => {
   const phones: phone[] = await get_customer_phones(id);
 
   return (
-    <div className="flex sm:flex-col-1 md:flex-col-2 lg:flex-col-3 ">
+    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px] p-[24px]'>
       <Table
         data={[customer]}
         keyField={"id"}
         columns={[
           { key: "first_name", header: "First Name" },
           { key: "last_name", header: "Last Name" },
+        ]}
+      />
+      <Table
+        data={phones}
+        keyField={"id"}
+        columns={[
+          { key: "phone_number", header: "Phone Number" },
+          { key: "phone_type", header: "Type" },
         ]}
       />
       <Table
@@ -63,14 +71,6 @@ const CustomerPage = async ({ params }: { params: customerProps }) => {
           { key: "model", header: "Model" },
           { key: "engine", header: "Engine" },
           { key: "vin", header: "Vin" },
-        ]}
-      />
-      <Table
-        data={phones}
-        keyField={"id"}
-        columns={[
-          { key: "phone_number", header: "Phone Number" },
-          { key: "phone_type", header: "Type" },
         ]}
       />
     </div>
