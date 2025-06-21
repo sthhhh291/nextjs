@@ -45,7 +45,7 @@ const CustomerPage = async ({ params }: { params: customerProps }) => {
   const phones: phone[] = await get_customer_phones(id);
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px] p-[24px]'>
+    <div className="flex flex-cols-1 md:flex-cols-2 lg:flex-cols-3 gap-[24px] p-[24px]">
       <Table
         data={[customer]}
         keyField={"id"}

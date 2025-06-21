@@ -1,14 +1,14 @@
-import { JSX } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 
-type ButtonProps = JSX.IntrinsicElements["button"] & {
-  children: React.ReactNode;
-};
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  children: ReactNode;
+}
 
-const Button: React.FC<ButtonProps> = ({ children, ...rest }) => {
+const Button = ({ children, ...props }: ButtonProps) => {
   return (
     <button
+      {...props}
       className="bg-blue-500 text-white font-bold py-2 px-4 rounded cursor-pointer hover:bg-blue-800"
-      {...rest}
     >
       {children}
     </button>
