@@ -5,9 +5,7 @@ import {
   get_car_repairs,
   get_car_phones,
 } from "@/lib/api/cars";
-// import Card from "@/lib/components/Card";
-import Heading from "@/lib/components/Heading";
-import CardList from "@/lib/components/CardList";
+import Table from "@/lib/components/Table";
 
 type carProps = {
   id: number;
@@ -53,35 +51,47 @@ const CarPage = async ({ params }: { params: carProps }) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8">
-      <h1 className="text-2xl font-bold mb-4">car Details</h1>
-      <p className="text-lg">car ID: {id}</p>
-      <Heading title={`${customer.first_name} ${customer.last_name}`} />
-      <Heading title={`${car.year} ${car.make} ${car.model}`} />
-      <h2 className="text-xl font-semibold mt-6 mb-4">Phones</h2>
-      <CardList
-        items={phones.map((phone) => ({
-          id: phone.id,
-          title: `${phone.phone_type} - ${phone.phone_number}`,
-          description: ``,
-        }))}
+      <h1 className="text-2xl font-bold mb-4">Car Details</h1>
+      <Table
+        data={[customer]}
+        keyField={"id"}
+        columns={[
+          { key: "first_name", header: "First Name" },
+          { key: "last_name", header: "Last Name" },
+        ]}
       />
-      <h2 className="text-xl font-semibold mt-6 mb-4">Estimates</h2>
-      <CardList
-        items={estimates.map((estimate) => ({
-          id: estimate.id,
-          title: `${estimate.date} ${estimate.miles} ${estimate.hours_taken}`,
-          description: estimate.pub_notes,
-          href: `/estimates/${estimate.id}`,
-        }))}
+      <Table
+        data={phones}
+        keyField={"id"}
+        columns={[
+          { key: "phone_type", header: "Type" },
+          { key: "phone_number", header: "Number" },
+        ]}
       />
-      <h2 className="text-xl font-semibold mt-6 mb-4">Repairs</h2>
-      <CardList
-        items={repairs.map((estimate) => ({
-          id: estimate.id,
-          title: `${estimate.date} ${estimate.miles} ${estimate.hours_taken}`,
-          description: estimate.pub_notes,
-          href: `/repairs/${estimate.id}`,
-        }))}
+      <Table
+        data={[car]}
+        keyField={"id"}
+        columns={[
+          { key: "year", header: "Year" },
+          { key: "make", header: "Make" },
+          { key: "model", header: "Model" },
+        ]}
+      />
+      <Table
+        data={estimates}
+        keyField={"id"}
+        columns={[
+          { key: "date", header: "Date" },
+          { key: "pub_notes", header: "Notes" },
+        ]}
+      />
+      <Table
+        data={repairs}
+        keyField={"id"}
+        columns={[
+          { key: "date", header: "Date" },
+          { key: "pub_notes", header: "Notes" },
+        ]}
       />
     </div>
   );

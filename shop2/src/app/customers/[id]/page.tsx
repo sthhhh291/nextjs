@@ -38,7 +38,6 @@ type phone = {
 
 const CustomerPage = async ({ params }: { params: customerProps }) => {
   const { id } = await params;
-  console.log("id", id);
   const customer_data = await get_customer(id);
   const customer: customer = customer_data.customer;
   const cars: car[] = await get_customer_cars(id);
