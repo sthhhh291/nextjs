@@ -1,18 +1,12 @@
-import mysql2, { Pool } from "mysql2";
-// const dotenv = require("dotenv");
-// dotenv.config();
-const db_user = process.env.DATABASE_USER;
-const db_uri = process.env.DATABASE_URI;
-const db_password = process.env.DATABASE_PASSWORD;
-const db_database = process.env.DATABASE;
+import mysql2, { Pool } from "mysql2/promise";
 
 let db: Pool;
 try {
   db = mysql2.createPool({
-    host: db_uri,
-    user: db_user,
-    password: db_password,
-    database: db_database,
+    host: process.env.DATABASE_URI,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE,
     waitForConnections: true,
     multipleStatements: true,
     connectionLimit: 10,

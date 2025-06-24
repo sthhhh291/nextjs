@@ -3,8 +3,9 @@ import db from "./db";
 export const getCustomers = async (
   filter: string,
   limit: number,
-  offset: number
+  page: number
 ) => {
+  const offset = (page - 1) * limit || 0;
   const customersSql = `SELECT id,first_name,last_name,notes FROM customers
     WHERE concat(first_name, " ", last_name) LIKE ?
     ORDER BY last_name,first_name LIMIT ? OFFSET ?`;
@@ -12,12 +13,22 @@ export const getCustomers = async (
   const customersParams = [`%${filter}%`, +limit, +offset];
   const countParams = [`%${filter}%`];
 
-  const customers = db.query(customersSql, customersParams);
-  const countRows = db.query(countSql, countParams);
-
+  const [results] = await db.query(customersSql, customersParams);
+  const [countRows] = await db.query(countSql, countParams);
+  const customers: customer[] = results as customer[];
+  const total = (countRows as { count: number }[])[0].count;
+  const pages = Math.ceil(total / limit);
+  const totals = {
+    total: total,
+    per_page: limit,
+    page: page,
+    next_page: page + 1 > pages ? pages : +page + 1,
+    prev_page: page - 1 < 1 ? 1 : +page - 1,
+    pages: pages,
+  };
   return {
     customers,
-    total: countRows,
+    totals,
   };
 };
 
