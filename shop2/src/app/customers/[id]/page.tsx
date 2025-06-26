@@ -1,50 +1,22 @@
 import {
-  get_customer,
-  get_customer_cars,
-  get_customer_phones,
-} from "@/lib/api/customers";
+  getCustomer,
+  getCustomerCars,
+  getCustomerPhones,
+  createCustomer,
+  editCustomer,
+  deleteCustomer,
+} from "@/lib/db/customers";
 import Table from "@/lib/components/Table";
+import Button from "@/lib/components/Button";
 
-type customerProps = {
-  id: number;
-};
-
-type customer = {
-  id: number;
-  first_name: string;
-  last_name: string;
-  notes: string;
-  "First Name": string;
-  "Last Name": string;
-  href?: string;
-};
-
-type car = {
-  id: number;
-  year: string;
-  make: string;
-  model: string;
-  engine: string;
-  vin: string;
-  fleet_no: string;
-  notes: string;
-};
-
-type phone = {
-  id: number;
-  phone_number: string;
-  phone_type: string;
-};
-
-const CustomerPage = async ({ params }: { params: customerProps }) => {
+const CustomerPage = async ({ params }: { params: customer }) => {
   const { id } = await params;
-  const customer_data = await get_customer(id);
-  const customer: customer = customer_data.customer;
-  const cars: car[] = await get_customer_cars(id);
-  const phones: phone[] = await get_customer_phones(id);
+  const customer = await getCustomer(id);
+  const cars: car[] = await getCustomerCars(id);
+  const phones: phone[] = await getCustomerPhones(id);
 
   return (
-    <div className="flex flex-cols-1 md:flex-cols-2 lg:flex-cols-3 gap-[24px] p-[24px]">
+    <div className='flex flex-cols-1 md:flex-cols-2 lg:flex-cols-3 gap-[24px] p-[24px]'>
       <Table
         data={[customer]}
         keyField={"id"}
@@ -72,6 +44,27 @@ const CustomerPage = async ({ params }: { params: customerProps }) => {
           { key: "vin", header: "Vin" },
         ]}
       />
+      <form
+        action={async () => {
+          "use server";
+          await editCustomer(5530, "testedit", "lastedit", "test notes edit");
+        }}>
+        <Button>Edit Test Customer</Button>
+      </form>
+      <form
+        action={async () => {
+          "use server";
+          await deleteCustomer(5530);
+        }}>
+        <Button>Delete test Customer</Button>
+      </form>
+      <form
+        action={async () => {
+          "use server";
+          await createCustomer("test", "last", "test notes");
+        }}>
+        <Button>Add Test Customer</Button>
+      </form>
     </div>
   );
 };

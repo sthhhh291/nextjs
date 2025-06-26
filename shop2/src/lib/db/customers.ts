@@ -1,5 +1,7 @@
+import { ResultSetHeader } from "mysql2";
 import db from "./db";
 
+// get all customers with pagination
 export const getCustomers = async (
   filter: string,
   limit: number,
@@ -32,209 +34,75 @@ export const getCustomers = async (
   };
 };
 
-// console.log(connection);
+// get one customer
+export const getCustomer = async (id: number) => {
+  const customerSql = `SELECT id,first_name,last_name,notes FROM customers
+    WHERE id=?`;
+  const customerParams = [id];
 
-// get all customers with pagination
-// export function getCustomers(filter:string,limit:number,page:number,offset:number) {
-//     connection.query(
-//         'SELECT id,first_name,last_name,notes FROM customers\
-//           where concat(first_name," ", last_name) like ?\
-//            order by last_name,first_name limit ? offset ?;\
-//           select count(*) as count from customers where concat(first_name," ", last_name) like ?;',
-//         [`%${filter}%`, +limit, +offset, `%${filter}%`],
-//         (err, results) => {
-//           if (err) {
-//             res.status(500).send("Error fetching customers" + err.stack);
-//             return;
-//           }
-//           const customers = results[0];
-//           const total = results[1][0].count;
-//           const pages = Math.ceil(total / limit);
-//           let result = {
-//             customers: customers,
-//             totals: {
-//               total: total,
-//               per_page: +limit,
-//               page: +page,
-//               next_page: +page + 1 > pages ? pages : +page + 1,
-//               prev_page: +page - 1 < 1 ? 1 : +page - 1,
-//               pages: pages,
-//             },
-//           };
-//           res.json(result);
-//         }
-//       );
-// }
-// router.get("/", (req, res) => {
-//   let filter = req.query.filter || "";
-//   let limit = req.query.limit || 20;
-//   let page = req.query.page || 1;
-//   let offset = (page - 1) * limit || 0;
-//   connection.query(
-//     'SELECT id,first_name,last_name,notes FROM customers\
-//       where concat(first_name," ", last_name) like ?\
-//        order by last_name,first_name limit ? offset ?;\
-//       select count(*) as count from customers where concat(first_name," ", last_name) like ?;',
-//     [`%${filter}%`, +limit, +offset, `%${filter}%`],
-//     (err, results) => {
-//       if (err) {
-//         res.status(500).send("Error fetching customers" + err.stack);
-//         return;
-//       }
-//       const customers = results[0];
-//       const total = results[1][0].count;
-//       const pages = Math.ceil(total / limit);
-//       let result = {
-//         customers: customers,
-//         totals: {
-//           total: total,
-//           per_page: +limit,
-//           page: +page,
-//           next_page: +page + 1 > pages ? pages : +page + 1,
-//           prev_page: +page - 1 < 1 ? 1 : +page - 1,
-//           pages: pages,
-//         },
-//       };
-//       res.json(result);
-//     }
-//   );
-// });
+  const [results] = await db.query(customerSql, customerParams);
+  const customers = results as customer[];
+  const customer: customer = customers[0];
+  return customer;
+};
 
-// // get all customers. let tanstack query handle pagination
-// router.get("/full", (req, res) => {
-//   var offset = (req.query.page - 1) * 50;
-//   if (!req.query.page) offset = 0;
-//   connection.query(
-//     "SELECT id,first_name,last_name,notes FROM customers order by last_name, first_name",
-//     (err, results) => {
-//       if (err) {
-//         console.error("Error executing query: " + err.stack);
-//         res.status(500).send("Error fetching customers");
-//         return;
-//       }
-//       res.json(results);
-//     }
-//   );
-// });
+// get all cars for 1 customer
+export const getCustomerCars = async (id: number) => {
+  const carSql =
+    "SELECT cars.id,cars.customer_id,cars.year,cars.make,cars.model,cars.engine,cars.vin,\
+    cars.license,cars.fleet_no,cars.notes from cars where cars.customer_id=?;";
+  const carParams = [id];
 
-// // get one customer note: this has been simplified
-// router.get("/:id", (req, res) => {
-//   connection.query(
-//     "SELECT id,first_name,last_name,notes FROM customers WHERE id=?;",
-//     [req.params.id],
-//     (err, results) => {
-//       if (err) {
-//         console.error("Error executing query: " + err.stack);
-//         res.status(500).send("Error fetching customer" + err);
-//         return;
-//       }
-//       let customer = {
-//         customer: results[0],
-//       };
-//       res.json(customer);
-//     }
-//   );
-// });
+  const [results] = await db.query(carSql, carParams);
+  const cars: car[] = results as car[];
+  return cars;
+};
 
-// //get cars by customer_id ie cars for bob johnson
-// router.get("/:id/cars", (req, res) => {
-//   connection.query(
-//     "SELECT cars.id,cars.customer_id,cars.year,cars.make,cars.model,cars.engine,cars.vin,\
-//     cars.license,cars.fleet_no,cars.notes from cars where cars.customer_id=?;",
-//     [req.params.id],
-//     (err, results) => {
-//       if (err) {
-//         console.error("Error executing query: " + err.stack);
-//         res.status(500).send("Error fetching car");
-//         return;
-//       }
-//       res.json(results);
-//     }
-//   );
-// });
+// get all phones for 1 customer
+export const getCustomerPhones = async (id: number) => {
+  const phoneSql =
+    "SELECT id,customer_id,phone_type,phone_number from phones where customer_id=?";
+  const phoneParams = [id];
 
-// //get phones by customer_id ie phones for bob johnson
-// router.get("/:id/phones", (req, res) => {
-//   connection.query(
-//     "SELECT id,customer_id,phone_type,phone_number from phones where customer_id=?;",
-//     [req.params.id],
-//     (err, results) => {
-//       if (err) {
-//         console.error("Error executing query: " + err.stack);
-//         res.status(500).send("Error fetching phone" + err);
-//         return;
-//       }
-//       res.json(results);
-//     }
-//   );
-// });
+  const [results] = await db.query(phoneSql, phoneParams);
+  const phones: phone[] = results as phone[];
+  return phones;
+};
 
-// // create customer
-// router.post("/", (req, res) => {
-//   const customer = {
-//     first_name: req.body.first_name,
-//     last_name: req.body.last_name,
-//     notes: req.body.notes,
-//   };
-//   connection.query(
-//     "insert into customers(first_name,last_name,notes) values(?,?,?);",
-//     [customer.first_name, customer.last_name, customer.notes],
-//     (err, results) => {
-//       if (err) {
-//         console.error("Error executing query: " + err.stack);
-//         res.status(500).send("Error fetching customers");
-//         return;
-//       }
-//       res.json(results);
-//     }
-//   );
-// });
+//create customer
+export const createCustomer = async (
+  first: string,
+  last: string,
+  notes: string
+) => {
+  const sql = "INSERT INTO customers(first_name,last_name,notes) values(?,?,?)";
+  const params = [first, last, notes];
+  const [results] = await db.query<ResultSetHeader>(sql, params);
+  console.log("results", results);
+  const insertId = results.insertId;
+  const newCustomer = await getCustomer(insertId);
+  console.log("new customer", newCustomer);
+};
 
-// // edit customer
-// router.put("/:id", (req, res) => {
-//   const customer = {
-//     first_name: req.body.first_name,
-//     last_name: req.body.last_name,
-//     notes: req.body.notes,
-//   };
-//   connection.query(
-//     "update customers set first_name=?, last_name=?,notes=? where id=?;",
-//     [customer.first_name, customer.last_name, customer.notes, req.params.id],
-//     (err, results) => {
-//       if (err) {
-//         console.error("Error executing query: " + err.stack);
-//         res.status(500).send("Error fetching customers" + err);
-//         return;
-//       }
-//       connection.query(
-//         "select first_name,last_name,notes from customers where id=?",
-//         [req.params.id],
-//         (err, results) => {
-//           if (err) {
-//             console.error("Error executing query: " + err.stack);
-//             res.status(500).send("Error fetching customers" + err);
-//           }
-//           res.json(results[0]);
-//         }
-//       );
-//     }
-//   );
-// });
+//edit customer
+export const editCustomer = async (
+  id: number,
+  first: string,
+  last: string,
+  notes: string
+) => {
+  const sql =
+    "UPDATE customers SET first_name=?, last_name=?, notes=? WHERE id=?";
+  const params = [first, last, notes, id];
+  const [results] = await db.query<ResultSetHeader>(sql, params);
+  console.log("updated customer", results);
+  const newCustomer = await getCustomer(id);
+  console.log("updated customer", newCustomer);
+};
 
-// //delete customer probably not gonna use this
-// router.delete("/:id", (req, res) => {
-//   connection.query(
-//     "delete from customers where id = ?;",
-//     [req.params.id],
-//     (err, results) => {
-//       if (err) {
-//         console.error("Error executing query: " + err.stack);
-//         res.status(500).send("Error fetching customers");
-//         return;
-//       }
-//       res.json(results);
-//     }
-//   );
-// });
-
-// module.exports = router;
+//delete customer
+export const deleteCustomer = async (id: number) => {
+  const sql = "DELETE FROM customers WHERE id=?";
+  const params = [id];
+  await db.query(sql, params);
+};

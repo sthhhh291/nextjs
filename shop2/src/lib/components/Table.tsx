@@ -12,11 +12,10 @@ type TableProps<T> = {
 };
 
 function Table<T>({ data, columns, keyField }: TableProps<T>) {
-  console.log("data", data, "columns", columns, "keyfield", keyField);
   return (
-    <table className="w-full text-left border">
+    <table className='w-full text-left border'>
       <thead>
-        <tr className="bg-slate-300">
+        <tr className='bg-slate-300'>
           {columns.map((col) => (
             <th key={String(col.key)}>{col.header}</th>
           ))}
@@ -24,7 +23,7 @@ function Table<T>({ data, columns, keyField }: TableProps<T>) {
       </thead>
       <tbody>
         {data.map((row) => (
-          <tr className="striped" key={String(row[keyField])}>
+          <tr className='striped' key={String(row[keyField])}>
             {columns.map((col) => (
               <td key={String(col.key)}>
                 {col.render
