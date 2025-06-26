@@ -1,7 +1,5 @@
-// "use client";
-import Input from "@/lib/components/Input";
+import SearchCustomers from "@/lib/components/SearchCustomers";
 import { getCustomers } from "@/lib/db/customers";
-// import { useSearchParams } from "next/navigation";
 
 interface CustomersPageProps {
   searchParams: {
@@ -21,15 +19,10 @@ export default async function CustomersPage({
   const page = searchParams.page || 1;
   const data = await getCustomers(filter, limit, page);
   const customers = data.customers;
-  // console.log("data", data);
-  // const totals = data.totals;
-  // console.log("totals", totals);
   return (
     <div>
       <div>
-        <Input onChange={(e) => console.log(e.target.value)} />
-      </div>
-      <div>
+        <SearchCustomers query={filter} />
         {customers.map((customer, index) => (
           <p key={index}>
             {customer.first_name} {customer.last_name} {customer.notes}
