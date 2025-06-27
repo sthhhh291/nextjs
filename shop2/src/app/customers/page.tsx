@@ -1,5 +1,6 @@
 import SearchCustomers from "@/lib/components/SearchCustomers";
 import { getCustomers } from "@/lib/db/customers";
+import AddCustomer from "./AddCustomer";
 
 interface CustomersPageProps {
   searchParams: {
@@ -23,6 +24,7 @@ export default async function CustomersPage({
     <div>
       <div>
         <SearchCustomers query={filter} />
+        <AddCustomer />
         {customers.map((customer, index) => (
           <p key={index}>
             {customer.first_name} {customer.last_name} {customer.notes}
