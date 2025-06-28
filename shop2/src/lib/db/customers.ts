@@ -78,10 +78,11 @@ export const createCustomer = async (
   const sql = "INSERT INTO customers(first_name,last_name,notes) values(?,?,?)";
   const params = [first, last, notes];
   const [results] = await db.query<ResultSetHeader>(sql, params);
-  console.log("results", results);
+  // console.log("results", results);
   const insertId = results.insertId;
-  const newCustomer = await getCustomer(insertId);
-  console.log("new customer", newCustomer);
+  return insertId;
+  // const newCustomer = await getCustomer(insertId);
+  // console.log("new customer", newCustomer);
 };
 
 //edit customer

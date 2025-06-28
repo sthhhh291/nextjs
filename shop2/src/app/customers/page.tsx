@@ -1,6 +1,6 @@
 import SearchCustomers from "@/lib/components/SearchCustomers";
 import { getCustomers } from "@/lib/db/customers";
-import AddCustomer from "./AddCustomer";
+import AddCustomer from "./CustomerForm";
 
 interface CustomersPageProps {
   searchParams: {
