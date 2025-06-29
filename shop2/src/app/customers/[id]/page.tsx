@@ -6,8 +6,13 @@ import {
   editCustomer,
   deleteCustomer,
 } from "@/lib/db/customers";
-import Table from "@/lib/components/Table";
+// import Table from "@/lib/components/Table";
 import Button from "@/lib/components/Button";
+import CustomerCard from "./CustomerCard";
+// import Phones from "./Phones";
+import Cars from "./Cars";
+// import Card from "@/lib/components/Card";
+// import CardList from "@/lib/components/CardList";
 
 const CustomerPage = async ({ params }: { params: customer }) => {
   const { id } = await params;
@@ -16,16 +21,25 @@ const CustomerPage = async ({ params }: { params: customer }) => {
   const phones: phone[] = await getCustomerPhones(id);
 
   return (
-    <div className='flex flex-cols-1 md:flex-cols-2 lg:flex-cols-3 gap-[24px] p-[24px]'>
-      <Table
-        data={[customer]}
-        keyField={"id"}
-        columns={[
-          { key: "first_name", header: "First Name" },
-          { key: "last_name", header: "Last Name" },
-        ]}
-      />
-      <Table
+    <div className=''>
+      <h2 className='max-w-md mx-auto  p-6'>Customer:</h2>
+      <CustomerCard customer={customer} phones={phones} />
+      {/* <Card
+        title={`${customer.first_name} ${customer.last_name}`}
+        description=''
+      /> */}
+      {/* <CardList
+        items={phones.map((phone) => ({
+          id: phone.id,
+          title: phone.phone_number,
+          description: phone.phone_type,
+        }))}
+      /> */}
+      <h2 className='max-w-md mx-auto p-6'>Cars:</h2>
+      <Cars cars={cars} />
+      {/* <Phones phones={phones} /> */}
+
+      {/* <Table
         data={phones}
         keyField={"id"}
         columns={[
@@ -43,7 +57,7 @@ const CustomerPage = async ({ params }: { params: customer }) => {
           { key: "engine", header: "Engine" },
           { key: "vin", header: "Vin" },
         ]}
-      />
+      /> */}
       <form
         action={async () => {
           "use server";

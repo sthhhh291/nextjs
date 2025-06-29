@@ -13,7 +13,7 @@ export default function SearchCustomers({ query }: { query?: string }) {
       return;
     }
     if (filter !== undefined) {
-      router.push(`/customers?filter=${filter}`);
+      router.push(`/?customerFilter=${filter}`);
     } else {
       // do i need anyghint here? don't seem to
     }
@@ -21,7 +21,7 @@ export default function SearchCustomers({ query }: { query?: string }) {
   return (
     <>
       <Input
-        placeholder="Search Customers"
+        placeholder='Search Customers'
         onChange={(e) => setFilter(e.target.value)}
         value={filter}
       />

@@ -35,7 +35,7 @@ export const getcars = async (filter: string, limit: number, page: number) => {
 
 // get one car
 export const getcar = async (id: number) => {
-  const carSql = `SELECT id, year,make,model,engine,vin,license,fleet_no\
+  const carSql = `SELECT id, customer_id, year,make,model,engine,vin,license,fleet_no\
     FROM cars
     WHERE id=?`;
   const carParams = [id];
@@ -62,7 +62,7 @@ export const getCarEstimates = async (id: number) => {
 export const getCarRepairs = async (id: number) => {
   const repairSql =
     "SELECT id,car_id,employee_id,date,miles,hours_taken,priv_notes,pub_notes\
-    from repair_orders where repair_id=?;";
+    from repair_orders where id=?;";
   const repairParams = [id];
 
   const [results] = await db.query(repairSql, repairParams);

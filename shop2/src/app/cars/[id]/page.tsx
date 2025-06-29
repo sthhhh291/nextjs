@@ -1,58 +1,29 @@
-import {
-  get_car,
-  get_car_customer,
-  get_car_estimates,
-  get_car_repairs,
-  get_car_phones,
-} from "@/lib/api/cars";
+import { getcar, getCarRepairs } from "@/lib/db/cars";
+import { getCustomer, getCustomerPhones } from "@/lib/db/customers";
 import Table from "@/lib/components/Table";
+import CustomerCard from "@/app/customers/[id]/CustomerCard";
+import Card from "@/lib/components/Card";
+import SearchList from "@/lib/components/SearchList";
 
 type carProps = {
   id: number;
 };
 
-type customer = {
-  id: number;
-  first_name: string;
-  last_name: string;
-  notes: string;
-};
-
-type car = {
-  id: number;
-  year: string;
-  make: string;
-  model: string;
-  notes: string;
-};
-
-type phone = {
-  id: number;
-  phone_number: string;
-  phone_type: string;
-};
-
-type estimate = {
-  id: number;
-  date: string;
-  miles: number;
-  hours_taken: number;
-  pub_notes: string;
-};
-
 const CarPage = async ({ params }: { params: carProps }) => {
   const { id } = await params;
-  const car_data = await get_car(id);
-  const car: car = car_data.car;
-  const customer: customer = await get_car_customer(id);
-  const phones: phone[] = await get_car_phones(id);
-  const estimates: estimate[] = await get_car_estimates(id);
-  const repairs: estimate[] = await get_car_repairs(id);
+  const car = await getcar(id);
+  // const car: car = car_data.car;
+  const customer = await getCustomer(car.customer_id);
+  const phones = await getCustomerPhones(car.customer_id);
+  const repairs = await getCarRepairs(id);
+  // const estimates: estimate[] = await get_car_estimates(id);
+  // const repairs: estimate[] = await get_car_repairs(id);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8">
-      <h1 className="text-2xl font-bold mb-4">Car Details</h1>
-      <Table
+    <div className='flex flex-col items-center justify-center min-h-screen p-8'>
+      <h1 className='text-2xl font-bold mb-4'>Car Details</h1>
+      <CustomerCard customer={customer} phones={phones} />
+      {/* <Table
         data={[customer]}
         keyField={"id"}
         columns={[
@@ -67,8 +38,19 @@ const CarPage = async ({ params }: { params: carProps }) => {
           { key: "phone_type", header: "Type" },
           { key: "phone_number", header: "Number" },
         ]}
+      /> */}
+      <Card
+        title={`${car.year} ${car.make} ${car.model}`}
+        description={`${car.engine} ${car.vin} ${car.license} ${car.fleet_no}`}
       />
-      <Table
+      <SearchList
+        items={repairs.map((car) => ({
+          id: car.id,
+          title: `${car.date} ${car.miles} ${car.hours_taken}`,
+          href: `/repairs/${car.id}`,
+        }))}
+      />
+      {/* <Table
         data={[car]}
         keyField={"id"}
         columns={[
@@ -76,8 +58,8 @@ const CarPage = async ({ params }: { params: carProps }) => {
           { key: "make", header: "Make" },
           { key: "model", header: "Model" },
         ]}
-      />
-      <Table
+      /> */}
+      {/* <Table
         data={estimates}
         keyField={"id"}
         columns={[
@@ -92,7 +74,7 @@ const CarPage = async ({ params }: { params: carProps }) => {
           { key: "date", header: "Date" },
           { key: "pub_notes", header: "Notes" },
         ]}
-      />
+      /> */}
     </div>
   );
 };

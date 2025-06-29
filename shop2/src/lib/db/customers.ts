@@ -50,7 +50,8 @@ export const getCustomer = async (id: number) => {
 export const getCustomerCars = async (id: number) => {
   const carSql =
     "SELECT cars.id,cars.customer_id,cars.year,cars.make,cars.model,cars.engine,cars.vin,\
-    cars.license,cars.fleet_no,cars.notes from cars where cars.customer_id=?;";
+    cars.license,cars.fleet_no,cars.notes from cars where cars.customer_id=?\
+    ORDER BY year DESC, make,model;";
   const carParams = [id];
 
   const [results] = await db.query(carSql, carParams);

@@ -8,7 +8,11 @@ type customerCreate = {
   notes: string;
 };
 
-type customer = base & customerCreate;
+type customer = base &
+  customerCreate & {
+    phones?: phone[];
+    cars?: car[];
+  };
 
 type carCreate = {
   customer_id: number;
