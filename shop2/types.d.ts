@@ -71,3 +71,15 @@ type partCreate = {
 };
 
 type part = base & partCreate;
+
+type totals = {
+  labor: number;
+  parts: number;
+  oil: number;
+  subtotal: number;
+  tax: number;
+  shop_fees: number;
+  total: number;
+  cost: number;
+  margin: number;
+};

@@ -51,7 +51,7 @@ export const getrepair = async (id: number) => {
 };
 
 // get all subs for 1 repair
-export const getrepairEstimates = async (id: number) => {
+export const getrepairSubs = async (id: number) => {
   const laborSql =
     "SELECT id,repair_order_id,description,hours,price\
     from labor where labor.repair_order_id=?;";
@@ -72,16 +72,34 @@ export const getrepairEstimates = async (id: number) => {
   return subs;
 };
 
-// get all repairs for 1 repair
-export const getrepairRepairs = async (id: number) => {
+// get totals for repair
+export const getrepairTotals = async (id: number) => {
   const repairSql =
-    "SELECT id,repair_id,employee_id,date,miles,hours_taken,priv_notes,pub_notes\
-    from repair_orders where repair_id=?;";
-  const repairParams = [id];
+    "select labor,parts,oil, labor+parts+oil as subtotal,\
+    round(value *(parts+oil),2)as tax,\
+    if(coalesce(labor,0)+coalesce(parts,0)+coalesce(oil,0) >500,15,\
+    round(.03*(coalesce(labor,0)+coalesce(parts,0)+coalesce(oil,0)),2))as shop_fees,\
+    labor+parts+oil+round(value*(parts+oil),2) +\
+    if(coalesce(labor,0)+coalesce(parts,0)+coalesce(oil,0) >500,15,\
+    round(.03*(coalesce(labor,0)+coalesce(parts,0)+coalesce(oil,0)),2)) as total,\
+    p_cost+o_cost as cost,\
+    labor+parts+oil +\
+    if(coalesce(labor,0)+coalesce(parts,0)+coalesce(oil,0) >500,15,\
+    round(.03*(coalesce(labor,0)+coalesce(parts,0)+coalesce(oil,0)),2))\
+    -p_cost - o_cost as margin,\
+    parts-p_cost as parts_margin\
+    from (select coalesce(sum(price),0) as labor from labor where repair_order_id=?) as labor,\
+    (select coalesce(sum(price*quantity),0) as parts, coalesce(sum(cost*quantity),0) as p_cost\
+     from parts where repair_order_id=?) as parts,\
+    (select coalesce(sum(price*quantity),0) as oil, coalesce(sum(cost*quantity),0) as o_cost from \
+    oil where repair_order_id=?) as oil\
+    join tax; ";
+  const repairParams = [id, id, id];
 
   const [results] = await db.query(repairSql, repairParams);
-  const repairs: estimate[] = results as estimate[];
-  return repairs;
+  const repairs: totals[] = results as totals[];
+  const totals: totals = repairs[0];
+  return totals;
 };
 
 //create repair
