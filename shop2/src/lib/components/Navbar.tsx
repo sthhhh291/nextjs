@@ -25,14 +25,19 @@ const Navbar: React.FC = () => {
               Customers
             </Link>
             <Link
-              href='#'
+              href='/cars'
               className='text-gray-700 hover:text-blue-600 font-medium'>
-              About
+              Cars
             </Link>
             <Link
-              href='#'
+              href='/estimates'
               className='text-gray-700 hover:text-blue-600 font-medium'>
-              Contact
+              Estimates
+            </Link>
+            <Link
+              href='/repairs'
+              className='text-gray-700 hover:text-blue-600 font-medium'>
+              Repairs
             </Link>
           </div>
           {/* Right Side (e.g., Cart, Profile) */}

@@ -62,7 +62,7 @@ export const getCarEstimates = async (id: number) => {
 export const getCarRepairs = async (id: number) => {
   const repairSql =
     "SELECT id,car_id,employee_id,date,miles,hours_taken,priv_notes,pub_notes\
-    from repair_orders where id=?;";
+    from repair_orders where car_id=?;";
   const repairParams = [id];
 
   const [results] = await db.query(repairSql, repairParams);

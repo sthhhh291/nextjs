@@ -1,11 +1,9 @@
-type params = {
-  id: number;
-};
-export default async function CarsPage({ params }: { params: params }) {
-  const { id } = await params;
+import CarSearch from "./CarSearch";
+
+export default async function CarsPage() {
   return (
     <>
-      <p>customer no {id}</p>
+      <CarSearch />
     </>
   );
 }
