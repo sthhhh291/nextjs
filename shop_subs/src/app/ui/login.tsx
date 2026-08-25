@@ -1,34 +1,19 @@
 import Form from "next/form";
+import {login} from "@/app/actions"
+import { redirect } from "next/dist/client/components/navigation";
 
 export default function Login() {
   const handleSubmit = async (formData: FormData) => {
     "use server";
-    const username = formData.get("username") as string;
-    const password = formData.get("password") as string;
-    const apiAddress = process.env.API_ADDRESS?.replace(/\/$/, "");
-
-    if (!apiAddress) {
-      throw new Error("API_ADDRESS is not configured");
-    }
-
     try {
-      const response = await fetch(`${apiAddress}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (response.ok) {
-        // Handle successful login (e.g., redirect to dashboard)
-        console.log("Login successful");
-      } else {
-        // Handle login failure (e.g., show error message)
-        console.error("Login failed");
-      }
+      await login(formData);
+      console.log("Login successful");
+      redirect("/"); // Redirect to the customers page after successful login
+      // return data; // Return the response data if needed
     } catch (error) {
       console.error("Error during login:", error);
+      redirect("/login"); // Redirect to the login page with an error query parameter
+      // throw error; // Rethrow the error to be handled by the caller
     }
   };
   return (
