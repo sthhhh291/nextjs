@@ -1,27 +1,11 @@
 import Form from "next/form";
-import {login} from "@/app/actions"
-import { redirect } from "next/dist/client/components/navigation";
+import { login } from "@/app/actions";
 
 export default function Login() {
-  const handleSubmit = async (formData: FormData) => {
-    "use server";
-    try {
-      await login(formData);
-      console.log("Login successful");
-      redirect("/"); // Redirect to the customers page after successful login
-      // return data; // Return the response data if needed
-    } catch (error) {
-      console.error("Error during login:", error);
-      redirect("/login"); // Redirect to the login page with an error query parameter
-      // throw error; // Rethrow the error to be handled by the caller
-    }
-  };
   return (
     <div className='flex flex-col items-center min-h-screen py-2'>
       <h2 className='text-xl font-bold bg-center'>Login</h2>
-      <Form
-        action={handleSubmit}
-        className='flex flex-col items-center   space-y-2'>
+      <Form action={login} className='flex flex-col items-center   space-y-2'>
         <input
           type='text'
           name='username'
