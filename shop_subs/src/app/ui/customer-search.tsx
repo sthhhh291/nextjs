@@ -2,13 +2,8 @@
 
 import { getCustomers } from "@/app/actions";
 import { useState } from "react";
-
-type Customer = {
-  id: string;
-  first_name: string;
-  last_name: string;
-  notes: string;
-};
+import Link  from "next/link";
+import type { Customer } from "@/types";
 
 export function CustomerSearch() {
   const [custList, setCustList] = useState<Customer[]>([]);
@@ -44,7 +39,8 @@ export function CustomerSearch() {
       <div>
         {/* Render the list of customers here */}
         {custList.map((customer: Customer) => (
-          <div
+          <Link
+            href={`/customers/${customer.id}`}
             key={customer.id}
             className='border border-gray-300 rounded p-2 mb-2'>
             <h3 className='text-lg font-bold'>
@@ -52,7 +48,7 @@ export function CustomerSearch() {
             </h3>
             <p className='text-gray-600'>{customer.id}</p>
             <p className='text-gray-600'>{customer.notes}</p>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
