@@ -64,49 +64,49 @@ export const createCustomer = async (formData: FormData) => {
   const first_name = formData.get("first_name") as string;
   const last_name = formData.get("last_name") as string;
   const notes = formData.get("notes") as string;
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get("access_token")?.value;
-    const res = await fetch(`${baseUrl}/customers`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-        body: JSON.stringify({ first_name, last_name, notes }),
-    });
-    if (!res.ok) {
-      console.error("Failed to create customer:", res.statusText);
-      throw new Error("Failed to create customer");
-    }
-    const data = await res.json();
-    console.log("Created customer:", data);
-    return data;
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  const res = await fetch(`${baseUrl}/customers`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ first_name, last_name, notes }),
+  });
+  if (!res.ok) {
+    console.error("Failed to create customer:", res.statusText);
+    throw new Error("Failed to create customer");
   }
+  const data = await res.json();
+  console.log("Created customer:", data);
+  return data;
+};
 
 //   update customer
 export const updateCustomer = async (formData: FormData) => {
   const id = formData.get("id") as string;
   const first_name = formData.get("first_name") as string;
-    const last_name = formData.get("last_name") as string;
-    const notes = formData.get("notes") as string;
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get("access_token")?.value;
-    const res = await fetch(`${baseUrl}/customers/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-        body: JSON.stringify({ first_name, last_name, notes }),
-    });
-    if (!res.ok) {
-      console.error("Failed to update customer:", res.statusText);
-      throw new Error("Failed to update customer");
-    }
-    const data = await res.json();
-    console.log("Updated customer:", data);
-    return data;
+  const last_name = formData.get("last_name") as string;
+  const notes = formData.get("notes") as string;
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  const res = await fetch(`${baseUrl}/customers/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ first_name, last_name, notes }),
+  });
+  if (!res.ok) {
+    console.error("Failed to update customer:", res.statusText);
+    throw new Error("Failed to update customer");
   }
+  const data = await res.json();
+  console.log("Updated customer:", data);
+  return data;
+};
 
 // search for customers with pagination and optional search term
 export const getCustomers = async (
@@ -168,8 +168,9 @@ export const getCustomerById = async (id: number) => {
   return res.json();
 };
 
-export const getCustomerPhones = async (customerId: number) => {  
-  if(!Number.isInteger(customerId) || customerId < 1) {
+// get customer phones by customer id
+export const getCustomerPhones = async (customerId: number) => {
+  if (!Number.isInteger(customerId) || customerId < 1) {
     throw new Error("Invalid customer ID");
   }
   const cookieStore = await cookies();
@@ -187,19 +188,79 @@ export const getCustomerPhones = async (customerId: number) => {
   return res.json();
 };
 
+// get customer addresses by customer id
+export const getCustomerAddresses = async (customerId: number) => {
+  if (!Number.isInteger(customerId) || customerId < 1) {
+    throw new Error("Invalid customer ID");
+  }
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  const res = await fetch(`${baseUrl}/customers/${customerId}/addresses`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!res.ok) {
+    console.error("Failed to fetch customer addresses:", res.statusText);
+    throw new Error("Failed to fetch customer addresses");
+  }
+  return res.json();
+};
+
+// get customer emails by customer id
+export const getCustomerEmails = async (customerId: number) => {
+  if (!Number.isInteger(customerId) || customerId < 1) {
+    throw new Error("Invalid customer ID");
+  }
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  const res = await fetch(`${baseUrl}/customers/${customerId}/emails`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!res.ok) {
+    console.error("Failed to fetch customer emails:", res.statusText);
+    throw new Error("Failed to fetch customer emails");
+  }
+  return res.json();
+};
+
+// get customer cars by customer id
+export const getCustomerCars = async (customerId: number) => {
+  if (!Number.isInteger(customerId) || customerId < 1) {
+    throw new Error("Invalid customer ID");
+  }
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  const res = await fetch(`${baseUrl}/customers/${customerId}/cars`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!res.ok) {
+    console.error("Failed to fetch customer emails:", res.statusText);
+    throw new Error("Failed to fetch customer emails");
+  }
+  return res.json();
+};
+
 // delete a customer by id
 export const deleteCustomer = async (id: number) => {
   const cookieStore = await cookies();
-    const accessToken = cookieStore.get("access_token")?.value;
-    const res = await fetch(`${baseUrl}/customers/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    if (!res.ok) {
-      console.error("Failed to delete customer:", res.statusText);
-      throw new Error("Failed to delete customer");
-    }
-    console.log("Deleted customer with id:", id);
+  const accessToken = cookieStore.get("access_token")?.value;
+  const res = await fetch(`${baseUrl}/customers/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!res.ok) {
+    console.error("Failed to delete customer:", res.statusText);
+    throw new Error("Failed to delete customer");
   }
+  console.log("Deleted customer with id:", id);
+};

@@ -2,7 +2,7 @@
 
 import { getCustomers } from "@/app/actions";
 import { useState } from "react";
-import Link  from "next/link";
+import Link from "next/link";
 import type { Customer } from "@/types";
 
 export function CustomerSearch() {
@@ -36,18 +36,14 @@ export function CustomerSearch() {
           Search
         </button>
       </form>
-      <div>
+      <div className='flex flex-col items-center mt-4'>
         {/* Render the list of customers here */}
         {custList.map((customer: Customer) => (
           <Link
             href={`/customers/${customer.id}`}
             key={customer.id}
-            className='border border-gray-300 rounded p-2 mb-2'>
-            <h3 className='text-lg font-bold'>
-              {customer.first_name} {customer.last_name}
-            </h3>
-            <p className='text-gray-600'>{customer.id}</p>
-            <p className='text-gray-600'>{customer.notes}</p>
+            className='border border-gray-300 rounded p-2 mb-2 hover:bg-gray-300 w-full text-center'>
+            {customer.first_name} {customer.last_name}
           </Link>
         ))}
       </div>
