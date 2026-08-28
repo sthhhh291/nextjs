@@ -5,7 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { Customer } from "@/types";
 
-export function CustomerSearch() {
+export default function CustomerSearch() {
   const [custList, setCustList] = useState<Customer[]>([]);
 
   const handleSearch = async (formData: FormData) => {

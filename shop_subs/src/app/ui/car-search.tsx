@@ -3,10 +3,10 @@
 import { getCars } from "@/app/actions";
 import { useState } from "react";
 import Link from "next/link";
-import type { Car } from "@/types";
+import type { CarCustomer } from "@/types";
 
 export default function CarSearch() {
-  const [carList, setCarList] = useState<Car[]>([]);
+  const [carList, setCarList] = useState<CarCustomer[]>([]);
 
   const handleSearch = async (formData: FormData) => {
     const carId = formData.get("carId") as string;
@@ -38,12 +38,12 @@ export default function CarSearch() {
       </form>
       <div className='flex flex-col items-center mt-4'>
         {/* Render the list of cars here */}
-        {carList.map((car: Car) => (
+        {carList.map((car: CarCustomer) => (
           <Link
             href={`/cars/${car.id}`}
             key={car.id}
             className='border border-gray-300 rounded p-2 mb-2 hover:bg-gray-300 w-full text-center'>
-            {car.year} {car.make} {car.car_model}
+            {car.first_name} {car.last_name} {car.year} {car.make} {car.car_model}
           </Link>
         ))}
       </div>

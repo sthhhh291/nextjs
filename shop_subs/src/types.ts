@@ -41,3 +41,5 @@ export type Car = {
     color: string;
     notes: string;
 };
+
+export type CarCustomer = Customer & Car
