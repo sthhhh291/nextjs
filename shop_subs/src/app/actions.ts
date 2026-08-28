@@ -264,3 +264,111 @@ export const deleteCustomer = async (id: number) => {
   }
   console.log("Deleted customer with id:", id);
 };
+
+// cars section
+// get all cars with pagination and optional search term
+export const getCars = async (
+  page: number = 1,
+  size: number = 20,
+  searchTerm: string = "",
+) => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  const res = await fetch(
+    `${baseUrl}/cars?page=${page}&size=${size}&searchTerm=${searchTerm}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+  if (!res.ok) {
+    console.error("Failed to fetch cars:", res.statusText);
+    throw new Error("Failed to fetch cars");
+  }
+  const data = await res.json();
+  console.log("Fetched cars:", data.items);
+  console.log("pagination info:", data.total, data.page, data.size, data.pages);
+  return data;
+};
+
+// get a single car by id
+export const getCarById = async (id: number) => {
+  if (!Number.isInteger(id) || id < 1) {
+    throw new Error("Invalid customer ID");
+  }
+
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  if (!accessToken) {
+    throw new Error("Authentication required");
+  }
+
+  const res = await fetch(`${baseUrl}/cars/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.text();
+    console.error("Failed to fetch car:", {
+      status: res.status,
+      statusText: res.statusText,
+      body: errorBody,
+    });
+    throw new Error(`Failed to fetch car (${res.status})`);
+  }
+
+  return res.json();
+};
+
+// create a new car
+
+// upate a car by id
+
+// delete a car by id
+
+// get customer by car id i don;t think i need this?
+// export const getCustomerByCarCustomerId = async (customerId: number) => {
+//   if (!Number.isInteger(customerId) || customerId < 1) {
+//     throw new Error("Invalid car ID");
+//   }
+//   const cookieStore = await cookies();
+//   const accessToken = cookieStore.get("access_token")?.value;
+//   const res = await fetch(`${baseUrl}/customers/${customerId}`, {
+//     method: "GET",
+//     headers: {
+//       Authorization: `Bearer ${accessToken}`,
+//     },
+//   });
+//   if (!res.ok) {
+//     console.error("Failed to fetch customer:", res.statusText);
+//     throw new Error("Failed to fetch customer");
+//   }
+//   const data = await res.json();
+//   return data;
+// };
+
+// get estimates by car id
+export const getEstimatesByCarId = async (carId: number) => {
+  if (!Number.isInteger(carId) || carId < 1) {
+    throw new Error("Invalid car ID");
+  }
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  const res = await fetch(`${baseUrl}/cars/${carId}/estimates`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!res.ok) {
+    console.error("Failed to fetch estimates:", res.statusText);
+    throw new Error("Failed to fetch estimates");
+  }
+  return res.json();
+};
