@@ -1,5 +1,5 @@
 // import Login from "../ui/login";
-import Login from "@/app/ui/login";
+import Login from "@/app/(auth)/login/login";
 
 export default async function Page() {
   return (

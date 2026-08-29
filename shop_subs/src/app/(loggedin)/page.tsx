@@ -1,5 +1,5 @@
-import CustomerSearch  from "./ui/customer-search";
-import CarSearch from '@/app/ui/car-search'
+import CustomerSearch  from '@/app/(loggedin)/ui/customer-search'
+import CarSearch from '@/app/(loggedin)/ui/car-search'
 
 export default function Home() {
   return (

@@ -8,7 +8,7 @@ import {
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Customer, Phone, Email, Address, Car } from "@/types";
-import CustomerDetail from "@/app/ui/customer-detail";
+import CustomerDetail from "@/app/(loggedin)/ui/customer-detail";
 
 export default async function CustomerPage({
   params,

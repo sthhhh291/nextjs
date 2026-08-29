@@ -1,4 +1,4 @@
-import CarSearch from "@/app/ui/car-search";
+import CarSearch from "@/app/(loggedin)/ui/car-search";
 
 export default function CarsPage() {
   return (

@@ -1,4 +1,4 @@
-import CustomerSearch from "@/app/ui/customer-search";
+import CustomerSearch from "@/app/(loggedin)/ui/customer-search";
 
 export default function CustomersPage() {
   return (
