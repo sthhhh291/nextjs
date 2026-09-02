@@ -1,5 +1,7 @@
 "use server";
 
+import { Customer } from "@/types";
+import { revalidatePath } from "next/dist/server/web/spec-extension/revalidate";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -66,21 +68,25 @@ export const createCustomer = async (formData: FormData) => {
   const notes = formData.get("notes") as string;
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
-  const res = await fetch(`${baseUrl}/customers`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({ first_name, last_name, notes }),
-  });
-  if (!res.ok) {
-    console.error("Failed to create customer:", res.statusText);
-    throw new Error("Failed to create customer");
+  try {
+    const res = await fetch(`${baseUrl}/customers`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ first_name, last_name, notes }),
+    });
+    if (!res.ok) {
+      console.error("Failed to create customer:", res.statusText);
+      throw new Error("Failed to create customer");
+    }
+    const data = await res.json();
+    console.log("Created customer:", data);
+    return {error: null, success: true, customer: data};
+  } catch (error) {
+    return {error: (error as Error).message, success: false, customer: null};
   }
-  const data = await res.json();
-  console.log("Created customer:", data);
-  return data;
 };
 
 //   update customer
@@ -105,8 +111,27 @@ export const updateCustomer = async (formData: FormData) => {
   }
   const data = await res.json();
   console.log("Updated customer:", data);
-  return data;
+  return {error: null, success: true, customer: data};
 };
+
+//save customer form data (create or update)
+export const saveCustomer = async (prevState: {error: string | null, success: boolean, customer: Customer | null}, formData: FormData) => { 
+  const id = formData.get("id") as string | null;
+  if (id) {
+    const res = await updateCustomer(formData);
+    if (res.success) {
+      revalidatePath(`/customers/${id}`);
+    }
+    return res;
+  } else {
+    const res = await createCustomer(formData);
+    if (res.success) {
+      redirect(`/customers/${res.customer?.id}`);
+    }
+    return res;
+  }
+};
+
 
 // search for customers with pagination and optional search term
 export const getCustomers = async (
@@ -130,8 +155,9 @@ export const getCustomers = async (
     throw new Error("Failed to fetch customers");
   }
   const data = await res.json();
-  console.log("Fetched customers:", data.items);
-  console.log("pagination info:", data.total, data.page, data.size, data.pages);
+  // console.log("Fetched customers:", data.items);
+  // console.log("pagination info:", data.total, data.page, data.size, data.pages);
+  // return {error: null, success: true, customers: data};
   return data;
 };
 
@@ -165,6 +191,7 @@ export const getCustomerById = async (id: number) => {
     throw new Error(`Failed to fetch customer (${res.status})`);
   }
 
+  // return {error: null, success: true, customer: await res.json()};
   return res.json();
 };
 
@@ -242,8 +269,8 @@ export const getCustomerCars = async (customerId: number) => {
     },
   });
   if (!res.ok) {
-    console.error("Failed to fetch customer emails:", res.statusText);
-    throw new Error("Failed to fetch customer emails");
+    console.error("Failed to fetch customer cars:", res.statusText);
+    throw new Error("Failed to fetch customer cars");
   }
   return res.json();
 };
@@ -372,3 +399,4 @@ export const getEstimatesByCarId = async (carId: number) => {
   }
   return res.json();
 };
+

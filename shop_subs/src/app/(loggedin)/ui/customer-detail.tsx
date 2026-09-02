@@ -1,4 +1,7 @@
+'use client';
+
 import { Customer, Phone, Email, Address } from "@/types";
+import CustomerLine from "./customer-line";
 
 
 export default function CustomerDetail(params: {customer:Customer, phones:Phone[], emails:Email[], addresses: Address[]}) {
@@ -8,15 +11,8 @@ export default function CustomerDetail(params: {customer:Customer, phones:Phone[
     const addresses = params.addresses
 
     return (
-        <div className='grid grid-cols-4 gap-4 align-center text-center p-4 rounded-lg shadow-md mt-4'>
-        <div className='border border-gray-300 rounded p-4 mt-4'>
-          <p>
-            <strong>Name:</strong> {customer?.first_name} {customer?.last_name}
-          </p>
-          <p>
-            <strong>Notes:</strong> {customer?.notes}
-          </p>
-        </div>
+          <div>
+            <CustomerLine customer={customer} />
         <div className='border border-gray-300 rounded p-4 mt-4'>
           <h3 className='text-lg font-bold'>Phone Numbers</h3>
           <ul>
