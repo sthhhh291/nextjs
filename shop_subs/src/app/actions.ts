@@ -1,7 +1,9 @@
 "use server";
 
-import { Customer } from "@/types";
+import { Customer, Phone } from "@/types";
+// import { error } from "console";
 import { revalidatePath } from "next/dist/server/web/spec-extension/revalidate";
+import error from "next/error";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -83,9 +85,9 @@ export const createCustomer = async (formData: FormData) => {
     }
     const data = await res.json();
     console.log("Created customer:", data);
-    return {error: null, success: true, customer: data};
+    return { error: null, success: true, customer: data };
   } catch (error) {
-    return {error: (error as Error).message, success: false, customer: null};
+    return { error: (error as Error).message, success: false, customer: null };
   }
 };
 
@@ -111,11 +113,18 @@ export const updateCustomer = async (formData: FormData) => {
   }
   const data = await res.json();
   console.log("Updated customer:", data);
-  return {error: null, success: true, customer: data};
+  return { error: null, success: true, customer: data };
 };
 
 //save customer form data (create or update)
-export const saveCustomer = async (prevState: {error: string | null, success: boolean, customer: Customer | null}, formData: FormData) => { 
+export const saveCustomer = async (
+  prevState: {
+    error: string | null;
+    success: boolean;
+    customer: Customer | null;
+  },
+  formData: FormData,
+) => {
   const id = formData.get("id") as string | null;
   if (id) {
     const res = await updateCustomer(formData);
@@ -131,7 +140,6 @@ export const saveCustomer = async (prevState: {error: string | null, success: bo
     return res;
   }
 };
-
 
 // search for customers with pagination and optional search term
 export const getCustomers = async (
@@ -292,6 +300,106 @@ export const deleteCustomer = async (id: number) => {
   console.log("Deleted customer with id:", id);
 };
 
+// phones section
+
+// create phone for a customer
+export const createPhone = async (formData: FormData) => {
+  const customer_id = formData.get("customer_id") as string;
+  const type = formData.get("type") as string;
+  const number = formData.get("number") as string;
+
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+
+  const res = await fetch(`${baseUrl}/phones`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ type, number, customer_id }),
+  });
+
+  if (!res.ok) {
+    return {
+      error: res.statusText || "Failed to create phone",
+      success: false,
+      phone: null,
+    };
+    // return { error: null, success: true, customer: data };
+    // } catch (error) {
+    // return { error: (error as Error).message, success: false, customer: null };
+  }
+
+  return { success: true, error: null, phone: await res.json() };
+};
+
+// update phone for a customer
+export const updatePhone = async (formData: FormData) => {
+  const id = formData.get("id") as string;
+  const customer_id = formData.get("customer_id") as string;
+  const type = formData.get("type") as string;
+  const number = formData.get("number") as string;
+
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  const res = await fetch(`${baseUrl}/phones/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ type, number, customer_id }),
+  });
+  if (!res.ok) {
+    return {
+      error: res.statusText || "Failed to update phone",
+      success: false,
+      phone: null,
+    };
+  }
+
+  return { success: true, error: null, phone: await res.json() };
+};
+
+// save phone form data (create or update)
+export const savePhone = async (
+  prevState: { error: string | null; success: boolean; phone: Phone | null },
+  formData: FormData,
+) => {
+  const id = formData.get("id") as string | null;
+  if (id) {
+    const res = await updatePhone(formData);
+    if (res.success && res.phone) {
+      revalidatePath(`/customers/${res.phone.customer_id}`);
+    }
+    return res;
+  } else {
+    const res = await createPhone(formData);
+    if (res.success && res.phone) {
+      revalidatePath(`/customers/${res.phone.customer_id}`);
+    }
+    return res;
+  }
+};
+
+// delete phone by id
+export const deletePhone = async (id: number) => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  const res = await fetch(`${baseUrl}/phones/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!res.ok) {
+    console.error("Failed to delete phone:", res.statusText);
+    throw new Error("Failed to delete phone");
+  }
+  console.log("Deleted phone with id:", id);
+};
+
 // cars section
 // get all cars with pagination and optional search term
 export const getCars = async (
@@ -399,4 +507,3 @@ export const getEstimatesByCarId = async (carId: number) => {
   }
   return res.json();
 };
-
