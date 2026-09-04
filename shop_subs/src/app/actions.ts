@@ -326,11 +326,7 @@ export const createPhone = async (formData: FormData) => {
       success: false,
       phone: null,
     };
-    // return { error: null, success: true, customer: data };
-    // } catch (error) {
-    // return { error: (error as Error).message, success: false, customer: null };
   }
-
   return { success: true, error: null, phone: await res.json() };
 };
 
@@ -370,17 +366,13 @@ export const savePhone = async (
 ) => {
   const id = formData.get("id") || null;
   if (id) {
-    // console.log("formdata:", formData);
     const res = await updatePhone(formData);
     if (res.success && res.phone) {
       revalidatePath(`/customers/${res.phone.customer_id}`);
     }
     return res;
   } else {
-    // console.log("formdata:", formData);
     const res = await createPhone(formData);
-    // console.log("createPhone response:", res);
-    // console.log("createPhone response phone:", res.phone);
     if (res.success && res.phone) {
       revalidatePath(`/customers/${res.phone.customer_id}`);
     }
@@ -403,6 +395,7 @@ export const deletePhone = async (id: number) => {
     throw new Error("Failed to delete phone");
   }
   console.log("Deleted phone with id:", id);
+  // revalidatePath(`/customers/${customer_id}`);
 };
 
 // cars section
