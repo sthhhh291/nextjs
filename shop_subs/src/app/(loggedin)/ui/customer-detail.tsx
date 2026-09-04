@@ -3,6 +3,8 @@
 import { Customer, Phone, Email, Address } from "@/types";
 import CustomerLine from "./customer-line";
 import PhoneForm from "./phone-form";
+import PhoneLine from "./phone-line";
+import { useState } from "react";
 
 export default function CustomerDetail(params: {
   customer: Customer;
@@ -14,25 +16,30 @@ export default function CustomerDetail(params: {
   const emails = params.emails;
   const phones = params.phones;
   const addresses = params.addresses;
+  const [isEditingPhone, setIsEditingPhone] = useState(false);
 
   return (
     <div className='border border-gray-300 rounded p-4 mt-4'>
       <CustomerLine customer={customer} />
       <div className='border border-gray-300 rounded p-4 mt-4'>
         <h3 className='text-lg font-bold'>Phone Numbers</h3>
-        <h2 className='text-lg font-bold p-2 m-2'>Add New Phone</h2>
-        <PhoneForm
-          phone={null}
-          isEditing={false}
-          customer_id={String(customer.id)}
-        />
-        {phones.map((phone) => (
+        <button
+          className='p-2 border rounded-sm border-gray-200 hover:bg-slate-400'
+          onClick={() => setIsEditingPhone(true)}
+        >
+          Add Phone
+        </button>
+        {isEditingPhone && (
           <PhoneForm
-            key={phone.id}
-            phone={phone}
-            isEditing={true}
-            customer_id={String(customer.id)}
+            phone={null}
+            isEditing={isEditingPhone}
+            customer_id={customer.id}
+            onSuccess={() => setIsEditingPhone(false)}
+            onClose={() => setIsEditingPhone(false)}
           />
+        )}
+        {phones.map((phone) => (
+          <PhoneLine key={phone.id} phone={phone} />
         ))}
       </div>
       <div className='border border-gray-300 rounded p-4 mt-4'>

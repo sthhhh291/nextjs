@@ -304,9 +304,9 @@ export const deleteCustomer = async (id: number) => {
 
 // create phone for a customer
 export const createPhone = async (formData: FormData) => {
-  const customer_id = formData.get("customer_id") as string;
-  const type = formData.get("type") as string;
-  const number = formData.get("number") as string;
+  const customer_id = formData.get("customer_id");
+  const type = String(formData.get("type") ?? "");
+  const number = String(formData.get("number") ?? "");
 
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
@@ -336,10 +336,10 @@ export const createPhone = async (formData: FormData) => {
 
 // update phone for a customer
 export const updatePhone = async (formData: FormData) => {
-  const id = formData.get("id") as string;
-  const customer_id = formData.get("customer_id") as string;
-  const type = formData.get("type") as string;
-  const number = formData.get("number") as string;
+  const id = formData.get("id");
+  const customer_id = formData.get("customer_id");
+  const type = String(formData.get("type") ?? "");
+  const number = String(formData.get("number") ?? "");
 
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
@@ -351,6 +351,7 @@ export const updatePhone = async (formData: FormData) => {
     },
     body: JSON.stringify({ type, number, customer_id }),
   });
+  console.log("updatePhone response:", res);
   if (!res.ok) {
     return {
       error: res.statusText || "Failed to update phone",
@@ -367,15 +368,19 @@ export const savePhone = async (
   prevState: { error: string | null; success: boolean; phone: Phone | null },
   formData: FormData,
 ) => {
-  const id = formData.get("id") as string | null;
+  const id = formData.get("id") || null;
   if (id) {
+    // console.log("formdata:", formData);
     const res = await updatePhone(formData);
     if (res.success && res.phone) {
       revalidatePath(`/customers/${res.phone.customer_id}`);
     }
     return res;
   } else {
+    // console.log("formdata:", formData);
     const res = await createPhone(formData);
+    // console.log("createPhone response:", res);
+    // console.log("createPhone response phone:", res.phone);
     if (res.success && res.phone) {
       revalidatePath(`/customers/${res.phone.customer_id}`);
     }

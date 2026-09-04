@@ -7,15 +7,13 @@ import { useState, useEffect } from "react";
 export default function PhoneForm(params: {
   phone: Phone | null;
   isEditing: boolean;
-  customer_id: string;
+  customer_id: number;
   onSuccess?: () => void;
   onClose?: () => void;
 }) {
   const data = params.phone;
   const id = params.phone?.id || null;
   const customer_id = params.customer_id;
-  const isEditing = params.isEditing;
-  // const customerId = params.customer_id;
   const onSuccess = params.onSuccess || undefined;
   const onClose = params.onClose || undefined;
   const [state, formAction, isPending] = useActionState(savePhone, {
@@ -28,21 +26,14 @@ export default function PhoneForm(params: {
       onSuccess();
     }
   }, [state, onSuccess]);
-  // const [isEditing, setIsEditing] = useState(params.isEditing);
-  // const [customerId, setCustomerId] = useState(data?.customer_id || "");
   const [type, setType] = useState(data?.type || "");
   const [number, setNumber] = useState(data?.number || "");
-  // const formAction = data ? updatePhone : createPhone;
-  // function handleSubmit() {
-  // }
   const buttonAction = data ? "Update Phone" : "Create Phone";
   return (
     <form className='border border-gray-200 p-4 rounded-sm' action={formAction}>
-      {/* <div className='flex flex-col items-center content-center space-y-2'> */}
       {data && <input type='hidden' name='id' value={id ?? ""} />}
       <input type='hidden' name='customer_id' value={customer_id} />
       <div className='text-lg font-bold p-2 m-2'>
-        {/* {data ? "Edit Phone" : "New Phone"} */}
         <label
           htmlFor='type'
           className='block text-sm font-medium text-gray-700'>
@@ -82,9 +73,9 @@ export default function PhoneForm(params: {
         </button>
         {state?.error && <p>{state.error}</p>}
         {state?.success && <p>Saved!</p>}
-        {/* </div> */}
         {data && (
           <button
+            type='button'
             className='p-3 border rounded-sm border-gray-200 hover:bg-slate-400'
             onClick={() => {
               onClose?.();
