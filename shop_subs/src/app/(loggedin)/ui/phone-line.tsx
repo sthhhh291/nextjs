@@ -3,7 +3,6 @@ import { useState } from "react";
 import PhoneForm from "./phone-form";
 import { Phone } from "@/types";
 import { deletePhone } from "@/app/actions";
-import { revalidatePath } from "next/dist/server/web/spec-extension/revalidate";
 
 export default function PhoneLine(params: { phone: Phone }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -18,8 +17,7 @@ export default function PhoneLine(params: { phone: Phone }) {
     );
     if (confirmed) {
       try {
-        await deletePhone(id);
-        revalidatePath(`/customers/${customer_id}`);
+        await deletePhone(id, customer_id);
       } catch (error) {
         console.error("Error deleting phone:", error);
       }

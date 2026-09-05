@@ -1,9 +1,7 @@
 "use server";
 
 import { Customer, Phone } from "@/types";
-// import { error } from "console";
-import { revalidatePath } from "next/dist/server/web/spec-extension/revalidate";
-import error from "next/error";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -381,7 +379,7 @@ export const savePhone = async (
 };
 
 // delete phone by id
-export const deletePhone = async (id: number) => {
+export const deletePhone = async (id: number, customerId: number) => {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
   const res = await fetch(`${baseUrl}/phones/${id}`, {
@@ -391,11 +389,15 @@ export const deletePhone = async (id: number) => {
     },
   });
   if (!res.ok) {
-    console.error("Failed to delete phone:", res.statusText);
-    throw new Error("Failed to delete phone");
+    const errorBody = await res.text();
+    console.error("Failed to delete phone:", {
+      status: res.status,
+      statusText: res.statusText,
+      body: errorBody,
+    });
+    throw new Error(`Failed to delete phone (${res.status})`);
   }
-  console.log("Deleted phone with id:", id);
-  // revalidatePath(`/customers/${customer_id}`);
+  revalidatePath(`/customers/${customerId}`);
 };
 
 // cars section
