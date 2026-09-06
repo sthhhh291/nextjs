@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Customer, Phone, Email, Address, Car } from "@/types";
 import CustomerDetail from "@/app/(loggedin)/ui/customer-detail";
+import CarLine from "../../ui/phone-line copy";
 
 export default async function CustomerPage({
   params,
@@ -47,14 +48,15 @@ export default async function CustomerPage({
         <h3 className='text-lg font-bold'>Cars</h3>
         <ul>
           {cars.map((car) => (
-            <Link
-              key={car.id}
-              href={`/cars/${car.id}`}
-              className='border border-gray-300 rounded p-2 m-2 hover:bg-gray-300 w-full text-center'>
-              {/* <strong> */}
-              {car.year} {car.make} {car.car_model}
-              {/* </strong> */}
-            </Link>
+            <CarLine key={car.id} car={car} />
+            // <Link
+            //   key={car.id}
+            //   href={`/cars/${car.id}`}
+            //   className='border border-gray-300 rounded p-2 m-2 hover:bg-gray-300 w-full text-center'>
+            //   {/* <strong> */}
+            //   {car.year} {car.make} {car.car_model}
+            //   {/* </strong> */}
+            // </Link>
           ))}
         </ul>
       </div>
