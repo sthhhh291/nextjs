@@ -26,7 +26,9 @@ export default function CarForm(params: {
       onSuccess();
     }
   }, [state, onSuccess]);
-  const [year, setYear] = useState(data?.year || "");
+  const [year, setYear] = useState(
+    data?.year?.toString() ?? (new Date().getFullYear() - 5).toString(),
+  );
   const [make, setMake] = useState(data?.make || "");
   const [car_model, setCarModel] = useState(data?.car_model || "");
   const [engine, setEngine] = useState(data?.engine || "");
@@ -37,7 +39,9 @@ export default function CarForm(params: {
   const [notes, setNotes] = useState(data?.notes || "");
   const buttonAction = data ? "Update Car" : "Create Car";
   return (
-    <form className='border border-gray-200 p-4 rounded-sm' action={formAction}>
+    <form
+      className='border border-gray-200 p-4 rounded-sm justify-start'
+      action={formAction}>
       {data && <input type='hidden' name='id' value={id ?? ""} />}
       <input type='hidden' name='customer_id' value={customer_id} />
       <div className='text-lg font-bold p-2 m-2'>
@@ -50,13 +54,13 @@ export default function CarForm(params: {
           type='number'
           name='year'
           min='1900'
-          max={new Date().getFullYear()+1}
-          defaultValue={new Date().getFullYear() - 5}
+          max={new Date().getFullYear() + 1}
           step='1'
           placeholder='year...'
           value={year}
           onChange={(e) => setYear(e.target.value)}
-          className='border border-gray-300 rounded p-2 m-2' />
+          className='border border-gray-300 rounded p-2 m-2 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent'
+        />
       </div>
       <div className='text-lg font-bold p-2 m-2'>
         {/* {data ? "Edit Car" : "New Car"} */}
@@ -75,7 +79,8 @@ export default function CarForm(params: {
       </div>
       <div className='text-lg font-bold p-2 m-2'>
         <label
-          htmlFor='car_model'>
+          htmlFor='car_model'
+          className='block text-sm font-medium text-gray-700'>
           Model
         </label>
         <input
@@ -88,7 +93,8 @@ export default function CarForm(params: {
       </div>
       <div className='text-lg font-bold p-2 m-2'>
         <label
-          htmlFor='engine'>
+          htmlFor='engine'
+          className='block text-sm font-medium text-gray-700'>
           Engine
         </label>
         <input
@@ -101,7 +107,8 @@ export default function CarForm(params: {
       </div>
       <div className='text-lg font-bold p-2 m-2'>
         <label
-          htmlFor='vin'>
+          htmlFor='vin'
+          className='block text-sm font-medium text-gray-700'>
           VIN
         </label>
         <input
@@ -114,7 +121,8 @@ export default function CarForm(params: {
       </div>
       <div className='text-lg font-bold p-2 m-2'>
         <label
-          htmlFor='color'>
+          htmlFor='color'
+          className='block text-sm font-medium text-gray-700'>
           Color
         </label>
         <input
@@ -127,7 +135,8 @@ export default function CarForm(params: {
       </div>
       <div className='text-lg font-bold p-2 m-2'>
         <label
-          htmlFor='license'>
+          htmlFor='license'
+          className='block text-sm font-medium text-gray-700'>
           License Plate
         </label>
         <input
@@ -140,7 +149,8 @@ export default function CarForm(params: {
       </div>
       <div className='text-lg font-bold p-2 m-2'>
         <label
-          htmlFor='fleet_number'>
+          htmlFor='fleet_number'
+          className='block text-sm font-medium text-gray-700'>
           Fleet Number
         </label>
         <input
@@ -153,7 +163,8 @@ export default function CarForm(params: {
       </div>
       <div className='text-lg font-bold p-2 m-2'>
         <label
-          htmlFor='notes'>
+          htmlFor='notes'
+          className='block text-sm font-medium text-gray-700'>
           Notes
         </label>
         <textarea
@@ -171,16 +182,14 @@ export default function CarForm(params: {
         </button>
         {state?.error && <p>{state.error}</p>}
         {state?.success && <p>Saved!</p>}
-        {data && (
-          <button
-            type='button'
-            className='p-3 border rounded-sm border-gray-200 hover:bg-slate-400'
-            onClick={() => {
-              onClose?.();
-            }}>
-            Close
-          </button>
-        )}
+        <button
+          type='button'
+          className='p-3 border rounded-sm border-gray-200 hover:bg-slate-400'
+          onClick={() => {
+            onClose?.();
+          }}>
+          Close
+        </button>
       </div>
     </form>
   );

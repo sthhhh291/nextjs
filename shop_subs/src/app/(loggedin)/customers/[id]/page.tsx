@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Customer, Phone, Email, Address, Car } from "@/types";
 import CustomerDetail from "@/app/(loggedin)/ui/customer-detail";
-import CarLine from "../../ui/phone-line copy";
+import CarLine from "../../ui/car-line";
 
 export default async function CustomerPage({
   params,
@@ -43,7 +43,12 @@ export default async function CustomerPage({
       <h2 className='text-xl font-bold bg-center align-center text-center p-4 rounded-lg shadow-md mt-4'>
         Customer Details
       </h2>
-      <CustomerDetail customer={customer} emails={emails} phones={phones} addresses={addresses} />
+      <CustomerDetail
+        customer={customer}
+        emails={emails}
+        phones={phones}
+        addresses={addresses}
+      />
       <div className='gap-4 align-center text-center p-4 rounded-lg shadow-md mt-4'>
         <h3 className='text-lg font-bold'>Cars</h3>
         <ul>

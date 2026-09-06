@@ -3,6 +3,7 @@ import { useState } from "react";
 import PhoneForm from "./phone-form";
 import { Phone } from "@/types";
 import { deletePhone } from "@/app/actions";
+import { Button } from "@/components/ui/button";
 
 export default function PhoneLine(params: { phone: Phone }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -13,7 +14,7 @@ export default function PhoneLine(params: { phone: Phone }) {
   };
   const deletePhoneHandler = async (id: number) => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this phone number?"
+      "Are you sure you want to delete this phone number?",
     );
     if (confirmed) {
       try {
@@ -26,30 +27,11 @@ export default function PhoneLine(params: { phone: Phone }) {
 
   return (
     <div className='border border-gray-300 rounded p-4 mt-4 text-sm font-bold'>
-      {isEditing ?
-        <PhoneForm
-          phone={phone}
-          customer_id={customer_id}
-          isEditing={isEditing}
-          onSuccess={updatePhone}
-          onClose={() => setIsEditing(false)}
-        />
-      : <>
-          <p>
-           {phone.number} {phone.type} 
-          </p>
-          <button
-            className='p-2 border rounded-sm border-gray-200 hover:bg-slate-400'
-            onClick={() => setIsEditing(true)}>
-            Edit Phone
-          </button>
-          <button
-            className='p-2 border rounded-sm border-gray-200 hover:bg-slate-400'
-            onClick={() => deletePhoneHandler(phone.id)}>
-            Delete Phone
-          </button>
-        </>
-      }
+      <p>
+        {phone.number} {phone.type}
+      </p>
+      <Button onClick={() => deletePhoneHandler(phone.id)}>Delete Phone</Button>
+      <PhoneForm phone={phone} customer_id={customer_id} />
     </div>
   );
 }
