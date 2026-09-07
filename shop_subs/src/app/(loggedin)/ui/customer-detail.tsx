@@ -28,7 +28,7 @@ export default function CustomerDetail(params: {
   const [isEditingCar, setIsEditingCar] = useState(false);
 
   return (
-    <>
+    <div>
       <Card>
         <CardHeader>
           <CardTitle>Customer Details</CardTitle>
@@ -56,7 +56,7 @@ export default function CustomerDetail(params: {
           </CardDescription>
         </CardHeader>
       </Card>
-    </>
+    </div>
     // <div className='border border-gray-300 rounded p-4 mt-4'>
     //   <CustomerLine customer={customer} />
     //   <div className='border border-gray-300 rounded p-4 mt-4'>

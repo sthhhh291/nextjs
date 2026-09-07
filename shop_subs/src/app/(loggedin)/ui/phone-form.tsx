@@ -3,11 +3,7 @@ import { savePhone } from "@/app/actions";
 import { useActionState } from "react";
 import type { Phone } from "@/types";
 import { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-} from "@/components/ui/dialog";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -16,7 +12,13 @@ import {
   FieldLegend,
   Field,
 } from "@/components/ui/field";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
 export default function PhoneForm(params: {
@@ -54,11 +56,7 @@ export default function PhoneForm(params: {
             <FieldSet>
               <FieldLegend>Phone Type</FieldLegend>
               <Field orientation='horizontal'>
-                <Select
-                  name='type'
-                  value={type}
-                  onValueChange={setType}
-                >
+                <Select name='type' value={type} onValueChange={setType}>
                   <SelectTrigger className='border border-gray-300 rounded p-2 m-2'>
                     <SelectValue placeholder='Select Type' />
                   </SelectTrigger>

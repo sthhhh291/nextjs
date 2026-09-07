@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Customer, Car } from "@/types";
 import CustomerDetail from "../../ui/customer-detail";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import CarForm from "../../ui/car-form";
 
 export default async function CustomerPage({
   params,
@@ -50,9 +52,16 @@ export default async function CustomerPage({
           emails={[]}
           addresses={[]}
         />
-        <div>
-          {car.year} {car.make} {car.car_model} {car.engine && car.engine}{" "}
-        </div>
+        <Card>
+          <CardHeader className='text-2xl'>
+            {car.year} {car.make} {car.car_model}
+            <CarForm car={car} customer_id={car.customer_id} />
+          </CardHeader>
+          <CardContent className='text-2xl'>
+            Engine: {car.engine} <br />
+            Vin: {car.vin}
+          </CardContent>
+        </Card>
       </div>
     </>
   );
