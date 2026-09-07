@@ -42,6 +42,7 @@ export default function CustomerDetail(params: {
           <CardTitle>Actions</CardTitle>
           <CardDescription>
             <PhoneForm phone={null} customer_id={customer.id} />
+            <CarForm car={null} customer_id={customer.id} />
           </CardDescription>
         </CardHeader>
       </Card>

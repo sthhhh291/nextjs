@@ -16,7 +16,6 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   FieldGroup,
   FieldSet,
-  FieldLegend,
   Field,
 } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
@@ -52,7 +51,6 @@ export default function CustomerForm(params: { customer: Customer | null }) {
             <DialogTitle>{data ? "Edit" : "Create"} Customer Form</DialogTitle>
             <FieldGroup>
               <FieldSet>
-                <FieldLegend>Customer Name</FieldLegend>
                 <Field orientation='horizontal'>
                   <Label htmlFor='first_name'>First Name</Label>
                   <Input

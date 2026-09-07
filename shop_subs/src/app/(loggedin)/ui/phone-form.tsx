@@ -6,18 +6,17 @@ import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTrigger,
-  DialogHeader,
   DialogContent,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   FieldGroup,
   FieldSet,
   FieldLegend,
   Field,
 } from "@/components/ui/field";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
 export default function PhoneForm(params: {
@@ -47,7 +46,6 @@ export default function PhoneForm(params: {
         render={
           <Button>{data ? "Edit Phone" : "Create Phone"}</Button>
         }></DialogTrigger>
-      <DialogHeader>{data ? "Edit" : "Create"} Phone Form</DialogHeader>
       <DialogContent>
         <form action={formAction}>
           {data && <input type='hidden' name='id' value={id} />}
@@ -56,16 +54,20 @@ export default function PhoneForm(params: {
             <FieldSet>
               <FieldLegend>Phone Type</FieldLegend>
               <Field orientation='horizontal'>
-                <select
+                <Select
                   name='type'
                   value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  className='border border-gray-300 rounded p-2 m-2'>
-                  <option value=''>Select Type</option>
-                  <option value='home'>Home</option>
-                  <option value='work'>Work</option>
-                  <option value='mobile'>Mobile</option>
-                </select>
+                  onValueChange={setType}
+                >
+                  <SelectTrigger className='border border-gray-300 rounded p-2 m-2'>
+                    <SelectValue placeholder='Select Type' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value='home'>Home</SelectItem>
+                    <SelectItem value='work'>Work</SelectItem>
+                    <SelectItem value='mobile'>Mobile</SelectItem>
+                  </SelectContent>
+                </Select>
               </Field>
               <Field orientation='horizontal'>
                 <Label htmlFor='number'>Number</Label>
@@ -87,49 +89,3 @@ export default function PhoneForm(params: {
     </Dialog>
   );
 }
-
-//       name='type'
-//       value={type}
-//       onChange={(e) => setType(e.target.value)}
-//       className='border border-gray-300 rounded p-2 m-2'>
-//       <option value=''>Select Type</option>
-//       <option value='home'>Home</option>
-//       <option value='work'>Work</option>
-//       <option value='mobile'>Mobile</option>
-//     </select>
-//   </div>
-//   <div className='text-lg font-bold p-2 m-2'>
-//     {/* {data ? "Edit Phone" : "New Phone"} */}
-//     <label
-//       htmlFor='number'
-//       className='block text-sm font-medium text-gray-700'>
-//       Number
-//     </label>
-//     <input
-//       type='text'
-//       name='number'
-//       placeholder='number...'
-//       value={number}
-//       onChange={(e) => setNumber(e.target.value)}
-//     />
-//   </div>
-//   <div className='text-lg font-bold p-2 m-2'>
-//     <button
-//       className='p-3 border rounded-sm border-gray-200 hover:bg-slate-400'
-//       disabled={isPending}>
-//       {isPending ? "Saving..." : buttonAction}
-//     </button>
-//     {state?.error && <p>{state.error}</p>}
-//     {state?.success && <p>Saved!</p>}
-//     <button
-//       type='button'
-//       className='p-3 border rounded-sm border-gray-200 hover:bg-slate-400'
-//       onClick={() => {
-//         onClose?.();
-//       }}>
-//       Close
-//     </button>
-//   </div>
-// </form>
-//   );
-// }
