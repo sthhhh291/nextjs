@@ -592,3 +592,54 @@ export const getEstimatesByCarId = async (carId: number) => {
   }
   return res.json();
 };
+
+// estimates area
+export const getEstimates = async () => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access token")?.value;
+  const res = await fetch(`${baseUrl}/estimates`, {
+    method : "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!res.ok) {
+    console.error("Failed to fetch estimates:", res.statusText);
+    throw new Error("Failed to fetch estimates");
+  }
+  return res.json();
+};
+
+// get single estimate by id
+// get a single car by id
+export const getEstimateById = async (id: number) => {
+  if (!Number.isInteger(id) || id < 1) {
+    throw new Error("Invalid estimate ID");
+  }
+
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  if (!accessToken) {
+    throw new Error("Authentication required");
+  }
+
+  const res = await fetch(`${baseUrl}/estimates/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.text();
+    console.error("Failed to fetch estimate:", {
+      status: res.status,
+      statusText: res.statusText,
+      body: errorBody,
+    });
+    throw new Error(`Failed to fetch estimate (${res.status})`);
+  }
+
+  return res.json();
+};
