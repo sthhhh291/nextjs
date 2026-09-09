@@ -1,7 +1,7 @@
-import { getCarById, getCustomerById } from "@/app/actions";
+import { getCarById, getCustomerById, getEstimatesByCarId } from "@/app/actions";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import type { Customer, Car } from "@/types";
+import type { Customer, Car, Estimate } from "@/types";
 import CustomerDetail from "../../ui/customer-detail";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import CarForm from "../../ui/car-form";
@@ -12,33 +12,12 @@ export default async function CustomerPage({
   params: { id: string };
 }) {
   const carId = Number((await params).id);
-  let car: Car | null = null;
-  let customer: Customer | null = null;
+  const car: Car = await getCarById(carId)
+  const customer: Customer = await getCustomerById(car.customer_id)
+  const estimates:Estimate[] = await getEstimatesByCarId(carId);
   //   let phones: Phone[] = [];
   //   let emails: Email[] = [];
   //   let addresses: Address[] = [];
-
-  try {
-    car = await getCarById(carId);
-  } catch (error) {
-    console.error("Error fetching car:", error);
-    notFound();
-  }
-
-  if (!car) {
-    notFound();
-  }
-
-  try {
-    customer = await getCustomerById(car.customer_id);
-  } catch (error) {
-    console.error("Error fetching customer:", error);
-    notFound();
-  }
-
-  if (!customer) {
-    notFound();
-  }
 
   return (
     <>
@@ -62,6 +41,14 @@ export default async function CustomerPage({
             Vin: {car.vin}
           </CardContent>
         </Card>
+        {estimates && estimates.map((estimate) => (
+
+          <Card key={estimate.id}>
+          <CardHeader>
+            {estimate.date}
+          </CardHeader>
+        </Card>
+        ))}
       </div>
     </>
   );

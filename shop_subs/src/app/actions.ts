@@ -611,7 +611,6 @@ export const getEstimates = async () => {
 };
 
 // get single estimate by id
-// get a single car by id
 export const getEstimateById = async (id: number) => {
   if (!Number.isInteger(id) || id < 1) {
     throw new Error("Invalid estimate ID");
