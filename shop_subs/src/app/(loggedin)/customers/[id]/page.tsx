@@ -9,7 +9,9 @@ import { notFound } from "next/navigation";
 import type { Customer, Phone, Email, Address, Car } from "@/types";
 import CustomerDetail from "@/app/(loggedin)/ui/customer-detail";
 import CarLine from "../../ui/car-line";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default async function CustomerPage({
   params,
@@ -50,13 +52,18 @@ export default async function CustomerPage({
         addresses={addresses}
       />
       <div>
-        <Card className='col-span-4'>
+        <Card className='col-span-4 p-2 m-2'>
           <h3 className='text-lg font-bold'>Cars</h3>
-          <ul>
+          <CardContent className='grid grid-cols-1'>
             {cars.map((car) => (
-              <CarLine key={car.id} car={car} />
+              <Button>
+                <Link href={`/cars/${car.id}`}>
+                  {/* <CarLine key={car.id} car={car} /> */}
+                  {car.year} {car.make} {car.car_model}
+                </Link>
+              </Button>
             ))}
-          </ul>
+          </CardContent>
         </Card>
       </div>
     </div>

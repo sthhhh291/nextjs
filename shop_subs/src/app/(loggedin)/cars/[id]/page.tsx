@@ -1,10 +1,15 @@
-import { getCarById, getCustomerById, getEstimatesByCarId } from "@/app/actions";
+import {
+  getCarById,
+  getCustomerById,
+  getEstimatesByCarId,
+} from "@/app/actions";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Customer, Car, Estimate } from "@/types";
 import CustomerDetail from "../../ui/customer-detail";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import CarForm from "../../ui/car-form";
+import CarDetail from "@/app/(loggedin)/ui/car-detail";
 
 export default async function CustomerPage({
   params,
@@ -12,9 +17,9 @@ export default async function CustomerPage({
   params: { id: string };
 }) {
   const carId = Number((await params).id);
-  const car: Car = await getCarById(carId)
-  const customer: Customer = await getCustomerById(car.customer_id)
-  const estimates:Estimate[] = await getEstimatesByCarId(carId);
+  const car: Car = await getCarById(carId);
+  const customer: Customer = await getCustomerById(car.customer_id);
+  const estimates: Estimate[] = await getEstimatesByCarId(carId);
   //   let phones: Phone[] = [];
   //   let emails: Email[] = [];
   //   let addresses: Address[] = [];
@@ -31,24 +36,24 @@ export default async function CustomerPage({
           emails={[]}
           addresses={[]}
         />
-        <Card>
-          <CardHeader className='text-2xl'>
+        {/* <Card> */}
+        {/* car detail */}
+        <CarDetail car={car} />
+        {/* <CardHeader className='text-2xl'>
             {car.year} {car.make} {car.car_model}
             <CarForm car={car} customer_id={car.customer_id} />
-          </CardHeader>
-          <CardContent className='text-2xl'>
-            Engine: {car.engine} <br />
-            Vin: {car.vin}
-          </CardContent>
-        </Card>
-        {estimates && estimates.map((estimate) => (
-
-          <Card key={estimate.id}>
-          <CardHeader>
-            {estimate.date}
-          </CardHeader>
-        </Card>
-        ))}
+          </CardHeader> */}
+        {/* <CardContent className='text-2xl'> */}
+        Engine: {car.engine} <br />
+        Vin: {car.vin}
+        {/* </CardContent> */}
+        {/* </Card>/ */}
+        {estimates &&
+          estimates.map((estimate) => (
+            <Card key={estimate.id}>
+              <CardHeader>{estimate.date}</CardHeader>
+            </Card>
+          ))}
       </div>
     </>
   );
