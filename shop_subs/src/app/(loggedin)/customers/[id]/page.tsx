@@ -4,11 +4,10 @@ import {
   getCustomerEmails,
   getCustomerAddresses,
   getCustomerCars,
-} from "@/app/actions";
+} from "@/actions/customer";
 import { notFound } from "next/navigation";
 import type { Customer, Phone, Email, Address, Car } from "@/types";
 import CustomerDetail from "@/app/(loggedin)/ui/customer-detail";
-import CarLine from "../../ui/car-line";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -42,9 +41,6 @@ export default async function CustomerPage({
 
   return (
     <div className='grid grid-cols-4 gap-4 align-center text-center p-4 rounded-lg shadow-md mt-4 justify-center'>
-      {/* <h2 className='text-xl font-bold bg-center align-center text-center p-4 rounded-lg shadow-md mt-4'>
-        Customer Details
-      </h2> */}
       <CustomerDetail
         customer={customer}
         emails={emails}
@@ -56,9 +52,8 @@ export default async function CustomerPage({
           <h3 className='text-lg font-bold'>Cars</h3>
           <CardContent className='grid grid-cols-1'>
             {cars.map((car) => (
-              <Button>
-                <Link href={`/cars/${car.id}`}>
-                  {/* <CarLine key={car.id} car={car} /> */}
+              <Button key={car.id}>
+                <Link href={`/cars/${car.id}`} >
                   {car.year} {car.make} {car.car_model}
                 </Link>
               </Button>

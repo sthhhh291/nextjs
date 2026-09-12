@@ -1,6 +1,6 @@
 "use client";
 
-import { getCars } from "@/app/actions";
+import { getCars } from "@/actions/car";
 import { useState } from "react";
 import Link from "next/link";
 import type { CarCustomer } from "@/types";

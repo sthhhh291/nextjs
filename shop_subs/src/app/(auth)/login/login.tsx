@@ -1,5 +1,5 @@
 import Form from "next/form";
-import { login } from "@/app/actions";
+import { login } from "@/actions/auth";
 
 export default function Login() {
   return (

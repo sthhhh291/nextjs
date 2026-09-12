@@ -1,7 +1,7 @@
 "use client";
 import CarForm from "./car-form";
 import { Car } from "@/types";
-import { deleteCar } from "@/app/actions";
+import { deleteCar } from "@/actions/car";
 import { Button } from "@/components/ui/button";
 
 export default function CarLine(params: { car: Car }) {

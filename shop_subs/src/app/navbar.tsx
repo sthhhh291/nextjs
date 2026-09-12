@@ -1,5 +1,5 @@
 
-import { logout } from "@/app/actions";
+import { logout } from "@/actions/auth";
 
 export default function Navbar() {
     const auth_links = [

@@ -1,17 +1,12 @@
 "use client";
-import { useState } from "react";
 import PhoneForm from "./phone-form";
 import { Phone } from "@/types";
-import { deletePhone } from "@/app/actions";
+import { deletePhone } from "@/actions/phone";
 import { Button } from "@/components/ui/button";
 
 export default function PhoneLine(params: { phone: Phone }) {
-  const [isEditing, setIsEditing] = useState(false);
   const phone = params.phone;
   const customer_id = phone.customer_id as number;
-  const updatePhone = () => {
-    setIsEditing(false);
-  };
   const deletePhoneHandler = async (id: number) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this phone number?",

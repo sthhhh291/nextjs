@@ -1,3 +1,5 @@
+"use server";
+
 import { Phone } from "@/types";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";

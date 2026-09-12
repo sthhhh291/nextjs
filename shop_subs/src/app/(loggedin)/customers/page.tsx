@@ -9,7 +9,7 @@ export default function CustomersPage() {
         <CustomerSearch />
       </div>
       <div className='flex-1 p-4'>
-        <CustomerForm customer={null} isEditing={false} />
+        <CustomerForm customer={null} />
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 "use client";
-import { saveCustomer } from "@/app/actions";
+import { saveCustomer } from "@/actions/customer";
 import { useActionState } from "react";
 import type { Customer } from "@/types";
 import { useEffect, useState } from "react";

@@ -1,5 +1,5 @@
 "use client";
-import { saveCar } from "@/app/actions";
+import { saveCar } from "@/actions/car";
 import { useActionState } from "react";
 import type { Car } from "@/types";
 import { useState, useEffect } from "react";
@@ -20,7 +20,6 @@ export default function CarForm(params: {
   customer_id: number;
 }) {
   const data = params.car;
-  const id = params.car?.id || null;
   const customer_id = params.customer_id;
   const [state, formAction, isPending] = useActionState(saveCar, {
     error: null,
