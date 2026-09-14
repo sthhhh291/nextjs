@@ -58,8 +58,8 @@ export const getEstimateById = async (id: number) => {
 
 // create a new estimate
 export const createEstimate = async (formData: FormData) => {
-  const car_id = formData.get("car_id");
-  const employee_id = String(formData.get("employee_id") ?? "");
+  const car_id = Number(formData.get("car_id"));
+  const employee_id = Number(formData.get("employee_id"));
   const date = String(formData.get("date") ?? "");
   const hours = String(formData.get("hours") ?? "");
   const mileage = String(formData.get("mileage") ?? "");
@@ -85,10 +85,11 @@ export const createEstimate = async (formData: FormData) => {
   });
 
   if (!res.ok) {
+    const errorBody = await res.text();
     return {
-      error: res.statusText || "Failed to create estimate",
+      error: errorBody || res.statusText || "Failed to create estimate",
       success: false,
-      car: null,
+      estimate: null,
     };
   }
   return { success: true, error: null, estimate: await res.json() };
@@ -97,8 +98,8 @@ export const createEstimate = async (formData: FormData) => {
 // update Estimate for a car
 export const updateEstimate = async (formData: FormData) => {
   const id = formData.get("id");
-  const car_id = formData.get("car_id");
-  const employee_id = String(formData.get("employee_id") ?? "");
+  const car_id = Number(formData.get("car_id"));
+  const employee_id = Number(formData.get("employee_id"));
   const date = String(formData.get("date") ?? "");
   const hours = String(formData.get("hours") ?? "");
   const mileage = String(formData.get("mileage") ?? "");
@@ -124,10 +125,11 @@ export const updateEstimate = async (formData: FormData) => {
   });
   console.log("updateCar response:", res);
   if (!res.ok) {
+    const errorBody = await res.text();
     return {
-      error: res.statusText || "Failed to update estimate",
+      error: errorBody || res.statusText || "Failed to update estimate",
       success: false,
-      car: null,
+      estimate: null,
     };
   }
 
@@ -153,7 +155,7 @@ export const saveEstimate = async (
   } else {
     const res = await createEstimate(formData);
     if (res.success && res.estimate) {
-      revalidatePath(`/estimates/${res.estimate.car_id}`);
+      revalidatePath(`/cars/${res.estimate.car_id}`);
     }
     return res;
   }

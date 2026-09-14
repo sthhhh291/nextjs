@@ -2,13 +2,13 @@
 
 import { Car} from "@/types";
 import CarLine from "./car-line";
-import CarForm from "./car-form";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import EstimateForm from "./estimate-form";
 
 export default function CarDetail(params: { car: Car }) {
   const car = params.car;
@@ -27,7 +27,7 @@ export default function CarDetail(params: { car: Car }) {
         <CardHeader>
           <CardTitle>Actions</CardTitle>
           <CardDescription>
-            <CarForm car={null} customer_id={car.customer_id} />
+            <EstimateForm estimate={null} car_id={car.id} />
           </CardDescription>
         </CardHeader>
       </Card>

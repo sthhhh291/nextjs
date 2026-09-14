@@ -162,17 +162,40 @@ export const deleteSubEstimate = async (id: number, estimateId: number) => {
 };
 
 // get labor, parts, oils by sub id
-// export const getLaborPartsOilBySubId = async (subId: number) => {
-//   if (!Number.isInteger(subId) || subId < 1) {
-//     throw new Error("Invalid estimate ID");
-//   }
-//   const cookieStore = await cookies();
-//   const accessToken = cookieStore.get("access_token")?.value;
-//   const [ labor_res, part_res, oil_res, total_res] = Promise.all(
-//     await fetch(`${baseUrl}/sub-estimates/${subId}/labor`, {
-//       method: "GET",
-//       headers: {
-//         Authorization: `Bearer ${accessToken}`,
-//       })
-//     }
-// }
+export const getLaborPartsOilBySubId = async (subId: number) => {
+  if (!Number.isInteger(subId) || subId < 1) {
+    throw new Error("Invalid estimate ID");
+  }
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  const labor = await fetch(`${baseUrl}/sub-estimates/${subId}/labor`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    }
+  })
+  const parts = await fetch(`${baseUrl}/sub-estimates/${subId}/parts`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    }
+  })
+  const oil = await fetch(`${baseUrl}/sub-estimates/${subId}/oil`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    }
+  })
+  const totals = await fetch(`${baseUrl}/sub-estimates/${subId}/totals`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    }
+  })
+  return {
+    labor : labor.json(),
+    parts: parts.json(),
+    oil : oil.json(),
+    totals : totals.json()
+  }
+}
