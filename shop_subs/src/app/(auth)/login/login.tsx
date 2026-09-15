@@ -3,7 +3,7 @@ import { login } from "@/actions/auth";
 
 export default function Login() {
   return (
-    <div className='flex flex-col items-center min-h-screen py-2'>
+    <div className='flex flex-col items-center min-h-screen py-2 justify-center'>
       <h2 className='text-xl font-bold bg-center'>Login</h2>
       <Form action={login} className='flex flex-col items-center content-center space-y-2'>
         <input

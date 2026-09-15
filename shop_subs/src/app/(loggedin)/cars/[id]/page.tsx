@@ -7,6 +7,7 @@ import type { Customer, Car, Estimate } from "@/types";
 import CustomerDetail from "../../ui/customer-detail";
 import { Card, CardHeader} from "@/components/ui/card";
 import CarDetail from "@/app/(loggedin)/ui/car-detail";
+import Link from "next/link";
 
 export default async function CustomerPage({
   params,
@@ -39,7 +40,9 @@ export default async function CustomerPage({
         {estimates &&
           estimates.map((estimate) => (
             <Card key={estimate.id}>
+              <Link href={`/estimates/${estimate.id}`}>
               <CardHeader>{estimate.date}</CardHeader>
+              </Link>
             </Card>
           ))}
       </div>

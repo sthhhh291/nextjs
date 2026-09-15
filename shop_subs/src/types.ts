@@ -58,6 +58,10 @@ export type Sub_estimate = {
   id: number;
   estimate_id: number;
   description: string;
+  labor? : Labor[];
+  parts? :Part[];
+  oil?: Part[];
+  totals?: Totals
 };
 
 export type Labor = {
