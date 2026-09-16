@@ -193,9 +193,9 @@ export const getLaborPartsOilBySubId = async (subId: number) => {
     }
   })
   return {
-    labor : labor.json(),
-    parts: parts.json(),
-    oil : oil.json(),
-    totals : totals.json()
+    labor: await labor.json(),
+    parts: await parts.json(),
+    oil: await oil.json(),
+    totals: await totals.json(),
   }
 }

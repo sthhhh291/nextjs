@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Estimate } from "@/types";
+import EstimateForm from "./estimate-form";
 
 export default function EstimateDetail(params:{estimate:Estimate}) {
   const estimate = params.estimate;
@@ -24,6 +25,7 @@ export default function EstimateDetail(params:{estimate:Estimate}) {
       <CardContent>
         Hours taken: {estimate.hours}
       </CardContent>
+      <EstimateForm estimate={estimate} car_id={estimate.car_id} />
     </Card>
   )
 }
