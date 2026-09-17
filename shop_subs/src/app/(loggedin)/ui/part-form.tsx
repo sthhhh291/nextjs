@@ -1,7 +1,7 @@
 "use client";
-import { saveLabor } from "@/actions/labor";
-import { useActionState } from "react";
-import type { Labor } from "@/types";
+import { savePart } from "@/actions/parts";
+import { startTransition, useActionState } from "react";
+import type { Part } from "@/types";
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -10,33 +10,36 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function SubForm(params: {
-  labor: Labor | null;
+  part: Part | null;
   sub_id: number;
 }) {
-  const data = params.labor;
+  const data = params.part;
   const sub_id = params.sub_id;
   const [open, setOpen] = useState(false);
   const buttonAction = data ? "Create" : "Save Changes";
-  const [state, formAction, isPending] = useActionState(saveLabor, {
+  const [state, formAction, isPending] = useActionState(savePart, {
     error: null,
     success: false,
-    labor: null,
+    parts: null,
   });
   const [description, setDescription] = useState(data?.description || "");
-  const [hours, setHours] = useState(data?.hours || 0);
-  const [rate, setRate] = useState(data?.rate || 0);
+  const [manufacturer, setManufacturer] = useState(data?.manufacturer || "");
+  const [part_number, setPartNumber] = useState(data?.part_number || "");
+  const [quantity,setQuantity] = useState(data?.quantity || 0);
+  const [cost,setCost] = useState(data?.cost || 0);
+  const [list,setList] = useState(data?.list || 0);
   const [price, setPrice] = useState(data?.price || 0);
 
   useEffect(() => {
     if (!isPending && state.success) {
-      setOpen(false);
+      startTransition(() => setOpen(false));
     }
   }, [isPending, state.success]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button>{data ? "Edit Labor" : "Create Labor"}</Button>
+        <Button>{data ? "Edit Part" : "Create Part"}</Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-2xl'>
         <form
@@ -56,25 +59,56 @@ export default function SubForm(params: {
               />
             </Field>
             <Field>
-              <Label htmlFor='rate'>rate</Label>
+              <Label htmlFor='manufacturer'>manufacturer</Label>
               <Input
-                type='number'
-                step={0.01}
-                name='rate'
-                placeholder='Rate...'
-                value={rate}
-                onChange={(e) => setRate(Number(e.target.value))}
+                type='text'
+                name='manufacturer'
+                placeholder='Manufacturer Number...'
+                value={manufacturer}
+                onChange={(e) => setManufacturer(e.target.value)}
               />
             </Field>
             <Field>
-              <Label htmlFor='hours'>hours</Label>
+              <Label htmlFor='part_number'>part_number</Label>
+              <Input
+                type='text'
+                name='part_number'
+                placeholder='Part Number...'
+                value={part_number}
+                onChange={(e) => setPartNumber(e.target.value)}
+              />
+            </Field>
+            <Field>
+              <Label htmlFor='quantity'>Quantity</Label>
+              <Input
+                type='number'
+                step={0.01}
+                name='quantity'
+                placeholder='Quantity...'
+                value={quantity}
+                onChange={(e) => setQuantity(Number(e.target.value))}
+              />
+            </Field>
+            <Field>
+              <Label htmlFor='cost'>Part Cost</Label>
               <Input
                 type='text'
                 step={0.01}
-                name='hours'
-                placeholder='Hours...'
-                value={hours}
-                onChange={(e) => setHours(Number(e.target.value))}
+                name='cost'
+                placeholder='Part Cost...'
+                value={cost}
+                onChange={(e) => setCost(Number(e.target.value))}
+              />
+            </Field>
+            <Field>
+              <Label htmlFor='list'>List Price</Label>
+              <Input
+                type='text'
+                name='list'
+                step={0.01}
+                placeholder='Price...'
+                value={list}
+                onChange={(e) => setList(Number(e.target.value))}
               />
             </Field>
             <Field>

@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import LaborForm from "@/app/(loggedin)/ui/labor-form";
+import PartForm from '@/app/(loggedin)/ui/part-form';
 import { Sub_estimate } from "@/types";
 
 export default function SubEstimateCard(params: { sub: Sub_estimate }) {
@@ -9,6 +10,7 @@ export default function SubEstimateCard(params: { sub: Sub_estimate }) {
       <Card>
         <h2>Actions</h2>
         <LaborForm labor={null} sub_id={sub.id} />
+        <PartForm part={null} sub_id={sub.id} />
       </Card>
       <CardHeader>{sub.description}</CardHeader>
       {/* labor */}
@@ -28,6 +30,7 @@ export default function SubEstimateCard(params: { sub: Sub_estimate }) {
           <CardContent>
             {lab.description} Qty: {lab.quantity} Price: {lab.price} Extended:{" "}
             {lab.quantity * lab.price}
+            <PartForm part={lab} sub_id={sub.id} />
           </CardContent>
         </div>
       ))}

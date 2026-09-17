@@ -59,10 +59,10 @@ export const getLaborById = async (id: number) => {
 // create a new labor
 export const createLabor = async (formData: FormData) => {
   const sub_estimate_id = Number(formData.get("sub_estimate_id"));
-  const description = Number(formData.get("description"));
-  const hours = String(formData.get("hours") ?? "");
-  const rate = String(formData.get("rate") ?? "");
-  const price = String(formData.get("price") ?? "");
+  const description = String(formData.get("description"));
+  const hours = Number(formData.get("hours") ?? "");
+  const rate = Number(formData.get("rate") ?? "");
+  const price = Number(formData.get("price") ?? "");
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
 
@@ -96,10 +96,10 @@ export const createLabor = async (formData: FormData) => {
 export const updateLabor = async (formData: FormData) => {
   const id = formData.get("id");
   const sub_estimate_id = Number(formData.get("sub_estimate_id"));
-  const description = Number(formData.get("description"));
-  const hours = String(formData.get("hours") ?? "");
-  const rate = String(formData.get("rate") ?? "");
-  const price = String(formData.get("price") ?? "");
+  const description = String(formData.get("description"));
+  const hours = Number(formData.get("hours") ?? "");
+  const rate = Number(formData.get("rate") ?? "");
+  const price = Number(formData.get("price") ?? "");
 
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
