@@ -1,5 +1,5 @@
 "use client";
-import { savePart } from "@/actions/parts";
+import { saveOil } from "@/actions/oil";
 import { startTransition, useActionState } from "react";
 import type { Part } from "@/types";
 import { useState, useEffect } from "react";
@@ -11,21 +11,21 @@ import { Label } from "@/components/ui/label";
 import {SquarePen} from "lucide-react"
 
 export default function SubForm(params: {
-  part: Part | null;
+  oil: Part | null;
   sub_id: number;
 }) {
-  const data = params.part;
+  const data = params.oil;
   const sub_id = params.sub_id;
   const [open, setOpen] = useState(false);
   const buttonAction = data ? "Create" : "Save Changes";
-  const [state, formAction, isPending] = useActionState(savePart, {
+  const [state, formAction, isPending] = useActionState(saveOil, {
     error: null,
     success: false,
-    parts: null,
+    oil: null,
   });
   const [description, setDescription] = useState(data?.description || "");
   const [manufacturer, setManufacturer] = useState(data?.manufacturer || "");
-  const [part_number, setPartNumber] = useState(data?.part_number || "");
+  const [part_number, setpartNumber] = useState(data?.part_number || "");
   const [quantity,setQuantity] = useState(data?.quantity || 0);
   const [cost,setCost] = useState(data?.cost || 0);
   const [list,setList] = useState(data?.list || 0);
@@ -40,7 +40,7 @@ export default function SubForm(params: {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button>{data ? <SquarePen /> : "Create Part"}</Button>
+        <Button>{data ? <SquarePen /> : "Create Oil"}</Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-2xl'>
         <form
@@ -76,7 +76,7 @@ export default function SubForm(params: {
                 name='part_number'
                 placeholder='Part Number...'
                 value={part_number}
-                onChange={(e) => setPartNumber(e.target.value)}
+                onChange={(e) => setpartNumber(e.target.value)}
               />
             </Field>
             <Field>
@@ -91,12 +91,12 @@ export default function SubForm(params: {
               />
             </Field>
             <Field>
-              <Label htmlFor='cost'>Part Cost</Label>
+              <Label htmlFor='cost'>Oil Cost</Label>
               <Input
                 type='text'
                 step={0.01}
                 name='cost'
-                placeholder='Part Cost...'
+                placeholder='Oil Cost...'
                 value={cost}
                 onChange={(e) => setCost(Number(e.target.value))}
               />

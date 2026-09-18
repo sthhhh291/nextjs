@@ -6,27 +6,27 @@ import type { Part } from "@/types";
 
 const baseUrl = process.env.API_ADDRESS || "http://localhost:3000";
 
-// parts area
-export const getParts = async () => {
+// oil area
+export const getOils = async () => {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access token")?.value;
-  const res = await fetch(`${baseUrl}/parts`, {
+  const res = await fetch(`${baseUrl}/oil`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   });
   if (!res.ok) {
-    console.error("Failed to fetch parts:", res.statusText);
-    throw new Error("Failed to fetch parts");
+    console.error("Failed to fetch oil:", res.statusText);
+    throw new Error("Failed to fetch oil");
   }
   return res.json();
 };
 
-// get single parts by id
-export const getPartById = async (id: number) => {
+// get single oil by id
+export const getOilById = async (id: number) => {
   if (!Number.isInteger(id) || id < 1) {
-    throw new Error("Invalid parts ID");
+    throw new Error("Invalid oil ID");
   }
 
   const cookieStore = await cookies();
@@ -35,7 +35,7 @@ export const getPartById = async (id: number) => {
     throw new Error("Authentication required");
   }
 
-  const res = await fetch(`${baseUrl}/parts/${id}`, {
+  const res = await fetch(`${baseUrl}/oil/${id}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -45,19 +45,19 @@ export const getPartById = async (id: number) => {
 
   if (!res.ok) {
     const errorBody = await res.text();
-    console.error("Failed to fetch parts:", {
+    console.error("Failed to fetch oil:", {
       status: res.status,
       statusText: res.statusText,
       body: errorBody,
     });
-    throw new Error(`Failed to fetch parts (${res.status})`);
+    throw new Error(`Failed to fetch oil (${res.status})`);
   }
 
   return res.json();
 };
 
-// create a new parts
-export const createPart = async (formData: FormData) => {
+// create a new oil
+export const createOil = async (formData: FormData) => {
   const sub_estimate_id = Number(formData.get("sub_estimate_id"));
   const description = String(formData.get("description"));
   const manufacturer = String(formData.get("manufacturer"));
@@ -80,7 +80,7 @@ export const createPart = async (formData: FormData) => {
   };
 
   try {
-    const res = await fetch(`${baseUrl}/parts/`, {
+    const res = await fetch(`${baseUrl}/oil/`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -92,7 +92,7 @@ export const createPart = async (formData: FormData) => {
     if (!res.ok) {
       const errorBody = await res.text();
       console.error("Failed to create part", {
-        url: `${baseUrl}/parts/`,
+        url: `${baseUrl}/oil/`,
         status: res.status,
         statusText: res.statusText,
         response: errorBody,
@@ -101,35 +101,35 @@ export const createPart = async (formData: FormData) => {
         hasAccessToken: Boolean(accessToken),
       });
       return {
-        error: errorBody || res.statusText || "Failed to create parts",
+        error: errorBody || res.statusText || "Failed to create oil",
         success: false,
-        parts: null,
+        oil: null,
       };
     }
 
-    const createdPartId = await res.json();
+    const createdOilId = await res.json();
     return {
       success: true,
       error: null,
-      parts: typeof createdPartId === "number" ? null : createdPartId,
+      oil: typeof createdOilId === "number" ? null : createdOilId,
     };
   } catch (error) {
     console.error("Error while creating part", {
-      url: `${baseUrl}/parts/`,
+      url: `${baseUrl}/oil/`,
       error,
       payload,
       hasAccessToken: Boolean(accessToken),
     });
     return {
-      error: error instanceof Error ? error.message : "Failed to create parts",
+      error: error instanceof Error ? error.message : "Failed to create oil",
       success: false,
-      parts: null,
+      oil: null,
     };
   }
 };
 
-// update Part for a car
-export const updatePart = async (formData: FormData) => {
+// update Oil for a car
+export const updateOil = async (formData: FormData) => {
   const id = formData.get("id");
   const sub_estimate_id = Number(formData.get("sub_estimate_id"));
   const description = String(formData.get("description"));
@@ -142,7 +142,7 @@ export const updatePart = async (formData: FormData) => {
 
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
-  const res = await fetch(`${baseUrl}/parts/${id}`, {
+  const res = await fetch(`${baseUrl}/oil/${id}`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -162,7 +162,7 @@ export const updatePart = async (formData: FormData) => {
   if (!res.ok) {
     const errorBody = await res.text();
     console.error("Failed to update part", {
-      url: `${baseUrl}/parts/${id}`,
+      url: `${baseUrl}/oil/${id}`,
       status: res.status,
       statusText: res.statusText,
       response: errorBody,
@@ -178,46 +178,46 @@ export const updatePart = async (formData: FormData) => {
       hasAccessToken: Boolean(accessToken),
     });
     return {
-      error: errorBody || res.statusText || "Failed to update parts",
+      error: errorBody || res.statusText || "Failed to update oil",
       success: false,
-      parts: null,
+      oil: null,
     };
   }
 
   await res.json();
-  return { success: true, error: null, parts: null };
+  return { success: true, error: null, oil: null };
 };
 
 // save car form data (create or update)
-export const savePart = async (
+export const saveOil = async (
   prevState: {
     error: string | null;
     success: boolean;
-    parts: Part | null;
+    oil: Part | null;
   },
   formData: FormData,
 ) => {
   const id = formData.get("id") || null;
   if (id) {
-    const res = await updatePart(formData)
-    if (res.success && res.parts) {
+    const res = await updateOil(formData);
+    if (res.success && res.oil) {
       revalidatePath("/");
     }
     return res;
   } else {
-    const res = await createPart(formData);
-    if (res.success && res.parts) {
+    const res = await createOil(formData);
+    if (res.success && res.oil) {
       revalidatePath("/");
     }
-    return res
+    return res;
   }
 };
 
 // delete a car by id
-export const deletePart = async (id: number, carId: number) => {
+export const deleteOil = async (id: number, carId: number) => {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
-  const res = await fetch(`${baseUrl}/parts/${id}`, {
+  const res = await fetch(`${baseUrl}/oil/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -225,12 +225,12 @@ export const deletePart = async (id: number, carId: number) => {
   });
   if (!res.ok) {
     const errorBody = await res.text();
-    console.error("Failed to delete parts:", {
+    console.error("Failed to delete oil:", {
       status: res.status,
       statusText: res.statusText,
       body: errorBody,
     });
-    throw new Error(`Failed to delete parts (${res.status})`);
+    throw new Error(`Failed to delete oil (${res.status})`);
   }
   revalidatePath(`/cars/${carId}`);
 };

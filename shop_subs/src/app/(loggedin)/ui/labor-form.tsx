@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { FieldGroup, Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SquarePen } from "lucide-react"
 
 export default function SubForm(params: {
   labor: Labor | null;
@@ -36,7 +37,7 @@ export default function SubForm(params: {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button>{data ? "Edit Labor" : "Create Labor"}</Button>
+        <Button>{data ? <SquarePen /> : "Create Labor"}</Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-2xl'>
         <form
