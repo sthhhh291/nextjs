@@ -94,7 +94,7 @@ export const getCustomers = async (
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
   const res = await fetch(
-    `${baseUrl}/customers?page=${page}&size=${size}&searchTerm=${searchTerm}`,
+    `${baseUrl}/customers?page=${page}&size=${size}&searchTerm=${encodeURIComponent(searchTerm)}`,
     {
       method: "GET",
       headers: {

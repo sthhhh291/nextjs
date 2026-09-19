@@ -1,5 +1,6 @@
 import CustomerSearch from "@/app/(loggedin)/ui/customer-search";
 import CustomerForm from "../ui/customer-form";
+import CustomerComboBox from "../ui/customer-combobox";
 
 export default function CustomersPage() {
   return (
@@ -11,6 +12,9 @@ export default function CustomersPage() {
       <div className='flex-1 p-4'>
         <CustomerForm customer={null} />
       </div>
+      {/* <div className='flex-1 p-4'>
+        <CustomerComboBox />
+      </div> */}
     </div>
   );
 }
