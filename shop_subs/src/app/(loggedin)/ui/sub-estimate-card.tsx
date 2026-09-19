@@ -34,9 +34,11 @@ export default function SubEstimateCard(params: { sub: Sub_estimate }) {
     <Card>
       <Card>
         <h2>Actions</h2>
+        <div className="flex flex-wrap justify-center gap-2">
         <LaborForm labor={null} sub_id={sub.id} />
         <PartForm part={null} sub_id={sub.id} />
         <OilForm oil={null} sub_id={sub.id} />
+        </div>
       </Card>
       <CardHeader>{sub.description}</CardHeader>
       {/* labor */}

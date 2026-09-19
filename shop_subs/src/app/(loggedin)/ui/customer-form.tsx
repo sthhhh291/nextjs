@@ -19,6 +19,7 @@ import {
   Field,
 } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
+import { SquarePen } from "lucide-react";
 
 export default function CustomerForm(params: { customer: Customer | null }) {
   const data = params.customer;
@@ -42,7 +43,7 @@ export default function CustomerForm(params: { customer: Customer | null }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
-        render={<Button>{data ? "Edit Customer" : "Create Customer"}</Button>}
+        render={<Button>{data ? <SquarePen /> : "Create Customer"}</Button>}
       />
       <DialogContent>
         <form action={formAction}>

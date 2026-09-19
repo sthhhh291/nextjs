@@ -3,6 +3,7 @@ import CarForm from "./car-form";
 import { Car } from "@/types";
 import { deleteCar } from "@/actions/car";
 import { Button } from "@/components/ui/button";
+import {Trash} from "lucide-react";
 
 export default function CarLine(params: { car: Car }) {
   const car = params.car;
@@ -24,7 +25,7 @@ export default function CarLine(params: { car: Car }) {
     <div className='border border-gray-300 rounded p-4 mt-4 text-sm font-bold'>
       {car.year} {car.make} {car.car_model}
       <CarForm car={car} customer_id={customer_id} />
-      <Button onClick={() => deleteCarHandler(car.id)}>Delete Car</Button>
+      <Button onClick={() => deleteCarHandler(car.id)}><Trash /></Button>
     </div>
   );
 }

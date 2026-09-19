@@ -40,15 +40,17 @@ export default async function CustomerPage({
   }
 
   return (
-    <div className='grid grid-cols-4 gap-4 align-center text-center p-4 rounded-lg shadow-md mt-4 justify-center'>
+    <div className='flex justify-center'>
+      <div className="w-1/2">
       <CustomerDetail
         customer={customer}
         emails={emails}
         phones={phones}
         addresses={addresses}
-      />
-      <div>
-        <Card className='col-span-4 p-2 m-2'>
+        />
+        </div>
+      <div className="w-1/4">
+        <Card className=''>
           <h3 className='text-lg font-bold'>Cars</h3>
           <CardContent className='grid grid-cols-1'>
             {cars.map((car) => (

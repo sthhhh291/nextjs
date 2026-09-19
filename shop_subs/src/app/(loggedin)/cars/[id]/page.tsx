@@ -2,8 +2,8 @@ import {
   getCarById,
   getEstimatesByCarId,
 } from "@/actions/car";
-import { getCustomerById } from "@/actions/customer";
-import type { Customer, Car, Estimate } from "@/types";
+import { getCustomerById, getCustomerPhones } from "@/actions/customer";
+import type { Customer, Car, Estimate, Phone } from "@/types";
 import CustomerDetail from "../../ui/customer-detail";
 import { Card, CardHeader} from "@/components/ui/card";
 import CarDetail from "@/app/(loggedin)/ui/car-detail";
@@ -18,7 +18,7 @@ export default async function CustomerPage({
   const car: Car = await getCarById(carId);
   const customer: Customer = await getCustomerById(car.customer_id);
   const estimates: Estimate[] = await getEstimatesByCarId(carId);
-  //   let phones: Phone[] = [];
+  const phones: Phone[] = await getCustomerPhones(customer.id);
   //   let emails: Email[] = [];
   //   let addresses: Address[] = [];
 
@@ -30,7 +30,7 @@ export default async function CustomerPage({
       <div className='grid grid-cols-2 gap-4 align-center text-center p-4 rounded-lg shadow-md mt-4'>
         <CustomerDetail
           customer={customer}
-          phones={[]}
+          phones={phones}
           emails={[]}
           addresses={[]}
         />

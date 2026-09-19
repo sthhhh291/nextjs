@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-
+import {SquarePen} from "lucide-react";
 export default function CarForm(params: {
   car: Car | null;
   customer_id: number;
@@ -49,7 +49,7 @@ export default function CarForm(params: {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button>{data ? "Edit Car" : "Create Car"}</Button>
+        <Button>{data ? <SquarePen /> : "Create Car"}</Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-2xl'>
         <form

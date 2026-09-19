@@ -17,6 +17,7 @@ import { SelectContent,Select,SelectLabel,SelectTrigger, SelectValue,SelectGroup
 import { Calendar } from "@/components/ui/calendar";
 import { ChevronDownIcon } from "lucide-react";
 import { format } from "date-fns";
+import { SquarePen } from "lucide-react";
 
 export default function EstimateForm(params: {
   estimate: Estimate | null;
@@ -62,7 +63,7 @@ export default function EstimateForm(params: {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button>{data ? "Edit Estimate" : "Create Estimate"}</Button>
+        <Button>{data ? <SquarePen /> : "Create Estimate"}</Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-2xl'>
         <form

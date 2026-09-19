@@ -1,7 +1,7 @@
 "use client";
-import { savePhone } from "@/actions/phone";
+import { saveEmail } from "@/actions/email";
 import { useActionState } from "react";
-import type { Phone } from "@/types";
+import type { Email } from "@/types";
 import { useState, useEffect } from "react";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -22,32 +22,32 @@ import {
 import { Button } from "@/components/ui/button";
 import { SquarePen } from "lucide-react";
 
-export default function PhoneForm(params: {
-  phone: Phone | null;
+export default function EmailForm(params: {
+  email: Email | null;
   customer_id: number;
 }) {
-  const data = params.phone;
-  const id = params.phone?.id;
+  const data = params.email;
+  const id = params.email?.id;
   const customer_id = params.customer_id;
-  const [state, formAction, isPending] = useActionState(savePhone, {
+  const [state, formAction, isPending] = useActionState(saveEmail, {
     error: null,
     success: false,
-    phone: null,
+    email: null,
   });
   const [type, setType] = useState(data?.type || "");
-  const [number, setNumber] = useState(data?.number || "");
+  const [address, setAddress] = useState(data?.address || "");
   const [open, setOpen] = useState(false);
   useEffect(() => {
     if (!isPending && state.success) {
       setOpen(false);
     }
   }, [isPending, state.success]);
-  const buttonAction = data ? "Update Phone" : "Create Phone";
+  const buttonAction = data ? "Update Email" : "Create Email";
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button>{data ? <SquarePen /> : "Create Phone"}</Button>
+          <Button>{data ? <SquarePen /> : "Create Email"}</Button>
         }></DialogTrigger>
       <DialogContent>
         <form action={formAction}>
@@ -55,7 +55,7 @@ export default function PhoneForm(params: {
           <input type='hidden' name='customer_id' value={customer_id} />
           <FieldGroup>
             <FieldSet>
-              <FieldLegend>Phone Type</FieldLegend>
+              <FieldLegend>Email Type</FieldLegend>
               <Field orientation='horizontal'>
                 <Select name='type' value={type} onValueChange={setType}>
                   <SelectTrigger className='border border-gray-300 rounded p-2 m-2'>
@@ -69,13 +69,13 @@ export default function PhoneForm(params: {
                 </Select>
               </Field>
               <Field orientation='horizontal'>
-                <Label htmlFor='number'>Number</Label>
+                <Label htmlFor='address'>address</Label>
                 <Input
-                  id='number'
-                  name='number'
-                  placeholder='number...'
-                  value={number}
-                  onChange={(e) => setNumber(e.target.value)}
+                  id='address'
+                  name='address'
+                  placeholder='address...'
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                 />
               </Field>
               <Button type='submit' disabled={isPending}>
