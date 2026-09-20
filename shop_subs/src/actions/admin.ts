@@ -93,14 +93,14 @@ export const createAdmin = async (formData: FormData) => {
 
 // update admin for a customer
 export const updateAdmin = async (formData: FormData) => {
-  const id = formData.get("id");
+  // const id = formData.get("id");
   const tax_rate = formData.get("tax_rate");
   const labor_rate = String(formData.get("labor_rate") ?? "");
   const shop_fees_percent = String(formData.get("shop_fees_percent") ?? "");
   const shop_fees_limit = String(formData.get("shop_fees_limit") ?? "");
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
-  const res = await fetch(`${baseUrl}/admin/${id}`, {
+  const res = await fetch(`${baseUrl}/admin/`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${accessToken}`,

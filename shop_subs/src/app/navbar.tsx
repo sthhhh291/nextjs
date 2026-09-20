@@ -13,6 +13,9 @@ export default function Navbar() {
     { href: "/estimates", label: "Estimates" },
     { href: "/parts-order", label: "Parts Order" },
     { href: "/employees", label: "Employees" },
+    { href: "/admin", label: "Admin"},
+    { href: "/parts-order", label: "Parts Order"},
+    { href: "/markups", label: "Markup"}
   ];
 
   const admin_links = [

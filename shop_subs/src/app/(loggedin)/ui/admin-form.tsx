@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { FieldSet, Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import CustomerComboBox from "./customer-combobox";
+
 import { Card } from "@/components/ui/card";
 import { Trash } from "lucide-react";
 export default function AdminForm(params: { admin: Admin | null }) {
@@ -17,8 +17,10 @@ export default function AdminForm(params: { admin: Admin | null }) {
     success: false,
     admin: null,
   });
-  const [tax_rate, settax_rate] = useState(data?.tax_rate || "");
-  const [salary, setSalary] = useState(data?.salary || "");
+  const [tax_rate, setTaxRate] = useState(data?.tax_rate || "");
+  const [labor_rate, setLaborRate] = useState(data?.labor_rate || "");
+  const [shop_fees_percent, setShopFeesPercent] = useState(data?.shop_fees_percent || "");
+  const [shop_fees_limit, setShopFeesLimit] = useState(data?.shop_fees_limit || "");
 
   const buttonAction = data ? "Save Changes" : "Create Admin";
 
@@ -29,12 +31,6 @@ export default function AdminForm(params: { admin: Admin | null }) {
     }
   }
 
-  // useEffect(() => {
-  //   if (!isPending && state.success) {
-  //     setOpen(false);
-  //   }
-  // }, [isPending, state.success]);
-
   return (
     <Card>
       <form
@@ -43,26 +39,43 @@ export default function AdminForm(params: { admin: Admin | null }) {
         {data && <input type='hidden' name='id' value={data.id} />}
         <FieldSet className='col-span-full grid grid-cols-1 gap-6 sm:grid-cols-5'>
           <Field>
-            <Label htmlFor='Customer'>Pick a Person</Label>
-          </Field>
-          <Field>
-            <Label htmlFor='title'>Title</Label>
+            <Label htmlFor='tax_rate'>Tax Rate</Label>
             <Input
-              type='text'
-              name='title'
-              placeholder='title...'
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              type='number'
+              name="tax_rate"
+              placeholder="Tax Rate..."
+              value={tax_rate}
+              onChange={(e) => setTaxRate(e.target.value)}
             />
           </Field>
           <Field>
-            <Label htmlFor='salary'>Salary</Label>
+            <Label htmlFor='labor_rate'>labor_rate</Label>
             <Input
               type='text'
-              name='salary'
+              name='labor_rate'
+              placeholder='Labor Rate...'
+              value={labor_rate}
+              onChange={(e) => setLaborRate(e.target.value)}
+            />
+          </Field>
+          <Field>
+            <Label htmlFor='shop_fees_percent'>shop_fees_percent</Label>
+            <Input
+              type='text'
+              name='shop_fees_percent'
               placeholder='model...'
-              value={salary}
-              onChange={(e) => setSalary(e.target.value)}
+              value={shop_fees_percent}
+              onChange={(e) => setShopFeesPercent(e.target.value)}
+            />
+          </Field>
+          <Field>
+            <Label htmlFor='shop_fees_limit'>shop_fees_limit</Label>
+            <Input
+              type='text'
+              name='shop_fees_limit'
+              placeholder='Shop fees upper limit...'
+              value={shop_fees_limit}
+              onChange={(e) => setShopFeesLimit(e.target.value)}
             />
           </Field>
           <Field>
@@ -73,14 +86,14 @@ export default function AdminForm(params: { admin: Admin | null }) {
               {isPending ? "Saving..." : buttonAction}
             </Button>
           </Field>
-          {data && (
+          {/* {data && (
             <Field>
               <Label className='invisible'>Delete</Label>
               <Button onClick={() => handleDelete(data.id)}>
                 <Trash />
               </Button>
             </Field>
-          )}
+          )} */}
         </FieldSet>
       </form>
     </Card>
