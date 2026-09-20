@@ -8,7 +8,7 @@ const baseUrl = process.env.API_ADDRESS || "http://localhost:3000";
 
 // markup section
 // get all markup with pagination and optional search term
-export const getmarkup = async () => {
+export const getMarkup = async () => {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
   const res = await fetch(`${baseUrl}/markups`, {
