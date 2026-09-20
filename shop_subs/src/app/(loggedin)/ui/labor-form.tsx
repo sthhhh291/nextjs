@@ -1,14 +1,16 @@
 "use client";
 import { saveLabor } from "@/actions/labor";
+import { getadmin } from "@/actions/admin";
 import { useActionState } from "react";
-import type { Labor } from "@/types";
+import type { Labor, Admin } from "@/types";
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FieldGroup, Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SquarePen } from "lucide-react"
+import { SquarePen } from "lucide-react";
+// import { useEffect } from "react";
 
 export default function SubForm(params: {
   labor: Labor | null;
@@ -27,6 +29,7 @@ export default function SubForm(params: {
   const [hours, setHours] = useState(data?.hours || 0);
   const [rate, setRate] = useState(data?.rate || 0);
   const [price, setPrice] = useState(data?.price || 0);
+  // const [admin, setAdmin] = useState<Admin>();
 
   useEffect(() => {
     if (!isPending && state.success) {
@@ -34,10 +37,41 @@ export default function SubForm(params: {
     }
   }, [isPending, state.success]);
 
+  // load labor rate from admin
+  useEffect(() => {
+    let active = true;
+
+    const loadAdmin = async () => {
+      try {
+        const data = await getadmin();
+        if (active) {
+          setRate(data.labor_rate);
+        }
+      } catch (error) {
+        console.error("Failed to load admin:", error);
+      }
+    };
+
+    loadAdmin();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // calculate labor price on hours/rate change
+  useEffect(() => {
+    setPrice(rate * hours);
+  }, [rate, hours]);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button>{data ? <SquarePen /> : "Create Labor"}</Button>
+        <Button>
+          {data ?
+            <SquarePen />
+          : "Create Labor"}
+        </Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-2xl'>
         <form
@@ -60,7 +94,7 @@ export default function SubForm(params: {
               <Label htmlFor='rate'>rate</Label>
               <Input
                 type='number'
-                step={0.01}
+                step={5}
                 name='rate'
                 placeholder='Rate...'
                 value={rate}
@@ -70,8 +104,8 @@ export default function SubForm(params: {
             <Field>
               <Label htmlFor='hours'>hours</Label>
               <Input
-                type='text'
-                step={0.01}
+                type='number'
+                step={0.1}
                 name='hours'
                 placeholder='Hours...'
                 value={hours}
@@ -81,7 +115,7 @@ export default function SubForm(params: {
             <Field>
               <Label htmlFor='price'>price</Label>
               <Input
-                type='text'
+                type='number'
                 name='price'
                 step={0.01}
                 placeholder='Price...'

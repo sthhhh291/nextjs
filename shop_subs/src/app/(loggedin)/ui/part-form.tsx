@@ -1,19 +1,17 @@
 "use client";
 import { savePart } from "@/actions/parts";
+import { getMarkup } from "@/actions/markup";
 import { startTransition, useActionState } from "react";
-import type { Part } from "@/types";
+import type { Markup, Part } from "@/types";
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FieldGroup, Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {SquarePen} from "lucide-react"
+import { SquarePen } from "lucide-react";
 
-export default function SubForm(params: {
-  part: Part | null;
-  sub_id: number;
-}) {
+export default function SubForm(params: { part: Part | null; sub_id: number }) {
   const data = params.part;
   const sub_id = params.sub_id;
   const [open, setOpen] = useState(false);
@@ -26,21 +24,77 @@ export default function SubForm(params: {
   const [description, setDescription] = useState(data?.description || "");
   const [manufacturer, setManufacturer] = useState(data?.manufacturer || "");
   const [part_number, setPartNumber] = useState(data?.part_number || "");
-  const [quantity,setQuantity] = useState(data?.quantity || 0);
-  const [cost,setCost] = useState(data?.cost || 0);
-  const [list,setList] = useState(data?.list || 0);
+  const [quantity, setQuantity] = useState(data?.quantity || 0);
+  const [cost, setCost] = useState(data?.cost || 0);
+  const [list, setList] = useState(data?.list || 0);
   const [price, setPrice] = useState(data?.price || 0);
+  const [markups, setMarkups] = useState<Markup[]>([]);
 
+  // open/close dialog
   useEffect(() => {
     if (!isPending && state.success) {
       startTransition(() => setOpen(false));
     }
   }, [isPending, state.success]);
 
+  // load markup tables
+  useEffect(() => {
+    let active = true;
+
+    const loadMarkup = async () => {
+      try {
+        const data = await getMarkup();
+        if (active) {
+          setMarkups(data);
+        }
+      } catch (error) {
+        console.error("Failed to load admin:", error);
+      }
+    };
+
+    loadMarkup();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // markup calculator
+  function calculateMarkup(num: number) {
+    const applicableMarkup = markups.reduce<Markup | null>(
+      (selected, markup) => {
+        const amount = Number(markup.amount);
+
+        if (!Number.isFinite(amount) || num < amount) {
+          return selected;
+        }
+
+        if (!selected || amount > Number(selected.amount)) {
+          return markup;
+        }
+
+        return selected;
+      },
+      null,
+    );
+
+    return applicableMarkup ? num * Number(applicableMarkup.markup_factor) : 0;
+  }
+
+  // calculate price when cost changes
+  useEffect(() => {
+    // setPrice(calculateMarkup(cost));
+    setPrice(cost * 1.86);
+  }, [cost, markups]);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button>{data ? <SquarePen /> : "Create Part"}</Button>
+        <Button>
+          {data ?
+            <SquarePen />
+          : "Create Part"}
+        </Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-2xl'>
         <form
@@ -93,7 +147,7 @@ export default function SubForm(params: {
             <Field>
               <Label htmlFor='cost'>Part Cost</Label>
               <Input
-                type='text'
+                type='number'
                 step={0.01}
                 name='cost'
                 placeholder='Part Cost...'
@@ -104,7 +158,7 @@ export default function SubForm(params: {
             <Field>
               <Label htmlFor='list'>List Price</Label>
               <Input
-                type='text'
+                type='number'
                 name='list'
                 step={0.01}
                 placeholder='Price...'
@@ -115,7 +169,7 @@ export default function SubForm(params: {
             <Field>
               <Label htmlFor='price'>price</Label>
               <Input
-                type='text'
+                type='number'
                 name='price'
                 step={0.01}
                 placeholder='Price...'
