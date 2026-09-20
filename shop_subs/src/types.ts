@@ -113,12 +113,11 @@ export type Income = {
 };
 
 export type PartsOrder = {
-  // id: number;
+  id: number;
   description: string;
-  payee: string;
-  date: string;
-  payment_type: string;
-  amount: number;
+  mfr_no: string;
+  part_no: string;
+  price: number;
 };
 
 export type Employee = {
