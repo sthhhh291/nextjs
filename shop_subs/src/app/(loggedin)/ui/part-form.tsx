@@ -59,31 +59,35 @@ export default function SubForm(params: { part: Part | null; sub_id: number }) {
     };
   }, []);
 
-  // markup calculator
-  function calculateMarkup(num: number) {
-    const applicableMarkup = markups.reduce<Markup | null>(
-      (selected, markup) => {
-        const amount = Number(markup.amount);
-
-        if (!Number.isFinite(amount) || num < amount) {
-          return selected;
-        }
-
-        if (!selected || amount > Number(selected.amount)) {
-          return markup;
-        }
-
-        return selected;
-      },
-      null,
-    );
-
-    return applicableMarkup ? num * Number(applicableMarkup.markup_factor) : 0;
-  }
-
   // calculate price when cost changes
   useEffect(() => {
+    function calculateMarkup(num:number) {
+      console.log("markups",markups)
+      let res = 0;
+      let lo = -1;
+      let hi = 0;
+      markups.sort((a,b) => a.amount -b.amount);
+      for (const mark of markups) {
+        if (num >= mark.amount) {
+          lo++;
+          hi++;
+          console.log('num greater', num,mark.amount)
+          res = mark.markup_factor;
+        }
+      }
+      const resObj = {
+        num:num,
+        lo,
+        hi,
+        loObj:markups[lo],
+        hiObj:markups[hi]
+      }
+      console.log("result", num,res);
+      console.log('lo', markups[lo] ,'hi', markups[hi])
+      console.log('res obj',resObj)
+    }
     // setPrice(calculateMarkup(cost));
+    calculateMarkup(cost);
     setPrice(cost * 1.86);
   }, [cost, markups]);
 
