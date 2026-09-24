@@ -22,6 +22,7 @@ export const getUsers = async () => {
     throw new Error("Failed to fetch markup");
   }
   const data = await res.json();
+  console.log("users", data);
   return data;
 };
 
@@ -77,7 +78,9 @@ export const createUser = async (formData: FormData) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      username,is_admin,is_active
+      username,
+      is_admin,
+      is_active,
     }),
   });
 

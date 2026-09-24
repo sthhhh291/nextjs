@@ -5,17 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 
 export default async function UserssPage() {
-  const orders: User[] = await getUsers();
+  const users: User[] = await getUsers();
   return (
     <>
       {/* create form here */}
       <h2>Add a user here</h2>
-      <UsersForm order={null} />
+      <UsersForm user={null} />
       {/* array of edit forms here */}
       <h2>View/Edit existing users here</h2>
-      {orders.map((emp) => (
+      {users.map((emp) => (
         <div key={emp.id}>
-          <UsersForm order={emp} />
+          <UsersForm user={emp} />
           {/* <Button>
             <Trash />
           </Button> */}
