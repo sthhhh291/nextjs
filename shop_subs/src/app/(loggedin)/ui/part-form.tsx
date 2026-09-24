@@ -29,6 +29,7 @@ export default function SubForm(params: { part: Part | null; sub_id: number }) {
   const [list, setList] = useState(data?.list || 0);
   const [price, setPrice] = useState(data?.price || 0);
   const [markups, setMarkups] = useState<Markup[]>([]);
+  const [markup, setMarkup] = useState(1.86);
 
   // open/close dialog
   useEffect(() => {
@@ -61,35 +62,53 @@ export default function SubForm(params: { part: Part | null; sub_id: number }) {
 
   // calculate price when cost changes
   useEffect(() => {
-    function calculateMarkup(num:number) {
-      console.log("markups",markups)
-      let res = 0;
-      let lo = -1;
-      let hi = 0;
-      markups.sort((a,b) => a.amount -b.amount);
-      for (const mark of markups) {
-        if (num >= mark.amount) {
-          lo++;
-          hi++;
-          console.log('num greater', num,mark.amount)
-          res = mark.markup_factor;
+    function calculateMarkup(num: number): number {
+      const sortedMarkups = [...markups]
+        .filter((markup) => Number.isFinite(Number(markup.amount)) && Number.isFinite(Number(markup.markup_factor)))
+        .sort((a, b) => Number(a.amount) - Number(b.amount));
+
+      if (sortedMarkups.length === 0) {
+        return 1;
+      }
+
+      const first = sortedMarkups[0];
+      const last = sortedMarkups[sortedMarkups.length - 1];
+
+      if (num <= Number(first.amount)) {
+        return Number(first.markup_factor);
+      }
+
+      if (num >= Number(last.amount)) {
+        return Number(last.markup_factor);
+      }
+
+      for (let index = 1; index < sortedMarkups.length; index++) {
+        const lower = sortedMarkups[index - 1];
+        const upper = sortedMarkups[index];
+
+        const lowAmount = Number(lower.amount);
+        const highAmount = Number(upper.amount);
+        if (num <= highAmount) {
+          const position = (num - lowAmount) / (highAmount - lowAmount);
+          const lowFactor = Number(lower.markup_factor);
+          const highFactor = Number(upper.markup_factor);
+          return lowFactor + position * (highFactor - lowFactor);
         }
       }
-      const resObj = {
-        num:num,
-        lo,
-        hi,
-        loObj:markups[lo],
-        hiObj:markups[hi]
-      }
-      console.log("result", num,res);
-      console.log('lo', markups[lo] ,'hi', markups[hi])
-      console.log('res obj',resObj)
+
+      return Number(last.markup_factor);
     }
-    // setPrice(calculateMarkup(cost));
-    calculateMarkup(cost);
-    setPrice(cost * 1.86);
+
+    const factor = Math.round(calculateMarkup(cost)*100)/100;
+    startTransition(() => {
+      // setPrice(cost * factor)
+      setMarkup(factor);
+  });
   }, [cost, markups]);
+
+  useEffect(() => {
+    startTransition(() => setPrice(Math.round(markup * cost*100)/100));
+  },[markup, cost])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -146,6 +165,17 @@ export default function SubForm(params: { part: Part | null; sub_id: number }) {
                 placeholder='Quantity...'
                 value={quantity}
                 onChange={(e) => setQuantity(Number(e.target.value))}
+              />
+            </Field>
+            <Field>
+              <Label htmlFor='markup'>Part Markup</Label>
+              <Input
+                type='number'
+                step={0.01}
+                name='markup'
+                placeholder='Part Cost...'
+                value={markup}
+                onChange={(e) => setMarkup(Number(e.target.value))}
               />
             </Field>
             <Field>
