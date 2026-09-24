@@ -15,7 +15,8 @@ export default function Navbar() {
     { href: "/employees", label: "Employees" },
     { href: "/admin", label: "Admin"},
     { href: "/parts-order", label: "Parts Order"},
-    { href: "/markups", label: "Markup"}
+    { href: "/markups", label: "Markup"},
+    { href: "/users", label: "Users"}
   ];
 
   const admin_links = [

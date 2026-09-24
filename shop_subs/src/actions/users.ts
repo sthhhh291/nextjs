@@ -8,7 +8,7 @@ const baseUrl = process.env.API_ADDRESS || "http://localhost:3000";
 
 // markup section
 // get all markup with pagination and optional search term
-export const getUser = async () => {
+export const getUsers = async () => {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
   const res = await fetch(`${baseUrl}/auth/users`, {
@@ -59,9 +59,14 @@ export const getUserById = async (id: number) => {
 };
 
 // create a new markup
+//  id: number;
+//   username: string;
+//   is_admin: boolean;
+//   is_active: boolean;
 export const createUser = async (formData: FormData) => {
-  const markup_factor = formData.get("markup_factor");
-  const amount = String(formData.get("amount") ?? "");
+  const username = formData.get("username");
+  const is_admin = String(formData.get("is_admin") ?? "");
+  const is_active = String(formData.get("is_active") ?? "");
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
 
@@ -72,8 +77,7 @@ export const createUser = async (formData: FormData) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      markup_factor,
-      amount,
+      username,is_admin,is_active
     }),
   });
 
@@ -90,8 +94,9 @@ export const createUser = async (formData: FormData) => {
 // update markup for a customer
 export const updateUser = async (formData: FormData) => {
   // const id = formData.get("id");
-  const markup_factor = formData.get("markup_factor");
-  const amount = String(formData.get("amount") ?? "");
+  const username = formData.get("username");
+  const is_admin = String(formData.get("is_admin") ?? "");
+  const is_active = String(formData.get("is_active") ?? "");
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
   const res = await fetch(`${baseUrl}/auth/users/`, {
@@ -101,8 +106,9 @@ export const updateUser = async (formData: FormData) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      markup_factor,
-      amount,
+      username,
+      is_admin,
+      is_active,
     }),
   });
   console.log("updateUser response:", res);
