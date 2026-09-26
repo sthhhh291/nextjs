@@ -2,8 +2,8 @@ import {
   getCarById,
   getEstimatesByCarId,
 } from "@/actions/car";
-import { getCustomerById, getCustomerPhones } from "@/actions/customer";
-import type { Customer, Car, Estimate, Phone } from "@/types";
+import { getCustomerById, getCustomerPhones,getCustomerEmails, getCustomerAddresses } from "@/actions/customer";
+import type { Customer, Car, Estimate, Phone, Email, Address } from "@/types";
 import CustomerDetail from "../../ui/customer-detail";
 import { Card, CardHeader} from "@/components/ui/card";
 import CarDetail from "@/app/(loggedin)/ui/car-detail";
@@ -15,10 +15,16 @@ export default async function CustomerPage({
   params: { id: string };
 }) {
   const carId = Number((await params).id);
-  const car: Car = await getCarById(carId);
-  const customer: Customer = await getCustomerById(car.customer_id);
-  const estimates: Estimate[] = await getEstimatesByCarId(carId);
-  const phones: Phone[] = await getCustomerPhones(customer.id);
+  const carPromise: Promise<Car> = getCarById(carId);
+  const car = await carPromise;
+  const customerPromise:Promise< Customer> = getCustomerById(car.customer_id);
+  const estimatesPromise: Promise<Estimate[]> = getEstimatesByCarId(carId);
+  const [customer,estimates] = await Promise.all([customerPromise,estimatesPromise])
+  const phonesPromise: Promise<Phone[]>=  getCustomerPhones(customer.id);
+  const emailsPromise: Promise<Email[]>=  getCustomerEmails(customer.id);
+  const addressesPromise: Promise<Address[]>=  getCustomerAddresses(customer.id);
+  const [phones,emails,addresses] = await Promise.all([phonesPromise,emailsPromise,addressesPromise])
+  
   //   let emails: Email[] = [];
   //   let addresses: Address[] = [];
 
@@ -31,8 +37,8 @@ export default async function CustomerPage({
         <CustomerDetail
           customer={customer}
           phones={phones}
-          emails={[]}
-          addresses={[]}
+          emails={emails}
+          addresses={addresses}
         />
         <CarDetail car={car} />
         Engine: {car.engine} <br />

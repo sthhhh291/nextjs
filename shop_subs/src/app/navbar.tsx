@@ -1,10 +1,10 @@
 import { logout } from "@/actions/auth";
+import { cookies } from "next/headers";
 
-export default function Navbar() {
-  const auth_links = [
-    { href: "/login", label: "Login" },
-    { href: "/register", label: "Register" },
-  ];
+export default async function Navbar() {
+  const cookieStore = await cookies();
+  const username = cookieStore.get("username")?.value;
+  const isAdmin = cookieStore.get("is_admin")?.value === "true";
 
   const protected_links = [
     { href: "/", label: "Home" },
@@ -12,36 +12,43 @@ export default function Navbar() {
     { href: "/cars", label: "Cars" },
     { href: "/estimates", label: "Estimates" },
     { href: "/parts-order", label: "Parts Order" },
-    { href: "/employees", label: "Employees" },
-    { href: "/admin", label: "Admin"},
-    { href: "/parts-order", label: "Parts Order"},
-    { href: "/markups", label: "Markup"},
-    { href: "/users", label: "Users"}
   ];
-
+  
   const admin_links = [
     { href: "/users", label: "Users" },
     { href: "/admin", label: "Admin" },
     { href: "/income", label: "Income" },
+    { href: "/employees", label: "Employees" },
+    { href: "/markups", label: "Markup" },
   ];
   return (
     <nav className='bg-gray-800 text-white p-4'>
-      <ul className='flex space-x-4'>
-        {protected_links.map((link) => (
-          <li key={link.href}>
-            <a href={link.href} className='hover:underline'>
-              {link.label}
-            </a>
+      <div className='flex items-center'>
+        <ul className='flex space-x-4'>
+          {protected_links.map((link) => (
+            <li key={link.href}>
+              <a href={link.href} className='hover:underline'>
+                {link.label}
+              </a>
+            </li>
+          ))}
+          {isAdmin && admin_links.map((link) => (
+            <li key={link.href}>
+              <a href={link.href} className='hover:underline'>
+                {link.label}
+              </a>
+            </li>
+          ))}
+          <li>
+            <form action={logout}>
+              <button type='submit' className='hover:underline'>
+                Logout
+              </button>
+            </form>
           </li>
-        ))}
-        <li key='logout'>
-          <form action={logout}>
-            <button type='submit' className='hover:underline'>
-              Logout
-            </button>
-          </form>
-        </li>
-      </ul>
+        </ul>
+        {username && <span className='ml-auto'>{username}</span>}
+      </div>
     </nav>
   );
 }

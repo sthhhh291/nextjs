@@ -15,29 +15,23 @@ import Link from "next/link";
 export default async function CustomerPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const customerId = Number((await params).id);
-  let customer: Customer | null = null;
-  let phones: Phone[] = [];
-  let emails: Email[] = [];
-  let addresses: Address[] = [];
-  let cars: Car[] = [];
+    const { id } = await params;
+    const customerId = Number(id);
+    const customerPromise:Promise<Customer> = getCustomerById(customerId);
+    const phonesPromise:Promise<Phone[]> =  getCustomerPhones(customerId);
+    const emailsPromise:Promise<Email[]> =  getCustomerEmails(customerId);
+    const addressesPromise:Promise<Address[]> =  getCustomerAddresses(customerId);
+    const carsPromise:Promise<Car[]> =  getCustomerCars(customerId);
+    
+    const [customer,phones,emails,addresses,cars] = await Promise.all([
+      customerPromise,phonesPromise,emailsPromise,addressesPromise,carsPromise
+    ])
 
-  try {
-    customer = await getCustomerById(customerId);
-    phones = await getCustomerPhones(customerId);
-    emails = await getCustomerEmails(customerId);
-    addresses = await getCustomerAddresses(customerId);
-    cars = await getCustomerCars(customerId);
-  } catch (error) {
-    console.error("Error fetching customer:", error);
-    notFound();
-  }
-
-  if (!customer) {
-    notFound();
-  }
+  // if (!customer) {
+  //   notFound();
+  // }
 
   return (
     <div className='flex justify-center'>

@@ -16,9 +16,10 @@ export default function UserForm(params: { user: User | null }) {
   const [state, formAction, isPending] = useActionState(saveUser, {
     error: null,
     success: false,
-    users: null,
+    markup: null,
   });
   const [username, setUsername] = useState(data?.username || "");
+  const [password, setPassword] = useState('');
   const [is_admin, setIsAdmin] = useState(Boolean(data?.is_admin));
   const [is_active, setIsActive] = useState(Boolean(data?.is_active ?? true));
 
@@ -54,7 +55,17 @@ export default function UserForm(params: { user: User | null }) {
               onChange={(e) => setUsername(e.target.value)}
             />
           </Field>
-          <Field>
+          { !data && <Field>
+            <Label htmlFor='password'>password</Label>
+            <Input
+              type='password'
+              name='password'
+              placeholder='Password...'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Field> }
+          <Field className="w-fit shrink-0 [&>[data-slot=checkbox]]:w-4">
             <Label htmlFor='is_admin'>Admin User?</Label>
             <Checkbox
               name='is_admin'
@@ -70,8 +81,8 @@ export default function UserForm(params: { user: User | null }) {
               onChange={(e) => setIsAdmin(e.target.value)}
             /> */}
           </Field>
-          <Field>
-            <Label htmlFor='is_active'>Active User?</Label>
+          <Field className="w-fit shrink-0 [&>[data-slot=checkbox]]:w-4">
+            <Label htmlFor='is_active' className="w-fit">Active User?</Label>
             <Checkbox
               name='is_active'
               checked={is_active}
@@ -97,6 +108,11 @@ export default function UserForm(params: { user: User | null }) {
               {isPending ? "Saving..." : buttonAction}
             </Button>
           </Field>
+          {state.error && (
+            <p role='alert' className='col-span-full text-sm text-destructive'>
+              {state.error}
+            </p>
+          )}
           {data && (
             <Field>
               <Label className='invisible'>Delete</Label>

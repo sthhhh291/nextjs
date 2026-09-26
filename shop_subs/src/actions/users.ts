@@ -65,12 +65,14 @@ export const getUserById = async (id: number) => {
 //   is_admin: boolean;
 //   is_active: boolean;
 export const createUser = async (formData: FormData) => {
-  const username = formData.get("username");
-  const is_admin = String(formData.get("is_admin") ?? "");
-  const is_active = String(formData.get("is_active") ?? "");
+  const username = String(formData.get("username") ?? "");
+  const password = String(formData.get("password") ?? "");
+  const is_admin = formData.has("is_admin");
+  const is_active = formData.has("is_active");
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
 
+  console.log("Creating user:", { username, is_admin, is_active });
   const res = await fetch(`${baseUrl}/auth/users`, {
     method: "POST",
     headers: {
@@ -79,19 +81,31 @@ export const createUser = async (formData: FormData) => {
     },
     body: JSON.stringify({
       username,
+      password,
       is_admin,
       is_active,
     }),
   });
 
+  const responseBody = await res.text();
+  console.log("Create user backend response:", {
+    status: res.status,
+    statusText: res.statusText,
+    body: responseBody,
+  });
+
   if (!res.ok) {
     return {
-      error: res.statusText || "Failed to create markup",
+      error: responseBody || res.statusText || "Failed to create user",
       success: false,
       markup: null,
     };
   }
-  return { success: true, error: null, markup: await res.json() };
+  return {
+    success: true,
+    error: null,
+    markup: responseBody ? (JSON.parse(responseBody) as User) : null,
+  };
 };
 
 // update markup for a customer
@@ -138,14 +152,14 @@ export const saveUser = async (
   const id = formData.get("id") || null;
   if (id) {
     const res = await updateUser(formData);
-    if (res.success && res.markup) {
-      revalidatePath(`/customers/${res.markup.customer_id}`);
+    if (res.success) {
+      revalidatePath("/users");
     }
     return res;
   } else {
     const res = await createUser(formData);
-    if (res.success && res.markup) {
-      revalidatePath(`/customers/${res.markup.customer_id}`);
+    if (res.success) {
+      revalidatePath("/users");
     }
     return res;
   }
