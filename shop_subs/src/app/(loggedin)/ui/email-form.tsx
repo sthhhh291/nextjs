@@ -1,9 +1,15 @@
 "use client";
 import { saveEmail } from "@/actions/email";
-import { useActionState } from "react";
+import { startTransition, useActionState } from "react";
 import type { Email } from "@/types";
 import { useState, useEffect } from "react";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -39,7 +45,7 @@ export default function EmailForm(params: {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     if (!isPending && state.success) {
-      setOpen(false);
+      startTransition(() => setOpen(false));
     }
   }, [isPending, state.success]);
   const buttonAction = data ? "Update Email" : "Create Email";
@@ -47,18 +53,33 @@ export default function EmailForm(params: {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button>{data ? <SquarePen /> : "Create Email"}</Button>
-        }></DialogTrigger>
+          <Button
+            variant={data ? "ghost" : "default"}
+            size={data ? "icon-sm" : "default"}
+            aria-label={data ? "Edit email" : undefined}
+            title={data ? "Edit email" : "Create email"}>
+            {data ?
+              <SquarePen aria-hidden='true' />
+            : "Create Email"}
+          </Button>
+        }
+      />
       <DialogContent>
         <form action={formAction}>
+          <DialogHeader className='mb-5'>
+            <DialogTitle>{data ? "Edit email" : "New email"}</DialogTitle>
+          </DialogHeader>
           {data && <input type='hidden' name='id' value={id} />}
           <input type='hidden' name='customer_id' value={customer_id} />
           <FieldGroup>
             <FieldSet>
               <FieldLegend>Email Type</FieldLegend>
-              <Field orientation='horizontal'>
-                <Select name='type' value={type} onValueChange={setType}>
-                  <SelectTrigger className='border border-gray-300 rounded p-2 m-2'>
+              <Field orientation='responsive'>
+                <Select
+                  name='type'
+                  value={type}
+                  onValueChange={(value) => setType(value ?? "")}>
+                  <SelectTrigger className='w-full'>
                     <SelectValue placeholder='Select Type' />
                   </SelectTrigger>
                   <SelectContent>
@@ -68,7 +89,7 @@ export default function EmailForm(params: {
                   </SelectContent>
                 </Select>
               </Field>
-              <Field orientation='horizontal'>
+              <Field orientation='responsive'>
                 <Label htmlFor='address'>address</Label>
                 <Input
                   id='address'

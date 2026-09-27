@@ -1,6 +1,6 @@
 "use client";
 import { saveCustomer } from "@/actions/customer";
-import { useActionState } from "react";
+import { startTransition, useActionState } from "react";
 import type { Customer } from "@/types";
 import { useEffect, useState } from "react";
 import {
@@ -13,11 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  FieldGroup,
-  FieldSet,
-  Field,
-} from "@/components/ui/field";
+import { FieldGroup, FieldSet, Field } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { SquarePen } from "lucide-react";
 
@@ -36,23 +32,33 @@ export default function CustomerForm(params: { customer: Customer | null }) {
 
   useEffect(() => {
     if (!isPending && state.success) {
-      setOpen(false);
+      startTransition(() => setOpen(false));
     }
   }, [isPending, state.success]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
-        render={<Button>{data ? <SquarePen /> : "Create Customer"}</Button>}
+        render={
+          <Button
+            variant={data ? "ghost" : "default"}
+            size={data ? "icon-sm" : "default"}
+            aria-label={data ? "Edit customer" : undefined}
+            title={data ? "Edit customer" : "Create customer"}>
+            {data ?
+              <SquarePen aria-hidden='true' />
+            : "Create Customer"}
+          </Button>
+        }
       />
       <DialogContent>
         <form action={formAction}>
           {data && <input type='hidden' name='id' value={data.id} />}
           <DialogHeader>
-            <DialogTitle>{data ? "Edit" : "Create"} Customer Form</DialogTitle>
+            <DialogTitle>{data ? "Edit customer" : "New customer"}</DialogTitle>
             <FieldGroup>
               <FieldSet>
-                <Field orientation='horizontal'>
+                <Field orientation='responsive'>
                   <Label htmlFor='first_name'>First Name</Label>
                   <Input
                     id='first_name'
@@ -61,7 +67,7 @@ export default function CustomerForm(params: { customer: Customer | null }) {
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                 </Field>
-                <Field orientation='horizontal'>
+                <Field orientation='responsive'>
                   <Label htmlFor='last_name'>Last Name</Label>
                   <Input
                     id='last_name'
@@ -70,7 +76,7 @@ export default function CustomerForm(params: { customer: Customer | null }) {
                     onChange={(e) => setLastName(e.target.value)}
                   />
                 </Field>
-                <Field orientation='horizontal'>
+                <Field orientation='responsive'>
                   <Label htmlFor='notes'>Notes</Label>
                   <Textarea
                     id='notes'

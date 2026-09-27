@@ -1,9 +1,15 @@
 "use client";
 import { saveCar } from "@/actions/car";
-import { useActionState } from "react";
+import { startTransition, useActionState } from "react";
 import type { Car } from "@/types";
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
   FieldGroup,
@@ -14,7 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {SquarePen} from "lucide-react";
+import { SquarePen } from "lucide-react";
 export default function CarForm(params: {
   car: Car | null;
   customer_id: number;
@@ -42,16 +48,29 @@ export default function CarForm(params: {
 
   useEffect(() => {
     if (!isPending && state.success) {
-      setOpen(false);
+      startTransition(() => setOpen(false));
     }
   }, [isPending, state.success]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Button>{data ? <SquarePen /> : "Create Car"}</Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button
+            variant={data ? "ghost" : "default"}
+            size={data ? "icon-sm" : "default"}
+            aria-label={data ? "Edit vehicle" : undefined}
+            title={data ? "Edit vehicle" : "Create vehicle"}>
+            {data ?
+              <SquarePen aria-hidden='true' />
+            : "Create Car"}
+          </Button>
+        }
+      />
       <DialogContent className='sm:max-w-2xl'>
+        <DialogHeader>
+          <DialogTitle>{data ? "Edit vehicle" : "New vehicle"}</DialogTitle>
+        </DialogHeader>
         <form
           action={formAction}
           className='grid grid-cols-1 gap-6 sm:grid-cols-2'>

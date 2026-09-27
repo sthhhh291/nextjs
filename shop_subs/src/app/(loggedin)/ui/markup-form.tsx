@@ -31,17 +31,20 @@ export default function MarkupForm(params: { markup: Markup | null }) {
 
   return (
     <Card>
-      <form
-        action={formAction}
-        className='grid grid-cols-1 gap-6 sm:grid-cols-4 px-4 mx-4'>
+      <form action={formAction} className='p-4 sm:p-5'>
         {data && <input type='hidden' name='id' value={data.id} />}
-        <FieldSet className='col-span-full grid grid-cols-1 gap-6 sm:grid-cols-5'>
+        {state.error && (
+          <p role='alert' className='mb-4 text-sm text-destructive'>
+            {state.error}
+          </p>
+        )}
+        <FieldSet className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4'>
           <Field>
             <Label htmlFor='amount'>Amount</Label>
             <Input
               type='number'
-              name="amount"
-              placeholder="Amount..."
+              name='amount'
+              placeholder='Amount...'
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
             />
@@ -87,7 +90,13 @@ export default function MarkupForm(params: { markup: Markup | null }) {
           {data && (
             <Field>
               <Label className='invisible'>Delete</Label>
-              <Button onClick={() => handleDelete(data.id)}>
+              <Button
+                type='button'
+                variant='destructive'
+                size='icon'
+                aria-label='Delete markup rule'
+                title='Delete markup rule'
+                onClick={() => handleDelete(data.id)}>
                 <Trash />
               </Button>
             </Field>

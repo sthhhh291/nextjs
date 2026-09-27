@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
+  CardContent,
 } from "@/components/ui/card";
 import AddressForm from "./address-form";
 import EmailForm from "./email-form";
@@ -28,48 +29,46 @@ export default function CustomerDetail(params: {
   const addresses = params.addresses;
 
   return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Customer Details</CardTitle>
-          <CardDescription>
-            <CustomerLine customer={customer} />
-          </CardDescription>
-        </CardHeader>
-      {/* </Card>
-      <Card> */}
-        <CardHeader>
-          <CardTitle>Actions</CardTitle>
-          <CardDescription>
-            <PhoneForm phone={null} customer_id={customer.id} />
-            <EmailForm email={null} customer_id={customer.id} />
-            <AddressForm address={null} customer_id={customer.id} />
-            <CarForm car={null} customer_id={customer.id} />
-          </CardDescription>
-        </CardHeader>
-      {/* </Card>
-      <Card> */}
-        <CardHeader>
-          {phones.length > 0 && <CardTitle>Phone Numbers</CardTitle>}
-          <CardDescription>
+    <Card className='min-w-0'>
+      <CardHeader className='border-b'>
+        <div className='flex flex-wrap items-start justify-between gap-3'>
+          <div className='space-y-1'>
+            <CardTitle>Customer</CardTitle>
+            <CardDescription>
+              <CustomerLine customer={customer} />
+            </CardDescription>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className='space-y-5 pt-5'>
+        <section className='space-y-3'>
+          <div className='flex flex-wrap items-center justify-between gap-3'>
+            <h3 className='text-sm font-semibold'>Contact details</h3>
+            <div className='flex flex-wrap gap-2'>
+              <PhoneForm phone={null} customer_id={customer.id} />
+              <EmailForm email={null} customer_id={customer.id} />
+              <AddressForm address={null} customer_id={customer.id} />
+              <CarForm car={null} customer_id={customer.id} />
+            </div>
+          </div>
+          <div className='divide-y rounded-lg border'>
             {phones.map((phone) => (
               <PhoneLine key={phone.id} phone={phone} />
             ))}
-          </CardDescription>
-          {emails.length > 0 && <CardTitle>Emails</CardTitle> }
-          <CardDescription>
             {emails.map((email) => (
               <EmailLine key={email.id} email={email} />
-              // <div key={email.id}>{email.address} {email.type}</div>
             ))}
-          </CardDescription>
-          {addresses.length > 0 && <CardTitle>Addresses</CardTitle>}
-          <CardDescription>
             {addresses.map((address) => (
               <AddressLine key={address.id} address={address} />
-              // <div key={address.id}>{address.street} {address.city} {address.state} {address.zip_code}</div>
             ))}
-          </CardDescription>
-        </CardHeader>
-      </Card>
+            {phones.length + emails.length + addresses.length === 0 && (
+              <p className='px-3 py-4 text-sm text-muted-foreground'>
+                No contact details have been added.
+              </p>
+            )}
+          </div>
+        </section>
+      </CardContent>
+    </Card>
   );
 }

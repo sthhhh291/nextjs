@@ -3,21 +3,24 @@ import { saveOil } from "@/actions/oil";
 import { startTransition, useActionState } from "react";
 import type { Part } from "@/types";
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FieldGroup, Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {SquarePen} from "lucide-react"
+import { SquarePen } from "lucide-react";
 
-export default function SubForm(params: {
-  oil: Part | null;
-  sub_id: number;
-}) {
+export default function SubForm(params: { oil: Part | null; sub_id: number }) {
   const data = params.oil;
   const sub_id = params.sub_id;
   const [open, setOpen] = useState(false);
-  const buttonAction = data ? "Create" : "Save Changes";
+  const buttonAction = data ? "Save Changes" : "Create Oil";
   const [state, formAction, isPending] = useActionState(saveOil, {
     error: null,
     success: false,
@@ -26,9 +29,9 @@ export default function SubForm(params: {
   const [description, setDescription] = useState(data?.description || "");
   const [manufacturer, setManufacturer] = useState(data?.manufacturer || "");
   const [part_number, setpartNumber] = useState(data?.part_number || "");
-  const [quantity,setQuantity] = useState(data?.quantity || 0);
-  const [cost,setCost] = useState(data?.cost || 0);
-  const [list,setList] = useState(data?.list || 0);
+  const [quantity, setQuantity] = useState(data?.quantity || 0);
+  const [cost, setCost] = useState(data?.cost || 0);
+  const [list, setList] = useState(data?.list || 0);
   const [price, setPrice] = useState(data?.price || 0);
 
   useEffect(() => {
@@ -39,10 +42,23 @@ export default function SubForm(params: {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Button>{data ? <SquarePen /> : "Create Oil"}</Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button
+            variant={data ? "ghost" : "default"}
+            size={data ? "icon-sm" : "default"}
+            aria-label={data ? "Edit oil item" : undefined}
+            title={data ? "Edit oil item" : "Create oil item"}>
+            {data ?
+              <SquarePen aria-hidden='true' />
+            : "Create Oil"}
+          </Button>
+        }
+      />
       <DialogContent className='sm:max-w-2xl'>
+        <DialogHeader>
+          <DialogTitle>{data ? "Edit oil item" : "New oil item"}</DialogTitle>
+        </DialogHeader>
         <form
           action={formAction}
           className='grid grid-cols-1 gap-6 sm:grid-cols-2'>

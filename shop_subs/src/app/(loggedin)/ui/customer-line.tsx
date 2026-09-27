@@ -5,18 +5,14 @@ import { Customer } from "@/types";
 export default function CustomerLine(params: { customer: Customer }) {
   const customer = params.customer;
   return (
-    <>
-    <div className='flex flex-wrap p-4 mt-4 text-2xl font-bold'>
-      <p>
-        <strong>Name:</strong> {customer.first_name} {customer.last_name}
+    <div className='space-y-1 text-sm'>
+      <p className='font-medium text-foreground'>
+        {customer.first_name} {customer.last_name}
       </p>
+      {customer.notes && (
+        <p className='whitespace-pre-wrap'>{customer.notes}</p>
+      )}
       <CustomerForm customer={customer} />
     </div>
-    <div className="text-2xl font-bold px-4">
-      <p>
-        <strong>Notes:</strong> {customer.notes}
-      </p>
-    </div>
-    </>
   );
 }

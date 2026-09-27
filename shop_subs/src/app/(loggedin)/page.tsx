@@ -1,14 +1,19 @@
-import CustomerSearch  from '@/app/(loggedin)/ui/customer-search'
-import CarSearch from '@/app/(loggedin)/ui/car-search'
+import CustomerSearch from "@/app/(loggedin)/ui/customer-search";
+import CarSearch from "@/app/(loggedin)/ui/car-search";
 
 export default function Home() {
   return (
-    <div className='flex flex-col items-center min-h-screen py-2'>
-      <h2 className='text-xl font-bold bg-center'>Search Customers and Cars</h2>
-      <div className='flex flex-row  justify-center w-full flex-1 px-20 text-center m-4'>
+    <section className='space-y-6'>
+      <header className='space-y-1'>
+        <h1 className='text-2xl font-semibold'>Shop Desk</h1>
+        <p className='text-sm text-muted-foreground'>
+          Find a customer or vehicle to get started.
+        </p>
+      </header>
+      <div className='grid min-w-0 gap-6 lg:grid-cols-2'>
         <CustomerSearch />
         <CarSearch />
       </div>
-    </div>
+    </section>
   );
 }

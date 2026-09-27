@@ -1,20 +1,15 @@
 import CustomerSearch from "@/app/(loggedin)/ui/customer-search";
-import CustomerForm from "../ui/customer-form";
-import CustomerComboBox from "../ui/customer-combobox";
 
 export default function CustomersPage() {
   return (
-    <div className='flex flex-row min-h-screen'>
-      <div className='flex-1 p-4'>
-        <h2 className='text-xl font-bold bg-center'>Customers</h2>
-        <CustomerSearch />
-      </div>
-      <div className='flex-1 p-4'>
-        <CustomerForm customer={null} />
-      </div>
-      {/* <div className='flex-1 p-4'>
-        <CustomerComboBox />
-      </div> */}
-    </div>
+    <section className='space-y-6'>
+      <header className='space-y-1'>
+        <h1 className='text-2xl font-semibold'>Customers</h1>
+        <p className='text-sm text-muted-foreground'>
+          Search customer records and manage their vehicles and contact details.
+        </p>
+      </header>
+      <CustomerSearch />
+    </section>
   );
 }

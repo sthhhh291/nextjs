@@ -1,11 +1,17 @@
 "use client";
 import { saveSubEstimate } from "@/actions/sub-estimate";
-import { useActionState } from "react";
+import { startTransition, useActionState } from "react";
 import type { Sub_estimate } from "@/types";
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { FieldGroup, FieldSet, Field } from "@/components/ui/field";
+import { FieldGroup, Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -16,7 +22,7 @@ export default function SubForm(params: {
   const data = params.sub;
   const estimate_id = params.estimate_id;
   const [open, setOpen] = useState(false);
-  const buttonAction = estimate_id ? "Create" : "Save Changes";
+  const buttonAction = data ? "Save Changes" : "Create Sub-estimate";
   const [state, formAction, isPending] = useActionState(saveSubEstimate, {
     error: null,
     success: false,
@@ -26,16 +32,23 @@ export default function SubForm(params: {
 
   useEffect(() => {
     if (!isPending && state.success) {
-      setOpen(false);
+      startTransition(() => setOpen(false));
     }
   }, [isPending, state.success]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Button>{data ? "Edit Sub" : "Create Sub"}</Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button variant={data ? "outline" : "default"}>
+            {data ? "Edit service" : "Add service"}
+          </Button>
+        }
+      />
       <DialogContent className='sm:max-w-2xl'>
+        <DialogHeader>
+          <DialogTitle>{data ? "Edit service" : "New service"}</DialogTitle>
+        </DialogHeader>
         <form
           action={formAction}
           className='grid grid-cols-1 gap-6 sm:grid-cols-2'>

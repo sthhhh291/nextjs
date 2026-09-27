@@ -4,6 +4,16 @@ import { getCars } from "@/actions/car";
 import { useState } from "react";
 import Link from "next/link";
 import type { CarCustomer } from "@/types";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 export default function CarSearch() {
   const [carList, setCarList] = useState<CarCustomer[]>([]);
@@ -19,34 +29,48 @@ export default function CarSearch() {
   };
 
   return (
-    <div className='flex flex-col items-center min-h-screen py-2'>
-      <h2 className='text-xl font-bold bg-center'>Car Search</h2>
-      <form
-        action={handleSearch}
-        className='flex flex-col items-center space-y-2'>
-        <input
-          type='text'
-          name='carId'
-          placeholder='Car search here...'
-          className='border border-gray-300 rounded px-3 py-2 mb-2'
-        />
-        <button
-          type='submit'
-          className='bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600'>
-          Search
-        </button>
-      </form>
-      <div className='flex flex-col items-center mt-4'>
-        {/* Render the list of cars here */}
-        {carList.map((car: CarCustomer) => (
-          <Link
-            href={`/cars/${car.id}`}
-            key={car.id}
-            className='border border-gray-300 rounded p-2 mb-2 hover:bg-gray-300 w-full text-center'>
-            {car.first_name} {car.last_name} {car.year} {car.make} {car.car_model}
-          </Link>
-        ))}
-      </div>
-    </div>
+    <Card className='min-w-0'>
+      <CardHeader className='border-b'>
+        <div className='space-y-1'>
+          <CardTitle>Vehicle search</CardTitle>
+          <CardDescription>
+            Search by customer, year, make, or model.
+          </CardDescription>
+        </div>
+      </CardHeader>
+      <CardContent className='space-y-4 pt-5'>
+        <form action={handleSearch} className='flex flex-col gap-2 sm:flex-row'>
+          <Input
+            type='text'
+            name='carId'
+            aria-label='Search vehicles'
+            placeholder='Customer, year, make, or model'
+          />
+          <Button type='submit' className='sm:w-auto'>
+            <Search aria-hidden='true' />
+            Search
+          </Button>
+        </form>
+        <div className='grid gap-2 sm:grid-cols-2'>
+          {carList.map((car: CarCustomer) => (
+            <Button
+              key={car.id}
+              variant='outline'
+              className='h-auto justify-start py-2 text-left'
+              render={<Link href={`/cars/${car.id}`} />}>
+              {car.year} {car.make} {car.car_model}
+              <span className='ml-auto text-xs text-muted-foreground'>
+                {car.first_name} {car.last_name}
+              </span>
+            </Button>
+          ))}
+          {carList.length === 0 && (
+            <p className='text-sm text-muted-foreground sm:col-span-2'>
+              Search results will appear here.
+            </p>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 }

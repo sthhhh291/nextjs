@@ -1,6 +1,6 @@
 "use client";
 import { saveUser, deleteUser } from "@/actions/users";
-import { useActionState, useEffect } from "react";
+import { useActionState } from "react";
 import type { User } from "@/types";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -19,15 +19,9 @@ export default function UserForm(params: { user: User | null }) {
     markup: null,
   });
   const [username, setUsername] = useState(data?.username || "");
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [is_admin, setIsAdmin] = useState(Boolean(data?.is_admin));
   const [is_active, setIsActive] = useState(Boolean(data?.is_active ?? true));
-
-  useEffect(() => {
-    setUsername(data?.username || "");
-    setIsAdmin(Boolean(data?.is_admin));
-    setIsActive(Boolean(data?.is_active ?? true));
-  }, [data]);
 
   const buttonAction = data ? "Save Changes" : "Create User";
 
@@ -40,11 +34,9 @@ export default function UserForm(params: { user: User | null }) {
 
   return (
     <Card>
-      <form
-        action={formAction}
-        className='grid grid-cols-1 gap-6 sm:grid-cols-4 px-4 mx-4'>
+      <form action={formAction} className='p-4 sm:p-5'>
         {data && <input type='hidden' name='id' value={data.id} />}
-        <FieldSet className='col-span-full grid grid-cols-1 gap-6 sm:grid-cols-5'>
+        <FieldSet className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5'>
           <Field>
             <Label htmlFor='username'>Username</Label>
             <Input
@@ -55,17 +47,19 @@ export default function UserForm(params: { user: User | null }) {
               onChange={(e) => setUsername(e.target.value)}
             />
           </Field>
-          { !data && <Field>
-            <Label htmlFor='password'>password</Label>
-            <Input
-              type='password'
-              name='password'
-              placeholder='Password...'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Field> }
-          <Field className="w-fit shrink-0 [&>[data-slot=checkbox]]:w-4">
+          {!data && (
+            <Field>
+              <Label htmlFor='password'>password</Label>
+              <Input
+                type='password'
+                name='password'
+                placeholder='Password...'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Field>
+          )}
+          <Field className='w-fit shrink-0'>
             <Label htmlFor='is_admin'>Admin User?</Label>
             <Checkbox
               name='is_admin'
@@ -81,8 +75,10 @@ export default function UserForm(params: { user: User | null }) {
               onChange={(e) => setIsAdmin(e.target.value)}
             /> */}
           </Field>
-          <Field className="w-fit shrink-0 [&>[data-slot=checkbox]]:w-4">
-            <Label htmlFor='is_active' className="w-fit">Active User?</Label>
+          <Field className='w-fit shrink-0'>
+            <Label htmlFor='is_active' className='w-fit'>
+              Active User?
+            </Label>
             <Checkbox
               name='is_active'
               checked={is_active}
@@ -116,7 +112,13 @@ export default function UserForm(params: { user: User | null }) {
           {data && (
             <Field>
               <Label className='invisible'>Delete</Label>
-              <Button onClick={() => handleDelete(data.id)}>
+              <Button
+                type='button'
+                variant='destructive'
+                size='icon'
+                aria-label='Delete user'
+                title='Delete user'
+                onClick={() => handleDelete(data.id)}>
                 <Trash />
               </Button>
             </Field>

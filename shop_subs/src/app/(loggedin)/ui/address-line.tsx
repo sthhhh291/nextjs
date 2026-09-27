@@ -22,12 +22,23 @@ export default function AddressLine(params: { address: Address }) {
   };
 
   return (
-    <div className='flex flex-wrap  justify-center'>
-      <p>
+    <div className='flex flex-wrap items-center justify-between gap-3 px-3 py-2.5 text-sm'>
+      <p className='min-w-0 flex-1'>
         {address.street}, {address.city} {address.state} {address.zip_code}
       </p>
-      <AddressForm address={address} customer_id={customer_id} />
-      <Button onClick={() => deleteAddressHandler(address.id)}><Trash /></Button>
+      <div className='flex items-center gap-1'>
+        <AddressForm address={address} customer_id={customer_id} />
+        <Button
+          type='button'
+          variant='ghost'
+          size='icon-sm'
+          aria-label='Delete address'
+          title='Delete address'
+          className='text-destructive hover:bg-destructive/10 hover:text-destructive'
+          onClick={() => deleteAddressHandler(address.id)}>
+          <Trash aria-hidden='true' />
+        </Button>
+      </div>
     </div>
   );
 }

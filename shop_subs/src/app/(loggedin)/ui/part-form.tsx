@@ -4,7 +4,13 @@ import { getMarkup } from "@/actions/markup";
 import { startTransition, useActionState } from "react";
 import type { Markup, Part } from "@/types";
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FieldGroup, Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -15,7 +21,7 @@ export default function SubForm(params: { part: Part | null; sub_id: number }) {
   const data = params.part;
   const sub_id = params.sub_id;
   const [open, setOpen] = useState(false);
-  const buttonAction = data ? "Create" : "Save Changes";
+  const buttonAction = data ? "Save Changes" : "Create Part";
   const [state, formAction, isPending] = useActionState(savePart, {
     error: null,
     success: false,
@@ -64,7 +70,11 @@ export default function SubForm(params: { part: Part | null; sub_id: number }) {
   useEffect(() => {
     function calculateMarkup(num: number): number {
       const sortedMarkups = [...markups]
-        .filter((markup) => Number.isFinite(Number(markup.amount)) && Number.isFinite(Number(markup.markup_factor)))
+        .filter(
+          (markup) =>
+            Number.isFinite(Number(markup.amount)) &&
+            Number.isFinite(Number(markup.markup_factor)),
+        )
         .sort((a, b) => Number(a.amount) - Number(b.amount));
 
       if (sortedMarkups.length === 0) {
@@ -99,27 +109,36 @@ export default function SubForm(params: { part: Part | null; sub_id: number }) {
       return Number(last.markup_factor);
     }
 
-    const factor = Math.round(calculateMarkup(cost)*100)/100;
+    const factor = Math.round(calculateMarkup(cost) * 100) / 100;
     startTransition(() => {
       // setPrice(cost * factor)
       setMarkup(factor);
-  });
+    });
   }, [cost, markups]);
 
   useEffect(() => {
-    startTransition(() => setPrice(Math.round(markup * cost*100)/100));
-  },[markup, cost])
+    startTransition(() => setPrice(Math.round(markup * cost * 100) / 100));
+  }, [markup, cost]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Button>
-          {data ?
-            <SquarePen />
-          : "Create Part"}
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button
+            variant={data ? "ghost" : "default"}
+            size={data ? "icon-sm" : "default"}
+            aria-label={data ? "Edit part" : undefined}
+            title={data ? "Edit part" : "Create part"}>
+            {data ?
+              <SquarePen aria-hidden='true' />
+            : "Create Part"}
+          </Button>
+        }
+      />
       <DialogContent className='sm:max-w-2xl'>
+        <DialogHeader>
+          <DialogTitle>{data ? "Edit part" : "New part"}</DialogTitle>
+        </DialogHeader>
         <form
           action={formAction}
           className='grid grid-cols-1 gap-6 sm:grid-cols-2'>

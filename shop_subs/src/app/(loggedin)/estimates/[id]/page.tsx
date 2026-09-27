@@ -1,10 +1,28 @@
-import { getEstimateById, getSubsByEstimateId } from "@/actions/estimate";
+import {
+  getEstimateById,
+  getSubsByEstimateId,
+  getTotalsById,
+} from "@/actions/estimate";
 import { getCarById } from "@/actions/car";
 import { getLaborPartsOilBySubId } from "@/actions/sub-estimate";
-import type { Estimate, Car, Customer, Sub_estimate, Phone, Email, Address } from "@/types";
+import type {
+  Estimate,
+  Car,
+  Customer,
+  Sub_estimate,
+  Phone,
+  Email,
+  Address,
+  Totals,
+} from "@/types";
 import EstimateDetail from "@/app/(loggedin)/ui/estimate-detail";
 import CarDetail from "@/app/(loggedin)/ui/car-detail";
-import { getCustomerAddresses, getCustomerById, getCustomerEmails, getCustomerPhones } from "@/actions/customer";
+import {
+  getCustomerAddresses,
+  getCustomerById,
+  getCustomerEmails,
+  getCustomerPhones,
+} from "@/actions/customer";
 import CustomerDetail from "../../ui/customer-detail";
 import SubEstimateCard from "../../ui/sub-estimate-card";
 
@@ -12,16 +30,24 @@ export default async function CarPage({ params }: { params: { id: string } }) {
   const estimateId = Number((await params).id);
   const estimatePromise: Promise<Estimate> = getEstimateById(estimateId);
   const subsPromise: Promise<Sub_estimate[]> = getSubsByEstimateId(estimateId);
-  const [estimate,subs] = await Promise.all([
+  const totalsPromise: Promise<Totals> = getTotalsById(estimateId);
+  const [estimate, subs, totals] = await Promise.all([
     estimatePromise,
-    subsPromise
-  ])
+    subsPromise,
+    totalsPromise,
+  ]);
   const car: Car = await getCarById(estimate.car_id);
   const customer: Customer = await getCustomerById(car.customer_id);
   const phonesPromise: Promise<Phone[]> = getCustomerPhones(customer.id);
   const emailsPromise: Promise<Email[]> = getCustomerEmails(customer.id);
-  const addressesPromise: Promise<Address[]> = getCustomerAddresses(customer.id);
-  const [phones,emails,addresses] = await Promise.all([phonesPromise,emailsPromise,addressesPromise])
+  const addressesPromise: Promise<Address[]> = getCustomerAddresses(
+    customer.id,
+  );
+  const [phones, emails, addresses] = await Promise.all([
+    phonesPromise,
+    emailsPromise,
+    addressesPromise,
+  ]);
   for (const sub of subs) {
     const temp = await getLaborPartsOilBySubId(sub.id);
     sub.labor = temp.labor;
@@ -35,11 +61,14 @@ export default async function CarPage({ params }: { params: { id: string } }) {
   //   let addresses: Address[] = [];
 
   return (
-    <>
-      <h2 className='text-xl font-bold bg-center align-center text-center p-4 rounded-lg shadow-md mt-4'>
-        Estimate Details
-      </h2>
-      <div className='grid grid-cols-2 gap-4 align-center text-center p-4 rounded-lg shadow-md mt-4'>
+    <section className='space-y-6'>
+      <header className='space-y-1'>
+        <h1 className='text-2xl font-semibold'>Estimate details</h1>
+        <p className='text-sm text-muted-foreground'>
+          Customer, vehicle, and service breakdown.
+        </p>
+      </header>
+      <div className='grid min-w-0 gap-6 lg:grid-cols-2'>
         <CustomerDetail
           customer={customer}
           phones={phones}
@@ -47,11 +76,15 @@ export default async function CarPage({ params }: { params: { id: string } }) {
           emails={emails}
         />
         <CarDetail car={car} />
-        <EstimateDetail estimate={estimate} />
-        {subs.map((sub) => (
-          <SubEstimateCard key={sub.id} sub={sub} />
-        ))}
+        <div className='min-w-0 lg:col-span-2'>
+          <EstimateDetail estimate={estimate} totals={totals} />
+        </div>
+        <div className='grid min-w-0 gap-4 lg:col-span-2 lg:grid-cols-2'>
+          {subs.map((sub) => (
+            <SubEstimateCard key={sub.id} sub={sub} />
+          ))}
+        </div>
       </div>
-    </>
+    </section>
   );
 }

@@ -4,6 +4,17 @@ import { getCustomers } from "@/actions/customer";
 import { useState } from "react";
 import Link from "next/link";
 import type { Customer } from "@/types";
+import CustomerForm from "./customer-form";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 export default function CustomerSearch() {
   const [custList, setCustList] = useState<Customer[]>([]);
@@ -19,34 +30,48 @@ export default function CustomerSearch() {
   };
 
   return (
-    <div className='flex flex-col items-center min-h-screen py-2'>
-      <h2 className='text-xl font-bold bg-center'>Customer Search</h2>
-      <form
-        action={handleSearch}
-        className='flex flex-col items-center space-y-2'>
-        <input
-          type='text'
-          name='customerId'
-          placeholder='Customer search here...'
-          className='border border-gray-300 rounded px-3 py-2 mb-2'
-        />
-        <button
-          type='submit'
-          className='bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600'>
-          Search
-        </button>
-      </form>
-      <div className='flex flex-col items-center mt-4'>
-        {/* Render the list of customers here */}
-        {custList.map((customer: Customer) => (
-          <Link
-            href={`/customers/${customer.id}`}
-            key={customer.id}
-            className='border border-gray-300 rounded p-2 mb-2 hover:bg-gray-300 w-full text-center'>
-            {customer.first_name} {customer.last_name}
-          </Link>
-        ))}
-      </div>
-    </div>
+    <Card className='min-w-0'>
+      <CardHeader className='border-b'>
+        <div className='flex flex-wrap items-start justify-between gap-3'>
+          <div className='space-y-1'>
+            <CardTitle>Customer search</CardTitle>
+            <CardDescription>
+              Find an existing record or add a customer.
+            </CardDescription>
+          </div>
+          <CustomerForm customer={null} />
+        </div>
+      </CardHeader>
+      <CardContent className='space-y-4 pt-5'>
+        <form action={handleSearch} className='flex flex-col gap-2 sm:flex-row'>
+          <Input
+            type='text'
+            name='customerId'
+            aria-label='Search customers'
+            placeholder='Name or customer ID'
+          />
+          <Button type='submit' className='sm:w-auto'>
+            <Search aria-hidden='true' />
+            Search
+          </Button>
+        </form>
+        <div className='grid gap-2 sm:grid-cols-2'>
+          {custList.map((customer: Customer) => (
+            <Button
+              key={customer.id}
+              variant='outline'
+              className='h-auto justify-start py-2 text-left'
+              render={<Link href={`/customers/${customer.id}`} />}>
+              {customer.first_name} {customer.last_name}
+            </Button>
+          ))}
+          {custList.length === 0 && (
+            <p className='text-sm text-muted-foreground sm:col-span-2'>
+              Search results will appear here.
+            </p>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 }

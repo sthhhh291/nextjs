@@ -1,9 +1,15 @@
 "use client";
 import { saveEstimate } from "@/actions/estimate";
-import { useActionState } from "react";
+import { startTransition, useActionState } from "react";
 import type { Employee, Estimate } from "@/types";
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FieldGroup, FieldSet, Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -81,20 +87,29 @@ export default function EstimateForm(params: {
 
   useEffect(() => {
     if (!isPending && state.success) {
-      setOpen(false);
+      startTransition(() => setOpen(false));
     }
   }, [isPending, state.success]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Button>
-          {data ?
-            <SquarePen />
-          : "Create Estimate"}
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button
+            variant={data ? "ghost" : "default"}
+            size={data ? "icon-sm" : "default"}
+            aria-label={data ? "Edit estimate" : undefined}
+            title={data ? "Edit estimate" : "Create estimate"}>
+            {data ?
+              <SquarePen aria-hidden='true' />
+            : "Create Estimate"}
+          </Button>
+        }
+      />
       <DialogContent className='sm:max-w-2xl'>
+        <DialogHeader>
+          <DialogTitle>{data ? "Edit estimate" : "New estimate"}</DialogTitle>
+        </DialogHeader>
         <form
           action={formAction}
           className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
@@ -137,7 +152,7 @@ export default function EstimateForm(params: {
                       <Button
                         variant={"outline"}
                         data-empty={!date}
-                        className='w-[212px] justify-between text-left font-normal data-[empty=true]:text-muted-foreground'>
+                        className='w-full justify-between text-left font-normal data-[empty=true]:text-muted-foreground sm:w-53'>
                         {date ? format(date, "PPP") : <span>Pick a date</span>}
                         <ChevronDownIcon data-icon='inline-end' />
                       </Button>

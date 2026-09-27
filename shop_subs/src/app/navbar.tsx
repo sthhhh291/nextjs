@@ -1,4 +1,7 @@
 import { logout } from "@/actions/auth";
+import DarkModeComponent from "@/app/(loggedin)/ui/dark-mode";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { cookies } from "next/headers";
 
 export default async function Navbar() {
@@ -13,7 +16,7 @@ export default async function Navbar() {
     { href: "/estimates", label: "Estimates" },
     { href: "/parts-order", label: "Parts Order" },
   ];
-  
+
   const admin_links = [
     { href: "/users", label: "Users" },
     { href: "/admin", label: "Admin" },
@@ -22,32 +25,44 @@ export default async function Navbar() {
     { href: "/markups", label: "Markup" },
   ];
   return (
-    <nav className='bg-gray-800 text-white p-4'>
-      <div className='flex items-center'>
-        <ul className='flex space-x-4'>
+    <nav className='sticky top-0 z-40 border-b bg-card text-card-foreground'>
+      <div className='mx-auto flex max-w-7xl flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3 sm:px-6 lg:px-8'>
+        <ul className='flex flex-wrap items-center gap-1'>
           {protected_links.map((link) => (
             <li key={link.href}>
-              <a href={link.href} className='hover:underline'>
+              <Link
+                href={link.href}
+                className='block rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground'>
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
-          {isAdmin && admin_links.map((link) => (
-            <li key={link.href}>
-              <a href={link.href} className='hover:underline'>
-                {link.label}
-              </a>
-            </li>
-          ))}
+          {isAdmin &&
+            admin_links.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className='block rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground'>
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           <li>
             <form action={logout}>
-              <button type='submit' className='hover:underline'>
-                Logout
-              </button>
+              <Button
+                type='submit'
+                variant='ghost'
+                size='sm'
+                className='text-muted-foreground'>
+                Sign out
+              </Button>
             </form>
           </li>
         </ul>
-        {username && <span className='ml-auto'>{username}</span>}
+        <div className='ml-auto flex items-center gap-3'>
+          <DarkModeComponent />
+          {username && <span className='text-sm font-medium'>{username}</span>}
+        </div>
       </div>
     </nav>
   );

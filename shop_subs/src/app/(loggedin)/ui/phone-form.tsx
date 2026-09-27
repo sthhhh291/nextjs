@@ -1,9 +1,15 @@
 "use client";
 import { savePhone } from "@/actions/phone";
-import { useActionState } from "react";
+import { startTransition, useActionState } from "react";
 import type { Phone } from "@/types";
 import { useState, useEffect } from "react";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -39,7 +45,7 @@ export default function PhoneForm(params: {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     if (!isPending && state.success) {
-      setOpen(false);
+      startTransition(() => setOpen(false));
     }
   }, [isPending, state.success]);
   const buttonAction = data ? "Update Phone" : "Create Phone";
@@ -47,18 +53,35 @@ export default function PhoneForm(params: {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button>{data ? <SquarePen /> : "Create Phone"}</Button>
-        }></DialogTrigger>
+          <Button
+            variant={data ? "ghost" : "default"}
+            size={data ? "icon-sm" : "default"}
+            aria-label={data ? "Edit phone number" : undefined}
+            title={data ? "Edit phone number" : "Create phone number"}>
+            {data ?
+              <SquarePen aria-hidden='true' />
+            : "Create Phone"}
+          </Button>
+        }
+      />
       <DialogContent>
         <form action={formAction}>
+          <DialogHeader className='mb-5'>
+            <DialogTitle>
+              {data ? "Edit phone number" : "New phone number"}
+            </DialogTitle>
+          </DialogHeader>
           {data && <input type='hidden' name='id' value={id} />}
           <input type='hidden' name='customer_id' value={customer_id} />
           <FieldGroup>
             <FieldSet>
               <FieldLegend>Phone Type</FieldLegend>
-              <Field orientation='horizontal'>
-                <Select name='type' value={type} onValueChange={setType}>
-                  <SelectTrigger className='border border-gray-300 rounded p-2 m-2'>
+              <Field orientation='responsive'>
+                <Select
+                  name='type'
+                  value={type}
+                  onValueChange={(value) => setType(value ?? "")}>
+                  <SelectTrigger className='w-full'>
                     <SelectValue placeholder='Select Type' />
                   </SelectTrigger>
                   <SelectContent>
@@ -68,7 +91,7 @@ export default function PhoneForm(params: {
                   </SelectContent>
                 </Select>
               </Field>
-              <Field orientation='horizontal'>
+              <Field orientation='responsive'>
                 <Label htmlFor='number'>Number</Label>
                 <Input
                   id='number'

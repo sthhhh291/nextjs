@@ -1,26 +1,29 @@
 import { getEmployees } from "@/actions/employees";
 import type { Employee } from "@/types";
 import EmployeeForm from "../ui/employee-form";
-import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
 
 export default async function EmployeesPage() {
   const employees: Employee[] = await getEmployees();
   return (
-    <>
-      {/* create form here */}
-      <h2>Add an employee here</h2>
-      <EmployeeForm employee={null} />
-      {/* array of edit forms here */}
-      <h2>View/Edit existing employees here</h2>
-      {employees.map((emp) => (
-        <div key={emp.id}>
-          <EmployeeForm employee={emp} />
-          {/* <Button>
-            <Trash />
-          </Button> */}
+    <section className='mx-auto max-w-5xl space-y-6'>
+      <header className='space-y-1'>
+        <h1 className='text-2xl font-semibold'>Employees</h1>
+        <p className='text-sm text-muted-foreground'>
+          Manage employee roles and compensation.
+        </p>
+      </header>
+      <div className='space-y-3'>
+        <h2 className='text-base font-semibold'>Add employee</h2>
+        <EmployeeForm employee={null} />
+      </div>
+      <div className='space-y-3'>
+        <h2 className='text-base font-semibold'>Employee records</h2>
+        <div className='grid gap-3'>
+          {employees.map((employee) => (
+            <EmployeeForm key={employee.id} employee={employee} />
+          ))}
         </div>
-      ))}
-    </>
+      </div>
+    </section>
   );
 }

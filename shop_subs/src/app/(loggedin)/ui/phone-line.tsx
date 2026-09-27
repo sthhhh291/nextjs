@@ -22,12 +22,23 @@ export default function PhoneLine(params: { phone: Phone }) {
   };
 
   return (
-    <div className='flex flex-wrap  justify-center'>
-      <p>
+    <div className='flex flex-wrap items-center justify-between gap-3 px-3 py-2.5 text-sm'>
+      <p className='min-w-0 flex-1'>
         {phone.number} {phone.type}
       </p>
-      <PhoneForm phone={phone} customer_id={customer_id} />
-      <Button onClick={() => deletePhoneHandler(phone.id)}><Trash /></Button>
+      <div className='flex items-center gap-1'>
+        <PhoneForm phone={phone} customer_id={customer_id} />
+        <Button
+          type='button'
+          variant='ghost'
+          size='icon-sm'
+          aria-label='Delete phone number'
+          title='Delete phone number'
+          className='text-destructive hover:bg-destructive/10 hover:text-destructive'
+          onClick={() => deletePhoneHandler(phone.id)}>
+          <Trash aria-hidden='true' />
+        </Button>
+      </div>
     </div>
   );
 }

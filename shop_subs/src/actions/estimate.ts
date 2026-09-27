@@ -202,3 +202,22 @@ export const getSubsByEstimateId = async (estimateId: number) => {
   }
   return res.json();
 };
+
+export const getTotalsById = async (estimateId: number) => {
+  if (!Number.isInteger(estimateId) || estimateId < 1) {
+    throw new Error("Invalid estimate ID");
+  }
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  const res = await fetch(`${baseUrl}/estimates/${estimateId}/totals`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!res.ok) {
+    console.error("Failed to fetch totals:", res.statusText);
+    throw new Error("Failed to fetch totals");
+  }
+  return res.json();
+};

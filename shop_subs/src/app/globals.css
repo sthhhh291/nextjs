@@ -48,34 +48,6 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-}
-
-input,
-textarea {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 0.25rem;
-  box-sizing: border-box;
-}
-
-/* button {
-  padding: 0.5rem 1rem;
-  background-color: #0070f3;
-  color: white;
-  border: none;
-  border-radius: 0.25rem;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #005bb5;
-} */
-
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

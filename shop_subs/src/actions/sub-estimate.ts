@@ -77,7 +77,7 @@ export const createSubEstimate = async (formData: FormData) => {
     return {
       error: res.statusText || "Failed to create sub",
       success: false,
-      car: null,
+      sub: null,
     };
   }
   return { success: true, error: null, sub: await res.json() };
@@ -172,30 +172,30 @@ export const getLaborPartsOilBySubId = async (subId: number) => {
     method: "GET",
     headers: {
       Authorization: `Bearer ${accessToken}`,
-    }
-  })
+    },
+  });
   const parts = await fetch(`${baseUrl}/sub-estimates/${subId}/parts`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${accessToken}`,
-    }
-  })
+    },
+  });
   const oil = await fetch(`${baseUrl}/sub-estimates/${subId}/oil`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${accessToken}`,
-    }
-  })
+    },
+  });
   const totals = await fetch(`${baseUrl}/sub-estimates/${subId}/totals`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${accessToken}`,
-    }
-  })
+    },
+  });
   return {
     labor: await labor.json(),
     parts: await parts.json(),
     oil: await oil.json(),
     totals: await totals.json(),
-  }
-}
+  };
+};

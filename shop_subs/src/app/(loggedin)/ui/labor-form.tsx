@@ -1,10 +1,16 @@
 "use client";
 import { saveLabor } from "@/actions/labor";
 import { getadmin } from "@/actions/admin";
-import { useActionState } from "react";
-import type { Labor, Admin } from "@/types";
+import { startTransition, useActionState } from "react";
+import type { Labor } from "@/types";
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FieldGroup, Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -19,7 +25,7 @@ export default function SubForm(params: {
   const data = params.labor;
   const sub_id = params.sub_id;
   const [open, setOpen] = useState(false);
-  const buttonAction = data ? "Create" : "Save Changes";
+  const buttonAction = data ? "Save Changes" : "Create Labor";
   const [state, formAction, isPending] = useActionState(saveLabor, {
     error: null,
     success: false,
@@ -33,7 +39,7 @@ export default function SubForm(params: {
 
   useEffect(() => {
     if (!isPending && state.success) {
-      setOpen(false);
+      startTransition(() => setOpen(false));
     }
   }, [isPending, state.success]);
 
@@ -61,19 +67,30 @@ export default function SubForm(params: {
 
   // calculate labor price on hours/rate change
   useEffect(() => {
-    setPrice(rate * hours);
+    startTransition(() => setPrice(rate * hours));
   }, [rate, hours]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Button>
-          {data ?
-            <SquarePen />
-          : "Create Labor"}
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button
+            variant={data ? "ghost" : "default"}
+            size={data ? "icon-sm" : "default"}
+            aria-label={data ? "Edit labor item" : undefined}
+            title={data ? "Edit labor item" : "Create labor item"}>
+            {data ?
+              <SquarePen aria-hidden='true' />
+            : "Create Labor"}
+          </Button>
+        }
+      />
       <DialogContent className='sm:max-w-2xl'>
+        <DialogHeader>
+          <DialogTitle>
+            {data ? "Edit labor item" : "New labor item"}
+          </DialogTitle>
+        </DialogHeader>
         <form
           action={formAction}
           className='grid grid-cols-1 gap-6 sm:grid-cols-2'>

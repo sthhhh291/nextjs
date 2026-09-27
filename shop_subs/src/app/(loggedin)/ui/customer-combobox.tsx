@@ -53,7 +53,7 @@ export default function CustomerComboBox({
       window.clearTimeout(timeoutId);
       window.clearTimeout(searchTimeout.current);
     };
-  }, []);
+  }, [defaultCustomer]);
 
   const handleCustomerSearch = (searchTerm: string) => {
     window.clearTimeout(searchTimeout.current);

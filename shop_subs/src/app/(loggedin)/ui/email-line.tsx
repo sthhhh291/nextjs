@@ -22,12 +22,23 @@ export default function EmailLine(params: { email: Email }) {
   };
 
   return (
-    <div className='flex flex-wrap  justify-center'>
-      <p>
+    <div className='flex flex-wrap items-center justify-between gap-3 px-3 py-2.5 text-sm'>
+      <p className='min-w-0 flex-1'>
         {email.address} {email.type}
       </p>
-      <EmailForm email={email} customer_id={customer_id} />
-      <Button onClick={() => deleteEmailHandler(email.id)}><Trash /></Button>
+      <div className='flex items-center gap-1'>
+        <EmailForm email={email} customer_id={customer_id} />
+        <Button
+          type='button'
+          variant='ghost'
+          size='icon-sm'
+          aria-label='Delete email'
+          title='Delete email'
+          className='text-destructive hover:bg-destructive/10 hover:text-destructive'
+          onClick={() => deleteEmailHandler(email.id)}>
+          <Trash aria-hidden='true' />
+        </Button>
+      </div>
     </div>
   );
 }
