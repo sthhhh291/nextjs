@@ -48,11 +48,11 @@ export default async function CustomerPage({
           <h3 className='text-lg font-bold'>Cars</h3>
           <CardContent className='grid grid-cols-1'>
             {cars.map((car) => (
-              <Button key={car.id}>
-                <Link href={`/cars/${car.id}`} >
+                <Link key = {car.id} href={`/cars/${car.id}`} >
+              <Button>
                   {car.year} {car.make} {car.car_model}
-                </Link>
               </Button>
+                </Link>
             ))}
           </CardContent>
         </Card>

@@ -28,7 +28,6 @@ export default function CustomerDetail(params: {
   const addresses = params.addresses;
 
   return (
-    <div>
       <Card>
         <CardHeader>
           <CardTitle>Customer Details</CardTitle>
@@ -36,8 +35,8 @@ export default function CustomerDetail(params: {
             <CustomerLine customer={customer} />
           </CardDescription>
         </CardHeader>
-      </Card>
-      <Card>
+      {/* </Card>
+      <Card> */}
         <CardHeader>
           <CardTitle>Actions</CardTitle>
           <CardDescription>
@@ -47,23 +46,23 @@ export default function CustomerDetail(params: {
             <CarForm car={null} customer_id={customer.id} />
           </CardDescription>
         </CardHeader>
-      </Card>
-      <Card>
+      {/* </Card>
+      <Card> */}
         <CardHeader>
-          <CardTitle>Phone Numbers</CardTitle>
+          {phones.length > 0 && <CardTitle>Phone Numbers</CardTitle>}
           <CardDescription>
             {phones.map((phone) => (
               <PhoneLine key={phone.id} phone={phone} />
             ))}
           </CardDescription>
-          <CardTitle>Emails</CardTitle>
+          {emails.length > 0 && <CardTitle>Emails</CardTitle> }
           <CardDescription>
             {emails.map((email) => (
               <EmailLine key={email.id} email={email} />
               // <div key={email.id}>{email.address} {email.type}</div>
             ))}
           </CardDescription>
-          <CardTitle>Addresses</CardTitle>
+          {addresses.length > 0 && <CardTitle>Addresses</CardTitle>}
           <CardDescription>
             {addresses.map((address) => (
               <AddressLine key={address.id} address={address} />
@@ -72,6 +71,5 @@ export default function CustomerDetail(params: {
           </CardDescription>
         </CardHeader>
       </Card>
-    </div>
   );
 }

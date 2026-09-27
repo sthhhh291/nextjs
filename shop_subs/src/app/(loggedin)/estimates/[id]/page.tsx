@@ -1,19 +1,27 @@
 import { getEstimateById, getSubsByEstimateId } from "@/actions/estimate";
 import { getCarById } from "@/actions/car";
 import { getLaborPartsOilBySubId } from "@/actions/sub-estimate";
-import type { Estimate, Car, Customer, Sub_estimate } from "@/types";
+import type { Estimate, Car, Customer, Sub_estimate, Phone, Email, Address } from "@/types";
 import EstimateDetail from "@/app/(loggedin)/ui/estimate-detail";
 import CarDetail from "@/app/(loggedin)/ui/car-detail";
-import { getCustomerById } from "@/actions/customer";
+import { getCustomerAddresses, getCustomerById, getCustomerEmails, getCustomerPhones } from "@/actions/customer";
 import CustomerDetail from "../../ui/customer-detail";
 import SubEstimateCard from "../../ui/sub-estimate-card";
 
 export default async function CarPage({ params }: { params: { id: string } }) {
   const estimateId = Number((await params).id);
-  const estimate: Estimate = await getEstimateById(estimateId);
+  const estimatePromise: Promise<Estimate> = getEstimateById(estimateId);
+  const subsPromise: Promise<Sub_estimate[]> = getSubsByEstimateId(estimateId);
+  const [estimate,subs] = await Promise.all([
+    estimatePromise,
+    subsPromise
+  ])
   const car: Car = await getCarById(estimate.car_id);
   const customer: Customer = await getCustomerById(car.customer_id);
-  const subs: Sub_estimate[] = await getSubsByEstimateId(estimateId);
+  const phonesPromise: Promise<Phone[]> = getCustomerPhones(customer.id);
+  const emailsPromise: Promise<Email[]> = getCustomerEmails(customer.id);
+  const addressesPromise: Promise<Address[]> = getCustomerAddresses(customer.id);
+  const [phones,emails,addresses] = await Promise.all([phonesPromise,emailsPromise,addressesPromise])
   for (const sub of subs) {
     const temp = await getLaborPartsOilBySubId(sub.id);
     sub.labor = temp.labor;
@@ -34,9 +42,9 @@ export default async function CarPage({ params }: { params: { id: string } }) {
       <div className='grid grid-cols-2 gap-4 align-center text-center p-4 rounded-lg shadow-md mt-4'>
         <CustomerDetail
           customer={customer}
-          phones={[]}
-          addresses={[]}
-          emails={[]}
+          phones={phones}
+          addresses={addresses}
+          emails={emails}
         />
         <CarDetail car={car} />
         <EstimateDetail estimate={estimate} />
