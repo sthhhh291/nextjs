@@ -53,13 +53,14 @@ export default async function CustomerPage({
           </CardHeader>
           <CardContent className='grid gap-2'>
             {cars.map((car) => (
+              <Link key={car.id} href={`/cars/${car.id}`}>
               <Button
-                key={car.id}
+                // key={car.id}
                 variant='outline'
-                className='h-auto w-full justify-start py-2 text-left'
-                render={<Link href={`/cars/${car.id}`} />}>
+                className='h-auto w-full justify-start py-2 text-left'>
                 {car.year} {car.make} {car.car_model}
-              </Button>
+                </Button>
+                </Link>
             ))}
           </CardContent>
         </Card>
