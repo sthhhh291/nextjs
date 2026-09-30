@@ -20,7 +20,6 @@ export default async function CustomerPage({
 }) {
   const carId = Number((await params).id);
   const carPromise: Promise<Car> = getCarById(carId);
-  // const car = await carPromise;
   const estimatesPromise: Promise<Estimate[]> = getEstimatesByCarId(carId);
   const [car, estimates] = await Promise.all([carPromise, estimatesPromise]);
   const customerPromise: Promise<Customer> = getCustomerById(car.customer_id);
@@ -35,9 +34,6 @@ export default async function CustomerPage({
     emailsPromise,
     addressesPromise,
   ]);
-
-  //   let emails: Email[] = [];
-  //   let addresses: Address[] = [];
 
   return (
     <section className='space-y-6'>
