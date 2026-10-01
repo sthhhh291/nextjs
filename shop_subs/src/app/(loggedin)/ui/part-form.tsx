@@ -146,7 +146,7 @@ export default function SubForm(params: { part: Part | null; sub_id: number }) {
           <input type='hidden' name='sub_estimate_id' value={sub_id} />
           <FieldGroup>
             <Field>
-              <Label htmlFor='description'>description</Label>
+              <Label htmlFor='description'>Description</Label>
               <Input
                 type='text'
                 name='description'
@@ -156,7 +156,7 @@ export default function SubForm(params: { part: Part | null; sub_id: number }) {
               />
             </Field>
             <Field>
-              <Label htmlFor='manufacturer'>manufacturer</Label>
+              <Label htmlFor='manufacturer'>Manufacturer Number</Label>
               <Input
                 type='text'
                 name='manufacturer'
@@ -166,7 +166,7 @@ export default function SubForm(params: { part: Part | null; sub_id: number }) {
               />
             </Field>
             <Field>
-              <Label htmlFor='part_number'>part_number</Label>
+              <Label htmlFor='part_number'>Part Number</Label>
               <Input
                 type='text'
                 name='part_number'
@@ -179,7 +179,7 @@ export default function SubForm(params: { part: Part | null; sub_id: number }) {
               <Label htmlFor='quantity'>Quantity</Label>
               <Input
                 type='number'
-                step={0.01}
+                step={1}
                 name='quantity'
                 placeholder='Quantity...'
                 value={quantity}
@@ -192,7 +192,7 @@ export default function SubForm(params: { part: Part | null; sub_id: number }) {
                 type='number'
                 step={0.01}
                 name='markup'
-                placeholder='Part Cost...'
+                placeholder='Part Markup...'
                 value={markup}
                 onChange={(e) => setMarkup(Number(e.target.value))}
               />

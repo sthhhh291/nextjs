@@ -98,7 +98,7 @@ export default function SubForm(params: {
           <input type='hidden' name='sub_estimate_id' value={sub_id} />
           <FieldGroup>
             <Field>
-              <Label htmlFor='description'>description</Label>
+              <Label htmlFor='description'>Description</Label>
               <Input
                 type='text'
                 name='description'
@@ -108,29 +108,29 @@ export default function SubForm(params: {
               />
             </Field>
             <Field>
-              <Label htmlFor='rate'>rate</Label>
+              <Label htmlFor='rate'>Labor Rate</Label>
               <Input
                 type='number'
                 step={5}
                 name='rate'
-                placeholder='Rate...'
+                placeholder='Labor Rate...'
                 value={rate}
                 onChange={(e) => setRate(Number(e.target.value))}
               />
             </Field>
             <Field>
-              <Label htmlFor='hours'>hours</Label>
+              <Label htmlFor='hours'>Labor Hours</Label>
               <Input
                 type='number'
                 step={0.1}
                 name='hours'
-                placeholder='Hours...'
+                placeholder='Labor Hours...'
                 value={hours}
                 onChange={(e) => setHours(Number(e.target.value))}
               />
             </Field>
             <Field>
-              <Label htmlFor='price'>price</Label>
+              <Label htmlFor='price'>Price</Label>
               <Input
                 type='number'
                 name='price'

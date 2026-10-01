@@ -40,43 +40,43 @@ export default function PartsOrderForm(params: { order: PartsOrder | null }) {
             {state.error}
           </p>
         )}
-        <FieldSet className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+        <FieldSet className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-6'>
           <Field>
-            <Label htmlFor='description'>description</Label>
+            <Label htmlFor='description'>Description</Label>
             <Input
-              type='number'
+              type='text'
               name='description'
-              placeholder='description...'
+              placeholder='Description...'
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
           </Field>
           <Field>
-            <Label htmlFor='mfr_no'>PartsOrder Factor</Label>
+            <Label htmlFor='mfr_no'>Manufacturer Number</Label>
             <Input
               type='text'
               name='mfr_no'
-              placeholder='Labor Rate...'
+              placeholder='Manufacturer Number...'
               value={mfr_no}
               onChange={(e) => setMfr_no(e.target.value)}
             />
           </Field>
           <Field>
-            <Label htmlFor='part_no'>part_no</Label>
+            <Label htmlFor='part_no'>Part Number</Label>
             <Input
               type='text'
               name='part_no'
-              placeholder='model...'
+              placeholder='Part Number...'
               value={part_no}
               onChange={(e) => setPartNo(e.target.value)}
             />
           </Field>
           <Field>
-            <Label htmlFor='price'>price</Label>
+            <Label htmlFor='price'>Price</Label>
             <Input
               type='text'
               name='price'
-              placeholder='Shop fees upper limit...'
+              placeholder='Price...'
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             />

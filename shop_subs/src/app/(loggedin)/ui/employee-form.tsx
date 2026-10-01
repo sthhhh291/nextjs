@@ -44,7 +44,7 @@ export default function EmployeeForm(params: { employee: Employee | null }) {
             {state.error}
           </p>
         )}
-        <FieldSet className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+        <FieldSet className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5'>
           <Field>
             <Label htmlFor='Customer'>Pick a Person</Label>
             <CustomerComboBox
@@ -65,7 +65,7 @@ export default function EmployeeForm(params: { employee: Employee | null }) {
             <Input
               type='text'
               name='title'
-              placeholder='title...'
+              placeholder='Title...'
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -75,7 +75,7 @@ export default function EmployeeForm(params: { employee: Employee | null }) {
             <Input
               type='text'
               name='salary'
-              placeholder='model...'
+              placeholder='Salary...'
               value={salary}
               onChange={(e) => setSalary(e.target.value)}
             />

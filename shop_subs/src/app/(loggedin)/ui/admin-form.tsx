@@ -36,7 +36,7 @@ export default function AdminForm(params: { admin: Admin | null }) {
             {state.error}
           </p>
         )}
-        <FieldSet className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+        <FieldSet className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5'>
           <Field>
             <Label htmlFor='tax_rate'>Tax Rate</Label>
             <Input
@@ -48,7 +48,7 @@ export default function AdminForm(params: { admin: Admin | null }) {
             />
           </Field>
           <Field>
-            <Label htmlFor='labor_rate'>labor_rate</Label>
+            <Label htmlFor='labor_rate'>Labor Rate</Label>
             <Input
               type='text'
               name='labor_rate'
@@ -58,17 +58,17 @@ export default function AdminForm(params: { admin: Admin | null }) {
             />
           </Field>
           <Field>
-            <Label htmlFor='shop_fees_percent'>shop_fees_percent</Label>
+            <Label htmlFor='shop_fees_percent'>Shop Fees Percent</Label>
             <Input
               type='text'
               name='shop_fees_percent'
-              placeholder='model...'
+              placeholder='Shop Fees Percent...'
               value={shop_fees_percent}
               onChange={(e) => setShopFeesPercent(e.target.value)}
             />
           </Field>
           <Field>
-            <Label htmlFor='shop_fees_limit'>shop_fees_limit</Label>
+            <Label htmlFor='shop_fees_limit'>Shop Fees Limit</Label>
             <Input
               type='text'
               name='shop_fees_limit'

@@ -52,7 +52,7 @@ export default async function Navbar() {
               <Button
                 type='submit'
                 variant='ghost'
-                size='sm'
+                // size='sm'
                 className='text-muted-foreground'>
                 Sign out
               </Button>
