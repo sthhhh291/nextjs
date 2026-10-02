@@ -24,15 +24,15 @@ export default function SubForm(params: { oil: Part | null; sub_id: number }) {
   const [state, formAction, isPending] = useActionState(saveOil, {
     error: null,
     success: false,
-    oil: null,
+    oil: data || null,
   });
-  const [description, setDescription] = useState(data?.description || "");
-  const [manufacturer, setManufacturer] = useState(data?.manufacturer || "");
-  const [part_number, setpartNumber] = useState(data?.part_number || "");
-  const [quantity, setQuantity] = useState(data?.quantity || 0);
-  const [cost, setCost] = useState(data?.cost || 0);
-  const [list, setList] = useState(data?.list || 0);
-  const [price, setPrice] = useState(data?.price || 0);
+    // const [description, setDescription] = useState(data?.description || "");
+    // const [manufacturer, setManufacturer] = useState(data?.manufacturer || "");
+    // const [part_number, setpartNumber] = useState(data?.part_number || "");
+    // const [quantity, setQuantity] = useState(data?.quantity || 0);
+    // const [cost, setCost] = useState(data?.cost || 0);
+    // const [list, setList] = useState(data?.list || 0);
+    // const [price, setPrice] = useState(data?.price || 0);
 
   useEffect(() => {
     if (!isPending && state.success) {
@@ -71,8 +71,9 @@ export default function SubForm(params: { oil: Part | null; sub_id: number }) {
                 type='text'
                 name='description'
                 placeholder='Description...'
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                defaultValue={data?.description || ""}
+                // value={description}
+                // onChange={(e) => setDescription(e.target.value)}
               />
             </Field>
             <Field>
@@ -81,8 +82,9 @@ export default function SubForm(params: { oil: Part | null; sub_id: number }) {
                 type='text'
                 name='manufacturer'
                 placeholder='Manufacturer Number...'
-                value={manufacturer}
-                onChange={(e) => setManufacturer(e.target.value)}
+                defaultValue={data?.manufacturer || ""}
+                // value={manufacturer}
+                // onChange={(e) => setManufacturer(e.target.value)}
               />
             </Field>
             <Field>
@@ -91,8 +93,9 @@ export default function SubForm(params: { oil: Part | null; sub_id: number }) {
                 type='text'
                 name='part_number'
                 placeholder='Part Number...'
-                value={part_number}
-                onChange={(e) => setpartNumber(e.target.value)}
+                defaultValue={data?.part_number || ""}
+                // value={part_number}
+                // onChange={(e) => setpartNumber(e.target.value)}
               />
             </Field>
             <Field>
@@ -102,8 +105,9 @@ export default function SubForm(params: { oil: Part | null; sub_id: number }) {
                 step={1}
                 name='quantity'
                 placeholder='Quantity...'
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
+                defaultValue={data?.quantity || 1}
+                // value={quantity}
+                // onChange={(e) => setQuantity(Number(e.target.value))}
               />
             </Field>
             <Field>
@@ -113,8 +117,9 @@ export default function SubForm(params: { oil: Part | null; sub_id: number }) {
                 step={0.01}
                 name='cost'
                 placeholder='Oil Cost...'
-                value={cost}
-                onChange={(e) => setCost(Number(e.target.value))}
+                defaultValue={data?.cost || 0}
+                // value={cost}
+                // onChange={(e) => setCost(Number(e.target.value))}
               />
             </Field>
             <Field>
@@ -124,8 +129,9 @@ export default function SubForm(params: { oil: Part | null; sub_id: number }) {
                 name='list'
                 step={0.01}
                 placeholder='Price...'
-                value={list}
-                onChange={(e) => setList(Number(e.target.value))}
+                defaultValue={data?.list || 0}
+                // value={list}
+                // onChange={(e) => setList(Number(e.target.value))}
               />
             </Field>
             <Field>
@@ -135,8 +141,9 @@ export default function SubForm(params: { oil: Part | null; sub_id: number }) {
                 name='price'
                 step={0.01}
                 placeholder='Price...'
-                value={price}
-                onChange={(e) => setPrice(Number(e.target.value))}
+                defaultValue={data?.price || 0}
+                // value={price}
+                // onChange={(e) => setPrice(Number(e.target.value))}
               />
             </Field>
           </FieldGroup>

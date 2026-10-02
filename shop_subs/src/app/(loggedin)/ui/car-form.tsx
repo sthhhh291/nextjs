@@ -32,17 +32,6 @@ export default function CarForm(params: {
     success: false,
     car: null,
   });
-  const [year, setYear] = useState(
-    data?.year?.toString() ?? (new Date().getFullYear() - 5).toString(),
-  );
-  const [make, setMake] = useState(data?.make || "");
-  const [car_model, setCarModel] = useState(data?.car_model || "");
-  const [engine, setEngine] = useState(data?.engine || "");
-  const [vin, setVin] = useState(data?.vin || "");
-  const [license, setLicense] = useState(data?.license || "");
-  const [color, setColor] = useState(data?.color || "");
-  const [fleet_number, setFleetNumber] = useState(data?.fleet_number || "");
-  const [notes, setNotes] = useState(data?.notes || "");
   const [open, setOpen] = useState(false);
   const buttonAction = data ? "Update Car" : "Create Car";
 
@@ -88,8 +77,7 @@ export default function CarForm(params: {
                   max={new Date().getFullYear() + 1}
                   step='1'
                   placeholder='year...'
-                  value={year}
-                  onChange={(e) => setYear(e.target.value)}
+                  defaultValue={data?.year?.toString() ?? (new Date().getFullYear() - 5).toString()}
                 />
               </Field>
               <Field>
@@ -98,8 +86,7 @@ export default function CarForm(params: {
                   type='text'
                   name='make'
                   placeholder='make...'
-                  value={make}
-                  onChange={(e) => setMake(e.target.value)}
+                  defaultValue={data?.make || ""}
                 />
               </Field>
               <Field>
@@ -108,8 +95,7 @@ export default function CarForm(params: {
                   type='text'
                   name='car_model'
                   placeholder='model...'
-                  value={car_model}
-                  onChange={(e) => setCarModel(e.target.value)}
+                  defaultValue={data?.car_model || ""}
                 />
               </Field>
               <Field>
@@ -118,8 +104,7 @@ export default function CarForm(params: {
                   type='text'
                   name='engine'
                   placeholder='engine...'
-                  value={engine}
-                  onChange={(e) => setEngine(e.target.value)}
+                  defaultValue={data?.engine || ""}
                 />
               </Field>
             </FieldSet>
@@ -131,8 +116,7 @@ export default function CarForm(params: {
                 type='text'
                 name='vin'
                 placeholder='VIN...'
-                value={vin}
-                onChange={(e) => setVin(e.target.value)}
+                defaultValue={data?.vin || ""}
               />
             </Field>
             <Field>
@@ -141,8 +125,7 @@ export default function CarForm(params: {
                 type='text'
                 name='color'
                 placeholder='color...'
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
+                defaultValue={data?.color || ""}
               />
             </Field>
             <Field>
@@ -151,8 +134,7 @@ export default function CarForm(params: {
                 type='text'
                 name='license'
                 placeholder='license...'
-                value={license}
-                onChange={(e) => setLicense(e.target.value)}
+                defaultValue={data?.license || ""}
               />
             </Field>
             <Field>
@@ -161,8 +143,7 @@ export default function CarForm(params: {
                 type='text'
                 name='fleet_number'
                 placeholder='fleet number...'
-                value={fleet_number}
-                onChange={(e) => setFleetNumber(e.target.value)}
+                defaultValue={data?.fleet_number || ""}
               />
             </Field>
             <Field>
@@ -170,8 +151,7 @@ export default function CarForm(params: {
               <Textarea
                 name='notes'
                 placeholder='notes...'
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
+                defaultValue={data?.notes || ""}
               />
             </Field>
             {/* </FieldSet> */}

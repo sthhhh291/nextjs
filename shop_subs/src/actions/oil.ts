@@ -184,8 +184,8 @@ export const updateOil = async (formData: FormData) => {
     };
   }
 
-  await res.json();
-  return { success: true, error: null, oil: null };
+  const oil = await res.json();
+  return { success: true, error: null, oil: oil };
 };
 
 // save car form data (create or update)

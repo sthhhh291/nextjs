@@ -23,11 +23,11 @@ export default function CustomerForm(params: { customer: Customer | null }) {
   const [state, formAction, isPending] = useActionState(saveCustomer, {
     error: null,
     success: false,
-    customer: null,
+    customer: data || null,
   });
-  const [firstName, setFirstName] = useState(data?.first_name || "");
-  const [lastName, setLastName] = useState(data?.last_name || "");
-  const [notes, setNotes] = useState(data?.notes || "");
+  // const [firstName, setFirstName] = useState(data?.first_name || "");
+  // const [lastName, setLastName] = useState(data?.last_name || "");
+  // const [notes, setNotes] = useState(data?.notes || "");
   const buttonAction = data ? "Update Customer" : "Create Customer";
 
   useEffect(() => {
@@ -63,8 +63,8 @@ export default function CustomerForm(params: { customer: Customer | null }) {
                   <Input
                     id='first_name'
                     name='first_name'
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    defaultValue={data?.first_name || ""}
+                    // onChange={(e) => setFirstName(e.target.value)}
                   />
                 </Field>
                 <Field orientation='responsive'>
@@ -72,8 +72,8 @@ export default function CustomerForm(params: { customer: Customer | null }) {
                   <Input
                     id='last_name'
                     name='last_name'
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                    defaultValue={data?.last_name || ""}
+                    // onChange={(e) => setLastName(e.target.value)}
                   />
                 </Field>
                 <Field orientation='responsive'>
@@ -81,8 +81,8 @@ export default function CustomerForm(params: { customer: Customer | null }) {
                   <Textarea
                     id='notes'
                     name='notes'
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
+                    defaultValue={data?.notes || ""}
+                    // onChange={(e) => setNotes(e.target.value)}
                   />
                 </Field>
               </FieldSet>

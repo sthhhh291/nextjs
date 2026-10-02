@@ -9,6 +9,7 @@ import { deleteOil } from "@/actions/oil";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import OilForm from "./oil-form";
+import { formatCurrency } from "@/lib/utils";
 
 export default function SubEstimateCard(params: { sub: Sub_estimate }) {
   const sub = params.sub;
@@ -58,7 +59,7 @@ export default function SubEstimateCard(params: { sub: Sub_estimate }) {
                 </div>
                 <div className='flex items-center gap-1'>
                   <span className='mr-1 text-sm font-medium'>
-                    {labor.price}
+                    {formatCurrency(labor.price)}
                   </span>
                   <LaborForm labor={labor} sub_id={sub.id} />
                   <Button
@@ -81,7 +82,7 @@ export default function SubEstimateCard(params: { sub: Sub_estimate }) {
             )}
           </div>
           <p className='text-right text-sm text-muted-foreground'>
-            Labor total: {sub.totals?.labor_total}
+            Labor total: {formatCurrency(sub.totals?.labor_total)}
           </p>
         </section>
         <section className='space-y-2'>
@@ -95,7 +96,7 @@ export default function SubEstimateCard(params: { sub: Sub_estimate }) {
                   <p className='text-sm font-medium'>{part.description}</p>
                   <p className='text-xs text-muted-foreground'>
                     Qty {part.quantity} at {part.price} | Extended{" "}
-                    {part.quantity * part.price}
+                    {formatCurrency(part.quantity * part.price)}
                   </p>
                 </div>
                 <div className='flex items-center gap-1'>
@@ -120,7 +121,7 @@ export default function SubEstimateCard(params: { sub: Sub_estimate }) {
             )}
           </div>
           <p className='text-right text-sm text-muted-foreground'>
-            Parts total: {sub.totals?.parts_total}
+            Parts total: {formatCurrency(sub.totals?.parts_total)}
           </p>
         </section>
         <section className='space-y-2'>
@@ -133,8 +134,8 @@ export default function SubEstimateCard(params: { sub: Sub_estimate }) {
                 <div className='min-w-0 flex-1'>
                   <p className='text-sm font-medium'>{oil.description}</p>
                   <p className='text-xs text-muted-foreground'>
-                    Qty {oil.quantity} at {oil.price} | Extended{" "}
-                    {oil.quantity * oil.price}
+                    Qty {oil.quantity} at {formatCurrency(oil.price)} | Extended{" "}
+                    {formatCurrency(oil.quantity * oil.price)}
                   </p>
                 </div>
                 <div className='flex items-center gap-1'>
@@ -159,26 +160,26 @@ export default function SubEstimateCard(params: { sub: Sub_estimate }) {
             )}
           </div>
           <p className='text-right text-sm text-muted-foreground'>
-            Oil total: {sub.totals?.oil_total}
+            Oil total: {formatCurrency(sub.totals?.oil_total)}
           </p>
         </section>
         <dl className='grid gap-3 rounded-lg bg-muted/50 p-3 text-sm sm:grid-cols-2'>
           <div>
             <dt className='text-muted-foreground'>Subtotal</dt>
-            <dd className='mt-1 font-medium'>{sub.totals?.sub_total}</dd>
+            <dd className='mt-1 font-medium'>{formatCurrency(sub.totals?.sub_total)}</dd>
           </div>
           <div>
             <dt className='text-muted-foreground'>Tax</dt>
-            <dd className='mt-1 font-medium'>{sub.totals?.tax}</dd>
+            <dd className='mt-1 font-medium'>{formatCurrency(sub.totals?.tax)}</dd>
           </div>
           <div>
             <dt className='text-muted-foreground'>Shop fees</dt>
-            <dd className='mt-1 font-medium'>{sub.totals?.shop_fees}</dd>
+            <dd className='mt-1 font-medium'>{formatCurrency(sub.totals?.shop_fees)}</dd>
           </div>
           <div>
             <dt className='text-muted-foreground'>Total</dt>
             <dd className='mt-1 text-base font-semibold'>
-              {sub.totals?.grand_total}
+              {formatCurrency(sub.totals?.grand_total)}
             </dd>
           </div>
         </dl>

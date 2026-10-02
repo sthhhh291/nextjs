@@ -118,18 +118,20 @@ export default function EstimateForm(params: {
           <input
             type='hidden'
             name='date'
-            value={date ? format(date, "yyyy-MM-dd") : ""}
+            defaultValue={data?.date ? format(new Date(data.date), "yyyy-MM-dd") : new Date().toISOString().split("T")[0] }
           />
           <FieldGroup>
             <FieldSet>
+              <Label htmlFor='employee_id'>Employee</Label>
               <Select
                 items={employees.map((employee) => ({
                   value: String(employee.id),
                   label: `${employee.first_name} ${employee.last_name}`,
                 }))}
                 name='employee_id'
-                value={employee_id}
-                onValueChange={(value) => setEmployeeId(value ?? "")}>
+                defaultValue={data?.employee_id?.toString() ?? "1"}
+                // onValueChange={(value) => setEmployeeId(value ?? "")}>
+                >
                 <SelectTrigger className='w-full max-w-48'>
                   <SelectValue placeholder='Select an employee' />
                 </SelectTrigger>
@@ -177,8 +179,8 @@ export default function EstimateForm(params: {
                 type='text'
                 name='hours'
                 placeholder='Hours Taken...'
-                value={hours}
-                onChange={(e) => setHours(e.target.value)}
+                defaultValue={data?.hours?.toString() ?? "0"}
+                // onChange={(e) => setHours(e.target.value)}
               />
             </Field>
             <Field>
@@ -187,16 +189,19 @@ export default function EstimateForm(params: {
                 type='text'
                 name='mileage'
                 placeholder='Mileage...'
-                value={mileage}
-                onChange={(e) => setMileage(e.target.value)}
+                defaultValue={data?.mileage?.toString() ?? "0"}
+                // onChange={(e) => setMileage(e.target.value)}
               />
             </Field>
           </FieldGroup>
+          <FieldGroup>
+
+          <Label htmlFor='estimate_type'>Estimate Type</Label>
           <Select
             items={estimate_types}
             name='estimate_type'
-            value={estimate_type}
-            onValueChange={(value) => setEstimate_type(value ?? "")}>
+            defaultValue={data?.estimate_type ?? "estimate"}
+            >
             <SelectTrigger className='w-full max-w-48'>
               <SelectValue />
             </SelectTrigger>
@@ -211,6 +216,7 @@ export default function EstimateForm(params: {
               </SelectGroup>
             </SelectContent>
           </Select>
+                </FieldGroup>
           {state.error && (
             <p className='text-sm text-destructive sm:col-span-2'>
               {state.error}

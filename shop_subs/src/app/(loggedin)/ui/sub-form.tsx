@@ -61,8 +61,8 @@ export default function SubForm(params: {
                 type='text'
                 name='description'
                 placeholder='Description...'
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                defaultValue={data?.description ?? ""}
+                // onChange={(e) => setDescription(e.target.value)}
               />
             </Field>
           </FieldGroup>
