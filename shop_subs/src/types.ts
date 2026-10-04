@@ -3,6 +3,9 @@ export type Customer = {
   first_name: string;
   last_name: string;
   notes: string;
+  phones: Phone[];
+  emails: Email[];
+  addresses: Address[];
 };
 
 export type Phone = {
