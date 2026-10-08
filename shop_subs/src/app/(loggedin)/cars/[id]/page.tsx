@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import CarDetail from "@/app/(loggedin)/ui/car-detail";
 import Link from "next/link";
+import { formatDate } from "@/lib/utils";
 // import { CupSoda } from "lucide-react";
 
 export default async function CustomerPage({
@@ -63,7 +64,7 @@ export default async function CustomerPage({
                   variant='outline'
                   className='h-auto justify-start py-2 text-left'
                   render={<Link href={`/estimates/${estimate.id}`} />}>
-                  {estimate.date}
+                  {formatDate(new Date(estimate.date))}
                 </Button>
               ))}
           </CardContent>

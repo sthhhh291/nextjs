@@ -1,4 +1,5 @@
 import { Estimate, Car, Customer, Sub_estimate } from '@/types';
+import { sub } from 'date-fns/fp/sub';
 
 export default function EstimatePrintPage(params: { estimate: Estimate, car: Car, customer: Customer, subs: Sub_estimate[] }) {
   const data = params.estimate;
@@ -34,6 +35,20 @@ export default function EstimatePrintPage(params: { estimate: Estimate, car: Car
                 <h2 className='text-xl font-semibold'>Notes</h2>
                 <p>Notes</p> 
               </div>
+            <div className='mb-4'>
+                <h2 className='text-xl font-semibold'>Sub Estimates</h2>
+                {subs.map((sub) => (
+                    <div key={sub.id} className='mb-2'>
+                        <p>Sub Estimate ID: {sub.id}</p>
+                        <p>Description: {sub.description}</p>
+                    </div>
+                  {sub.labor && (
+                    <div>
+                        <h3>Labor</h3>
+                    </div>
+                  )}
+                ))}
+            </div>
         </div>
     );
 }   
