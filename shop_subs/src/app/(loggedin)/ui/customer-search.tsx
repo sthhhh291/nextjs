@@ -57,13 +57,15 @@ export default function CustomerSearch() {
         </form>
         <div className='grid gap-2 sm:grid-cols-2'>
           {custList.map((customer: Customer) => (
-            <Button
-              key={customer.id}
-              variant='outline'
-              className='h-auto justify-start py-2 text-left'
-              render={<Link href={`/customers/${customer.id}`} />}>
-              {customer.first_name} {customer.last_name}
-            </Button>
+            <Link key={customer.id} href={`/customers/${customer.id}`}>
+              <Button
+                // key={customer.id}
+                variant='outline'
+                className='h-auto justify-start py-2 text-left'
+                render={<Link href={`/customers/${customer.id}`} />}>
+                {customer.first_name} {customer.last_name}
+              </Button>
+            </Link>
           ))}
           {custList.length === 0 && (
             <p className='text-sm text-muted-foreground sm:col-span-2'>
