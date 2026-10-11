@@ -1,7 +1,12 @@
 "use client";
 
-import { useTable, type ColumnDef, type RowData } from "@tanstack/react-table";
-
+import {
+  useTable,
+  type ColumnDef,
+  type RowData,
+  type SortingState,
+  type ColumnFiltersState,
+} from "@tanstack/react-table"
 import {
   Table,
   TableBody,
@@ -13,6 +18,8 @@ import {
 
 import { features, type DataTableFeatures } from "./data-table-features";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
 interface DataTableProps<TData extends RowData> {
   columns: ColumnDef<DataTableFeatures, TData>[];
@@ -23,14 +30,34 @@ export function DataTable<TData extends RowData>({
   columns,
   data,
 }: DataTableProps<TData>) {
+
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
   const table = useTable({
     features,
     data,
     columns,
+    state: {
+      sorting,
+      columnFilters,
+    },
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
   });
 
   return (
     <div className='overflow-hidden rounded-md border'>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filter emails..."
+          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("email")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

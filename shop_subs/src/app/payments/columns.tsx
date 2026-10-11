@@ -11,28 +11,38 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, ArrowUpDown } from "lucide-react";
+
+import type { Totals } from "@/types";
 
 import { type DataTableFeatures } from "./data-table-features";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
+// export type Payment = {
+//   id: string;
+//   amount: number;
+//   status: "pending" | "processing" | "success" | "failed";
+//   email: string;
+// };
 
 // Use `accessor` for data columns and `display` for columns without one.
-const columnHelper = createColumnHelper<DataTableFeatures, Payment>();
+const columnHelper = createColumnHelper<DataTableFeatures, Totals();
 
 export const columns = columnHelper.columns([
   columnHelper.accessor("status", {
     header: "Status",
   }),
   columnHelper.accessor("email", {
-    header: "Email",
+    header: ({column}) => (
+      <Button
+        variant='ghost'
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Email
+        <ArrowUpDown className='ml-2 h-4 w-4' />
+      </Button>
+    ),
   }),
   columnHelper.accessor("amount", {
     header: () => <div className='text-right'>Amount</div>,
