@@ -20,6 +20,7 @@ import { features, type DataTableFeatures } from "./data-table-features";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+// import { getTotalsByRange, } from "@/actions/totals";
 
 interface DataTableProps<TData extends RowData> {
   columns: ColumnDef<DataTableFeatures, TData>[];
@@ -33,6 +34,8 @@ export function DataTable<TData extends RowData>({
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  // const reports = getTotalsByRange("2023-01-01", "2023-12-31");
 
   const table = useTable({
     features,
@@ -48,7 +51,7 @@ export function DataTable<TData extends RowData>({
 
   return (
     <div className='overflow-hidden rounded-md border'>
-      <div className="flex items-center py-4">
+      {/* <div className="flex items-center py-4">
         <Input
           placeholder="Filter emails..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -57,7 +60,7 @@ export function DataTable<TData extends RowData>({
           }
           className="max-w-sm"
         />
-      </div>
+      </div> */}
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

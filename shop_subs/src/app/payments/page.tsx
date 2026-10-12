@@ -1,27 +1,13 @@
-import { columns, Payment } from "./columns";
+// import type { Totals } from "@/types";
+import { Totals } from "@/types";
+import { columns } from "./columns";
 import { DataTable } from "./data-table";
+import { getTotalsByRange } from "@/actions/totals";
 
-async function getData(): Promise<Payment[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },  {
-      id: "728ed523",
-      amount: 400,
-      status: "failed",
-      email: "d@example.com",
-    },{
-      id: "728ed52d",
-      amount: 100,
-      status: "processing",
-      email: "z@example.com",
-    },
-    // ...
-  ];
+async function getData(): Promise<Totals[]> {
+  // Fetch data from your API here
+  const data: Totals[] = await getTotalsByRange("2023-01-01", "2023-12-31");
+  return data;
 }
 
 export default async function DemoPage() {

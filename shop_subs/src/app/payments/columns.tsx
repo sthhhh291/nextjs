@@ -17,37 +17,47 @@ import type { Totals } from "@/types";
 
 import { type DataTableFeatures } from "./data-table-features";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-// export type Payment = {
-//   id: string;
-//   amount: number;
-//   status: "pending" | "processing" | "success" | "failed";
-//   email: string;
+// export type Totals = Totals;
+
+// export type Totals = {
+//   estimate_id: number;
+//   sub_estimate_id: number;
+//   employee_id: number;
+//   date: string;
+//   labor_total: number;
+//   parts_total: number;
+//   oil_total: number;
+//   sub_total: number;
+//   tax: number;
+//   shop_fees: number;
+//   grand_total: number;
+//   cost_total: number;
+//   parts_margin: number;
+//   margin: number;
 // };
 
 // Use `accessor` for data columns and `display` for columns without one.
-const columnHelper = createColumnHelper<DataTableFeatures, Totals();
+const columnHelper = createColumnHelper<DataTableFeatures, Totals>();
 
 export const columns = columnHelper.columns([
-  columnHelper.accessor("status", {
-    header: "Status",
+  columnHelper.accessor("labor_total", {
+    header: "Labor Total",
   }),
-  columnHelper.accessor("email", {
+  columnHelper.accessor("parts_total", {
     header: ({column}) => (
       <Button
         variant='ghost'
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
-        Email
+        Parts Total
         <ArrowUpDown className='ml-2 h-4 w-4' />
       </Button>
     ),
   }),
-  columnHelper.accessor("amount", {
-    header: () => <div className='text-right'>Amount</div>,
+  columnHelper.accessor("oil_total", {
+    header: () => <div className='text-right'>Oil Total</div>,
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
+      const amount = parseFloat(row.getValue("oil_total") as unknown as string);
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
@@ -72,7 +82,7 @@ export const columns = columnHelper.columns([
             <DropdownMenuGroup>
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(payment.id)}>
+                onClick={() => navigator.clipboard.writeText(payment.estimate_id.toString())}>
                 Copy payment ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
