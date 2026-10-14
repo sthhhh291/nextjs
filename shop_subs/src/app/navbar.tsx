@@ -23,6 +23,7 @@ export default async function Navbar() {
     { href: "/income", label: "Income" },
     { href: "/employees", label: "Employees" },
     { href: "/markups", label: "Markup" },
+    { href: "/reports", label: "Reports" },
   ];
   return (
     <nav className='sticky top-0 z-40 border-b bg-card text-card-foreground'>
