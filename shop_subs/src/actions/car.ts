@@ -11,12 +11,13 @@ const baseUrl = process.env.API_ADDRESS || "http://localhost:3000";
 export const getCars = async (
   page: number = 1,
   size: number = 20,
-  searchTerm: string = "",
+  customerTerm: string = "",
+  carTerm: string = "",
 ) => {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
   const res = await fetch(
-    `${baseUrl}/cars?page=${page}&size=${size}&searchTerm=${searchTerm}`,
+    `${baseUrl}/cars?page=${page}&size=${size}&customerTerm=${customerTerm}&carTerm=${carTerm}`,
     {
       method: "GET",
       headers: {

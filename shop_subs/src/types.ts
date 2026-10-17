@@ -45,7 +45,12 @@ export type Car = {
   notes: string;
 };
 
-export type CarCustomer = Customer & Car;
+export type CarCustomer = {
+  id: number;
+  customer_id: number;
+  customer: string;
+  car: string;
+};
 
 export type Estimate = {
   id: number;
@@ -61,10 +66,10 @@ export type Sub_estimate = {
   id: number;
   estimate_id: number;
   description: string;
-  labor? : Labor[];
-  parts? :Part[];
+  labor?: Labor[];
+  parts?: Part[];
   oil?: Part[];
-  totals?: Totals
+  totals?: Totals;
 };
 
 export type Labor = {

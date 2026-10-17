@@ -20,18 +20,6 @@ export default function CustomerSearch() {
   const [custList, setCustList] = useState<Customer[]>([]);
   const [isPending, startTransition] = useTransition();
 
-  // const handleSearch = async (formData: FormData) => {
-  //   const customerId = formData.get("customerId") as string;
-  //   startTransition(async () => {
-  //     try {
-  //       const data = await getCustomers(1, 20, customerId);
-  //       setCustList(data.items);
-  //     } catch (error) {
-  //       console.error("Error fetching customers:", error);
-  //     }
-  //   });
-  // };
-
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -61,19 +49,21 @@ export default function CustomerSearch() {
         </div>
       </CardHeader>
       <CardContent className='space-y-4 pt-5'>
-        <form onSubmit={handleSearch} className='flex flex-col gap-2 sm:flex-row'>
+        <form
+          onSubmit={handleSearch}
+          className='flex flex-col gap-2 sm:flex-row'>
           <Input
             type='text'
             name='customerId'
             aria-label='Search customers'
             placeholder='Name or customer ID'
           />
-           <Button type="submit" className="sm:w-auto" disabled={isPending}>
-    {isPending ?
-      <LoaderCircle className="animate-spin" aria-hidden="true" />
-    : <Search aria-hidden="true" />}
-    {isPending ? "Searching..." : "Search"}
-  </Button>
+          <Button type='submit' className='sm:w-auto' disabled={isPending}>
+            {isPending ?
+              <LoaderCircle className='animate-spin' aria-hidden='true' />
+            : <Search aria-hidden='true' />}
+            {isPending ? "Searching..." : "Search"}
+          </Button>
         </form>
         <div className='grid gap-2 sm:grid-cols-2'>
           {custList.map((customer: Customer) => (

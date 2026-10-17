@@ -1,7 +1,7 @@
 "use client";
 
 import { getCars } from "@/actions/car";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
 import type { CarCustomer } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -13,19 +13,25 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, LoaderCircle } from "lucide-react";
 
 export default function CarSearch() {
   const [carList, setCarList] = useState<CarCustomer[]>([]);
+  const [isPending, startTransition] = useTransition();
 
-  const handleSearch = async (formData: FormData) => {
+  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
     const carId = formData.get("carId") as string;
-    try {
-      const data = await getCars(1, 20, carId);
-      setCarList(data.items);
-    } catch (error) {
-      console.error("Error fetching cars:", error);
-    }
+    const customerId = formData.get("customerId") as string;
+    startTransition(async () => {
+      try {
+        const data = await getCars(1, 20, customerId, carId);
+        setCarList(data.items);
+      } catch (error) {
+        console.error("Error fetching cars:", error);
+      }
+    });
   };
 
   return (
@@ -39,29 +45,46 @@ export default function CarSearch() {
         </div>
       </CardHeader>
       <CardContent className='space-y-4 pt-5'>
-        <form action={handleSearch} className='flex flex-col gap-2 sm:flex-row'>
+        <form
+          onSubmit={handleSearch}
+          className='flex flex-col gap-2 sm:flex-row'>
+          <Input
+            type='text'
+            name='customerId'
+            aria-label='Search Customers'
+            placeholder='Search Customers'
+          />
           <Input
             type='text'
             name='carId'
             aria-label='Search vehicles'
-            placeholder='Customer, year, make, or model'
+            placeholder='Search Cars'
           />
-          <Button type='submit' className='sm:w-auto'>
-            <Search aria-hidden='true' />
-            Search
-          </Button>
+          {isPending ?
+            <Button type='submit' className='sm:w-auto' disabled>
+              <LoaderCircle className='mr-2 h-4 w-4 animate-spin' />
+              Searching...
+            </Button>
+          : <Button type='submit' className='sm:w-auto'>
+              <Search aria-hidden='true' />
+              Search
+            </Button>
+          }
         </form>
         <div className='grid gap-2 sm:grid-cols-2'>
           {carList.map((car: CarCustomer) => (
             <Button
               key={car.id}
               variant='outline'
-              className='h-auto justify-start py-2 text-left'
-              render={<Link href={`/cars/${car.id}`} />}>
-              {car.year} {car.make} {car.car_model}
-              <span className='ml-auto text-xs text-muted-foreground'>
-                {car.first_name} {car.last_name}
-              </span>
+              className='h-auto justify-start py-2 text-left'>
+              <Link
+                href={`/cars/${car.id}`}
+                className='flex w-full items-center gap-2'>
+                {car.car}
+                <span className='ml-auto text-xs text-muted-foreground'>
+                  {car.customer}
+                </span>
+              </Link>
             </Button>
           ))}
           {carList.length === 0 && (
