@@ -5,6 +5,8 @@ import type { Estimate, Totals } from "@/types";
 import EstimateForm from "./estimate-form";
 import SubForm from "./sub-form";
 import { formatDate, formatCurrency } from "@/lib/utils";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function EstimateDetail(params: {
   estimate: Estimate;
@@ -81,6 +83,11 @@ export default function EstimateDetail(params: {
         <div className='flex flex-wrap gap-2 border-t pt-4'>
           <SubForm sub={null} estimate_id={estimate.id} />
           <EstimateForm estimate={estimate} car_id={estimate.car_id} />
+            <Button>
+          <Link href={`/print/${estimate.id}`} target='_blank'>
+              Print Estimate
+          </Link>
+            </Button>
         </div>
       </CardContent>
     </Card>

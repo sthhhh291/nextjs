@@ -79,7 +79,7 @@ export default async function CarPage({ params }: { params: { id: string } }) {
         <CarDetail car={car} />
         <div className='min-w-0 lg:col-span-2'>
           <EstimateDetail estimate={estimate} totals={totals} />
-          <PrintEstimateButton estimateId={estimate.id} />
+          {/* <PrintEstimateButton estimateId={estimate.id} /> */}
         </div>
         <div className='grid min-w-0 gap-4 lg:col-span-2 lg:grid-cols-2'>
           {subs.map((sub) => (
