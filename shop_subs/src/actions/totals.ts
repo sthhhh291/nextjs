@@ -41,6 +41,54 @@ export const getTotalsByRange = async (begin: string, end: string) => {
   return res.json();
 };
 
+export const getTotalsByQuarter = async (year: number) => {
+  const q1begin = `${year}-01-01`;
+  const q1end = `${year}-03-31`;
+  const q2begin = `${year}-04-01`;
+  const q2end = `${year}-06-30`;
+  const q3begin = `${year}-07-01`;
+  const q3end = `${year}-09-30`;
+  const q4begin = `${year}-10-01`;
+  const q4end = `${year}-12-31`;
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  const res = await fetch(`${baseUrl}/totals/range?begin=${q1begin}&end=${q1end}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const res2 = await fetch(`${baseUrl}/totals/range?begin=${q2begin}&end=${q2end}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const res3 = await fetch(`${baseUrl}/totals/range?begin=${q3begin}&end=${q3end}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const res4 = await fetch(`${baseUrl}/totals/range?begin=${q4begin}&end=${q4end}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!res.ok) {
+    console.error("Failed to fetch totals by range:", res.statusText);
+    throw new Error("Failed to fetch totals by range");
+  }
+  console.log("Fetched totals by range:", await res.clone().json());
+  const results = {
+    q1: await res.json(),
+    q2: await res2.json(),
+    q3: await res3.json(),
+    q4: await res4.json(),
+  };
+  return results;
+};
 export const getTotalsById = async (id: number) => {
   if (!Number.isInteger(id) || id < 1) {
     throw new Error("Invalid totals ID");
