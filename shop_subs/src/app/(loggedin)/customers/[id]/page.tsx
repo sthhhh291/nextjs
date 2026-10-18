@@ -32,10 +32,6 @@ export default async function CustomerPage({
     carsPromise,
   ]);
 
-  // if (!customer) {
-  //   notFound();
-  // }
-
   return (
     <section className='grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(16rem,0.7fr)]'>
       <div className='min-w-0'>

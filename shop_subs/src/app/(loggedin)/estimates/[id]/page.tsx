@@ -25,7 +25,6 @@ import {
 } from "@/actions/customer";
 import CustomerDetail from "../../ui/customer-detail";
 import SubEstimateCard from "../../ui/sub-estimate-card";
-import PrintEstimateButton from "../../ui/print-estimate-button";
 
 export default async function CarPage({ params }: { params: { id: string } }) {
   const estimateId = Number((await params).id);
@@ -56,10 +55,6 @@ export default async function CarPage({ params }: { params: { id: string } }) {
     sub.oil = temp.oil;
     sub.totals = temp.totals;
   }
-  //   const estimates: Estimate[] = await getEstimatesByEstimateId(estimateId);
-  //   let phones: Phone[] = [];
-  //   let emails: Email[] = [];
-  //   let addresses: Address[] = [];
 
   return (
     <section className='space-y-6'>
