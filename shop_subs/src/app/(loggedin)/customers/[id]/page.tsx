@@ -10,6 +10,7 @@ import CustomerDetail from "@/app/(loggedin)/ui/customer-detail";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export default async function CustomerPage({
   params,
@@ -31,6 +32,10 @@ export default async function CustomerPage({
     addressesPromise,
     carsPromise,
   ]);
+
+  if (!customer) {
+    notFound();
+  }
 
   return (
     <section className='grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(16rem,0.7fr)]'>

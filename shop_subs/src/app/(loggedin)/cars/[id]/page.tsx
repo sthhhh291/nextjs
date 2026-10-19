@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import CarDetail from "@/app/(loggedin)/ui/car-detail";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
+import { notFound } from "next/navigation";
 // import { CupSoda } from "lucide-react";
 
 export default async function CustomerPage({
@@ -23,6 +24,9 @@ export default async function CustomerPage({
   const carPromise: Promise<Car> = getCarById(carId);
   const estimatesPromise: Promise<Estimate[]> = getEstimatesByCarId(carId);
   const [car, estimates] = await Promise.all([carPromise, estimatesPromise]);
+  if (!car) {
+    return notFound();
+  }
   const customerPromise: Promise<Customer> = getCustomerById(car.customer_id);
   const customer = await customerPromise;
   const phonesPromise: Promise<Phone[]> = getCustomerPhones(customer.id);

@@ -25,6 +25,7 @@ import {
 } from "@/actions/customer";
 import CustomerDetail from "../../ui/customer-detail";
 import SubEstimateCard from "../../ui/sub-estimate-card";
+import { notFound } from "next/navigation";
 
 export default async function CarPage({ params }: { params: { id: string } }) {
   const estimateId = Number((await params).id);
@@ -36,6 +37,9 @@ export default async function CarPage({ params }: { params: { id: string } }) {
     subsPromise,
     totalsPromise,
   ]);
+  if (!estimate) {
+    return notFound();
+  }
   const car: Car = await getCarById(estimate.car_id);
   const customer: Customer = await getCustomerById(car.customer_id);
   const phonesPromise: Promise<Phone[]> = getCustomerPhones(customer.id);
