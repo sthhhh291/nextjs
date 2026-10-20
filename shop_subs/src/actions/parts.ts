@@ -62,7 +62,7 @@ export const createPart = async (formData: FormData) => {
   const description = String(formData.get("description"));
   const manufacturer = String(formData.get("manufacturer"));
   const part_number = String(formData.get("part_number"));
- const quantity = Number(formData.get("quantity") ?? "");
+  const quantity = Number(formData.get("quantity") ?? "");
   const cost = Number(formData.get("cost") ?? "");
   const list = Number(formData.get("list") ?? "");
   const price = Number(formData.get("price") ?? "");
@@ -199,7 +199,8 @@ export const savePart = async (
 ) => {
   const id = formData.get("id") || null;
   if (id) {
-    const res = await updatePart(formData)
+    const res = await updatePart(formData);
+    console.log("parts results:", res);
     if (res.success && res.parts) {
       revalidatePath("/");
     }
@@ -209,7 +210,7 @@ export const savePart = async (
     if (res.success && res.parts) {
       revalidatePath("/");
     }
-    return res
+    return res;
   }
 };
 

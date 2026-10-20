@@ -37,12 +37,6 @@ export default function SubForm(params: {
   const [price, setPrice] = useState(data?.price || 0);
   // const [admin, setAdmin] = useState<Admin>();
 
-  useEffect(() => {
-    if (!isPending && state.success) {
-      startTransition(() => setOpen(false));
-    }
-  }, [isPending, state.success]);
-
   // load labor rate from admin
   useEffect(() => {
     let active = true;
@@ -93,6 +87,7 @@ export default function SubForm(params: {
         </DialogHeader>
         <form
           action={formAction}
+          onSubmit={() => setOpen(false)}
           className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
           {data && <input type='hidden' name='id' value={data.id} />}
           <input type='hidden' name='sub_estimate_id' value={sub_id} />

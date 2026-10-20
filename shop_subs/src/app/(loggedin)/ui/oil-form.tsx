@@ -26,19 +26,19 @@ export default function SubForm(params: { oil: Part | null; sub_id: number }) {
     success: false,
     oil: data || null,
   });
-    // const [description, setDescription] = useState(data?.description || "");
-    // const [manufacturer, setManufacturer] = useState(data?.manufacturer || "");
-    // const [part_number, setpartNumber] = useState(data?.part_number || "");
-    // const [quantity, setQuantity] = useState(data?.quantity || 0);
-    // const [cost, setCost] = useState(data?.cost || 0);
-    // const [list, setList] = useState(data?.list || 0);
-    // const [price, setPrice] = useState(data?.price || 0);
+  // const [description, setDescription] = useState(data?.description || "");
+  // const [manufacturer, setManufacturer] = useState(data?.manufacturer || "");
+  // const [part_number, setpartNumber] = useState(data?.part_number || "");
+  // const [quantity, setQuantity] = useState(data?.quantity || 0);
+  // const [cost, setCost] = useState(data?.cost || 0);
+  // const [list, setList] = useState(data?.list || 0);
+  // const [price, setPrice] = useState(data?.price || 0);
 
-  useEffect(() => {
-    if (!isPending && state.success) {
-      startTransition(() => setOpen(false));
-    }
-  }, [isPending, state.success]);
+  // useEffect(() => {
+  //   if (!isPending && state.success) {
+  //     startTransition(() => setOpen(false));
+  //   }
+  // }, [isPending, state.success]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -61,6 +61,7 @@ export default function SubForm(params: { oil: Part | null; sub_id: number }) {
         </DialogHeader>
         <form
           action={formAction}
+          onSubmit={() => setOpen(false)}
           className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
           {data && <input type='hidden' name='id' value={data.id} />}
           <input type='hidden' name='sub_estimate_id' value={sub_id} />
