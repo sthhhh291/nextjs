@@ -107,11 +107,11 @@ export const createPart = async (formData: FormData) => {
       };
     }
 
-    const createdPartId = await res.json();
+    // const createdPartId = await res.json();
     return {
       success: true,
       error: null,
-      parts: typeof createdPartId === "number" ? null : createdPartId,
+      parts: await res.json(),
     };
   } catch (error) {
     console.error("Error while creating part", {
@@ -184,8 +184,8 @@ export const updatePart = async (formData: FormData) => {
     };
   }
 
-  await res.json();
-  return { success: true, error: null, parts: null };
+  // await res.json();
+  return { success: true, error: null, parts: await res.json() };
 };
 
 // save car form data (create or update)
