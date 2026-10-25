@@ -157,9 +157,21 @@ export const saveEmployee = async (
 };
 
 // delete a employee by id
-export const deleteEmployee = async (id: number) => {
+export const deleteEmployee = async (
+  id: number,
+): Promise<
+  { success: true; error: null } | { success: false; error: string }
+> => {
+  if (!Number.isInteger(id) || id < 1) {
+    throw new Error("Invalid employee ID");
+  }
+
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
+  if (!accessToken) {
+    throw new Error("Authentication required");
+  }
+
   const res = await fetch(`${baseUrl}/employees/${id}`, {
     method: "DELETE",
     headers: {
@@ -173,7 +185,11 @@ export const deleteEmployee = async (id: number) => {
       statusText: res.statusText,
       body: errorBody,
     });
-    throw new Error(`Failed to delete employee (${res.status})`);
+    return {
+      success: false,
+      error: `Failed to delete employee (${res.status}): ${res.statusText || "Unknown error"}`,
+    };
   }
-  revalidatePath(`/`);
+  revalidatePath("/employees");
+  return { success: true, error: null };
 };

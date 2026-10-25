@@ -10,6 +10,8 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import EstimateForm from "./estimate-form";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function CarDetail(params: { car: Car }) {
   const car = params.car;
@@ -24,7 +26,12 @@ export default function CarDetail(params: { car: Car }) {
       </CardHeader>
       <CardContent className='space-y-3 pt-5'>
         <h3 className='text-sm font-semibold'>Actions</h3>
-        <EstimateForm estimate={null} car_id={car.id} />
+        <div className='flex flex-wrap gap-3'>
+          <EstimateForm estimate={null} car_id={car.id} />
+          <Link href={`/cars/${car.id}`}>
+            <Button>View Car</Button>
+          </Link>
+        </div>
       </CardContent>
     </Card>
   );

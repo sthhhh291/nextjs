@@ -25,7 +25,9 @@ export default function EstimateDetail(params: {
         <dl className='grid gap-4 sm:grid-cols-2'>
           <div>
             <dt className='text-xs text-muted-foreground'>Date</dt>
-            <dd className='mt-1 text-sm font-medium'>{formatDate(estimateDate)}</dd>
+            <dd className='mt-1 text-sm font-medium'>
+              {formatDate(estimateDate)}
+            </dd>
           </div>
           <div>
             <dt className='text-xs text-muted-foreground'>Type</dt>
@@ -45,49 +47,68 @@ export default function EstimateDetail(params: {
         <dl className='grid gap-4 sm:grid-cols-2'>
           <div>
             <dt className='text-xs text-muted-foreground'>Labor</dt>
-            <dd className='mt-1 text-sm font-medium'>{formatCurrency(totals?.labor_total)}</dd>
+            <dd className='mt-1 text-sm font-medium'>
+              {formatCurrency(totals?.labor_total)}
+            </dd>
           </div>
           <div>
             <dt className='text-xs text-muted-foreground'>Parts</dt>
-            <dd className='mt-1 text-sm font-medium'>{formatCurrency(totals?.parts_total)}</dd>
+            <dd className='mt-1 text-sm font-medium'>
+              {formatCurrency(totals?.parts_total)}
+            </dd>
           </div>
           <div>
             <dt className='text-xs text-muted-foreground'>Oil</dt>
-            <dd className='mt-1 text-sm font-medium'>{formatCurrency(totals?.oil_total)}</dd>
+            <dd className='mt-1 text-sm font-medium'>
+              {formatCurrency(totals?.oil_total)}
+            </dd>
           </div>
           <div>
             <dt className='text-xs text-muted-foreground'>Sub Total</dt>
-            <dd className='mt-1 text-sm font-medium'>{formatCurrency(totals?.sub_total)}</dd>
+            <dd className='mt-1 text-sm font-medium'>
+              {formatCurrency(totals?.sub_total)}
+            </dd>
           </div>
           <div>
             <dt className='text-xs text-muted-foreground'>Tax</dt>
-            <dd className='mt-1 text-sm font-medium'>{formatCurrency(totals?.tax)}</dd>
+            <dd className='mt-1 text-sm font-medium'>
+              {formatCurrency(totals?.tax)}
+            </dd>
           </div>
           <div>
             <dt className='text-xs text-muted-foreground'>Shop Fees</dt>
-            <dd className='mt-1 text-sm font-medium'>{formatCurrency(totals?.shop_fees)}</dd>
+            <dd className='mt-1 text-sm font-medium'>
+              {formatCurrency(totals?.shop_fees)}
+            </dd>
           </div>
           <div>
             <dt className='text-xs text-muted-foreground'>Total</dt>
-            <dd className='mt-1 text-sm font-medium'>{formatCurrency(totals?.grand_total)}</dd>
+            <dd className='mt-1 text-sm font-medium'>
+              {formatCurrency(totals?.grand_total)}
+            </dd>
           </div>
           <div>
             <dt className='text-xs text-muted-foreground'>Margin</dt>
-            <dd className='mt-1 text-sm font-medium'>{formatCurrency(totals?.margin)}</dd>
+            <dd className='mt-1 text-sm font-medium'>
+              {formatCurrency(totals?.margin)}
+            </dd>
           </div>
           <div>
             <dt className='text-xs text-muted-foreground'>Margin per Hour</dt>
-            <dd className='mt-1 text-sm font-medium'>{formatCurrency(totals?.margin/estimate.hours)}</dd>
+            <dd className='mt-1 text-sm font-medium'>
+              {formatCurrency(totals?.margin / estimate.hours)}
+            </dd>
           </div>
         </dl>
         <div className='flex flex-wrap gap-2 border-t pt-4'>
           <SubForm sub={null} estimate_id={estimate.id} />
           <EstimateForm estimate={estimate} car_id={estimate.car_id} />
-            <Button>
           <Link href={`/print/${estimate.id}`} target='_blank'>
-              Print Estimate
+            <Button>Print Estimate</Button>
           </Link>
-            </Button>
+          <Link href={`/estimates/${estimate.id}`}>
+            <Button>View Estimate</Button>
+          </Link>
         </div>
       </CardContent>
     </Card>

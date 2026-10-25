@@ -16,6 +16,8 @@ import AddressForm from "./address-form";
 import EmailForm from "./email-form";
 import EmailLine from "./email-line";
 import AddressLine from "./address-line";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function CustomerDetail(params: {
   customer: Customer;
@@ -42,15 +44,6 @@ export default function CustomerDetail(params: {
       </CardHeader>
       <CardContent className='space-y-5 pt-5'>
         <section className='space-y-3'>
-          <div className='flex flex-wrap items-center justify-between gap-3'>
-            <h3 className='text-sm font-semibold'>Contact details</h3>
-            <div className='flex flex-wrap gap-2'>
-              <PhoneForm phone={null} customer_id={customer.id} />
-              <EmailForm email={null} customer_id={customer.id} />
-              <AddressForm address={null} customer_id={customer.id} />
-              <CarForm car={null} customer_id={customer.id} />
-            </div>
-          </div>
           <div className='divide-y rounded-lg border'>
             {phones.map((phone) => (
               <PhoneLine key={phone.id} phone={phone} />
@@ -66,6 +59,18 @@ export default function CustomerDetail(params: {
                 No contact details have been added.
               </p>
             )}
+          </div>
+          <div className='flex flex-wrap items-center justify-between gap-3'>
+            <h3 className='text-sm font-semibold'>Contact details</h3>
+            <div className='flex flex-wrap gap-2'>
+              <PhoneForm phone={null} customer_id={customer.id} />
+              <EmailForm email={null} customer_id={customer.id} />
+              <AddressForm address={null} customer_id={customer.id} />
+              <CarForm car={null} customer_id={customer.id} />
+              <Link href={`/customers/${customer.id}`}>
+                <Button>View Customer</Button>
+              </Link>
+            </div>
           </div>
         </section>
       </CardContent>

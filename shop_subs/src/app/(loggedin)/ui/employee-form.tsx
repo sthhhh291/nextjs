@@ -19,13 +19,31 @@ export default function EmployeeForm(params: { employee: Employee | null }) {
   });
   const [title, setTitle] = useState(data?.title || "");
   const [salary, setSalary] = useState(data?.salary || "");
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const buttonAction = data ? "Save Changes" : "Create Employee";
 
   async function handleDelete(id: number) {
     const conf = confirm("Are you sure you want to delete employee?");
     if (conf) {
-      await deleteEmployee(id);
+      setDeleteError(null);
+      setIsDeleting(true);
+      try {
+        const result = await deleteEmployee(id);
+        if (!result.success) {
+          setDeleteError(result.error);
+        }
+      } catch (error) {
+        console.error("Failed to delete employee:", error);
+        setDeleteError(
+          error instanceof Error ?
+            error.message
+          : "Failed to delete employee. Please try again.",
+        );
+      } finally {
+        setIsDeleting(false);
+      }
     }
   }
 
@@ -42,6 +60,11 @@ export default function EmployeeForm(params: { employee: Employee | null }) {
         {state.error && (
           <p role='alert' className='mb-4 text-sm text-destructive'>
             {state.error}
+          </p>
+        )}
+        {deleteError && (
+          <p role='alert' className='mb-4 text-sm text-destructive'>
+            {deleteError}
           </p>
         )}
         <FieldSet className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5'>
@@ -97,8 +120,9 @@ export default function EmployeeForm(params: { employee: Employee | null }) {
                 size='icon'
                 aria-label='Delete employee'
                 title='Delete employee'
+                disabled={isDeleting}
                 onClick={() => handleDelete(data.id)}>
-                <Trash />
+                {isDeleting ? "..." : <Trash />}
               </Button>
             </Field>
           )}
