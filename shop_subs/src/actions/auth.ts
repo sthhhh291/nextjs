@@ -45,7 +45,16 @@ export const login = async (formData: FormData) => {
     sameSite: "strict",
     path: "/",
   });
-  redirect("/"); // Redirect to the home page after successful login
+  const requestedPath = formData.get("redirectTo");
+  const redirectPath =
+    typeof requestedPath === "string" &&
+    requestedPath.startsWith("/") &&
+    !requestedPath.startsWith("//") &&
+    !requestedPath.includes("\\") &&
+    !/[\u0000-\u001f\u007f]/.test(requestedPath)
+      ? requestedPath
+      : "/";
+  redirect(redirectPath);
   // return data;
 };
 
