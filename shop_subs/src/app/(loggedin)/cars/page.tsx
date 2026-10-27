@@ -1,4 +1,5 @@
 import CarSearch from "@/app/(loggedin)/ui/car-search";
+import VinDecoder from "@/app/(loggedin)/ui/vin-decoder";
 
 export default function CarsPage() {
   return (
@@ -10,6 +11,7 @@ export default function CarsPage() {
         </p>
       </header>
       <CarSearch />
+      <VinDecoder />
     </section>
   );
 }
