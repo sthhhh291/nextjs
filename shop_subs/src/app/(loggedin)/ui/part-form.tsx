@@ -37,12 +37,11 @@ export default function SubForm(params: { part: Part | null; sub_id: number }) {
   const [markups, setMarkups] = useState<Markup[]>([]);
   const [markup, setMarkup] = useState(1.86);
 
-  // open/close dialog
-  // useEffect(() => {
-  //   if (!isPending && state.success) {
-  //     startTransition(() => setOpen(false));
-  //   }
-  // }, [isPending, state.success]);
+  useEffect(() => {
+    if (!isPending && state.success) {
+      startTransition(() => setOpen(false));
+    }
+  }, [isPending, state.success]);
 
   // load markup tables
   useEffect(() => {
@@ -144,7 +143,6 @@ export default function SubForm(params: { part: Part | null; sub_id: number }) {
         </DialogHeader>
         <form
           action={formAction}
-          onSubmit={() => setOpen(false)}
           className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
           {data && <input type='hidden' name='id' value={data.id} />}
           <input type='hidden' name='sub_estimate_id' value={sub_id} />
