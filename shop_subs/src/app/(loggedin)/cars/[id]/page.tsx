@@ -13,7 +13,6 @@ import CarDetail from "@/app/(loggedin)/ui/car-detail";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 import { notFound } from "next/navigation";
-// import { CupSoda } from "lucide-react";
 
 export default async function CustomerPage({
   params,
