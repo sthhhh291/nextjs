@@ -52,30 +52,42 @@ export const getTotalsByQuarter = async (year: number) => {
   const q4end = `${year}-12-31`;
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
-  const res = await fetch(`${baseUrl}/totals/range?begin=${q1begin}&end=${q1end}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
+  const res = await fetch(
+    `${baseUrl}/totals/range?begin=${q1begin}&end=${q1end}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     },
-  });
-  const res2 = await fetch(`${baseUrl}/totals/range?begin=${q2begin}&end=${q2end}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
+  );
+  const res2 = await fetch(
+    `${baseUrl}/totals/range?begin=${q2begin}&end=${q2end}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     },
-  });
-  const res3 = await fetch(`${baseUrl}/totals/range?begin=${q3begin}&end=${q3end}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
+  );
+  const res3 = await fetch(
+    `${baseUrl}/totals/range?begin=${q3begin}&end=${q3end}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     },
-  });
-  const res4 = await fetch(`${baseUrl}/totals/range?begin=${q4begin}&end=${q4end}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
+  );
+  const res4 = await fetch(
+    `${baseUrl}/totals/range?begin=${q4begin}&end=${q4end}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     },
-  });
+  );
   if (!res.ok) {
     console.error("Failed to fetch totals by range:", res.statusText);
     throw new Error("Failed to fetch totals by range");
@@ -89,7 +101,14 @@ export const getTotalsByQuarter = async (year: number) => {
   };
   return results;
 };
-export const getTotalsById = async (id: number) => {
+
+export const getTotalsByMonth = async (year: number) => {
+  const jan = [`1-1-${year}`, `1-31-${year}`];
+
+  const jan_res = await getTotalsByRange(jan[0], jan[1]);
+};
+
+const getTotalsById = async (id: number) => {
   if (!Number.isInteger(id) || id < 1) {
     throw new Error("Invalid totals ID");
   }
