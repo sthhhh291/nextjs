@@ -106,9 +106,11 @@ export const getTotalsByMonth = async (year: number) => {
   const jan = [`1-1-${year}`, `1-31-${year}`];
 
   const jan_res = await getTotalsByRange(jan[0], jan[1]);
+  console.log("january result for year", jan_res);
+  return jan_res;
 };
 
-const getTotalsById = async (id: number) => {
+export const getTotalsById = async (id: number) => {
   if (!Number.isInteger(id) || id < 1) {
     throw new Error("Invalid totals ID");
   }
